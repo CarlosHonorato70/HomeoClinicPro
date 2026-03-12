@@ -1,0 +1,59 @@
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { consultationSchema } from "@/lib/validations";
+import { encrypt } from "@/lib/encryption";
+import { logAudit, AuditActions } from "@/lib/audit";
+import { checkConsultationLimit } from "@/lib/subscription";
+
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const body = await req.json();
+  const parsed = consultationSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  }
+
+  const data = parsed.data;
+
+  const patient = await prisma.patient.findFirst({
+    where: { id: data.patientId, clinicId: session.user.clinicId },
+  });
+  if (!patient) {
+    return NextResponse.json({ error: "Paciente não encontrado" }, { status: 404 });
+  }
+
+  try {
+    await checkConsultationLimit(session.user.clinicId);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Limite de consultas atingido";
+    return NextResponse.json({ error: message }, { status: 403 });
+  }
+
+  const consultation = await prisma.consultation.create({
+    data: {
+      patientId: data.patientId,
+      userId: session.user.id,
+      date: new Date(data.date),
+      complaint: encrypt(data.complaint),
+      anamnesis: data.anamnesis ? encrypt(data.anamnesis) : null,
+      physicalExam: data.physicalExam ? encrypt(data.physicalExam) : null,
+      diagnosis: data.diagnosis ? encrypt(data.diagnosis) : null,
+      repertorialSymptoms: data.repertorialSymptoms || null,
+      prescription: data.prescription ? encrypt(data.prescription) : null,
+      evolution: data.evolution || null,
+    },
+  });
+
+  await logAudit({
+    clinicId: session.user.clinicId,
+    userId: session.user.id,
+    action: AuditActions.CONSULTATION_NEW,
+    details: `Consulta criada para paciente: ${patient.name}`,
+  });
+
+  return NextResponse.json(consultation, { status: 201 });
+}

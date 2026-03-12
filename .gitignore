@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# SQLite dev databases
+dev.db
+dev.db-shm
+dev.db-wal
+
+# Large extracted data (regenerable via scripts)
+data/extracted/*.json
+
+# Prototype data (55MB compiled JS)
+prototype/sr_homeopata_data.js
+
+# Claude local settings
+.claude/settings.local.json

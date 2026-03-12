@@ -1,0 +1,46 @@
+import { prisma } from "./prisma";
+
+export const AuditActions = {
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  PATIENT_NEW: "PATIENT_NEW",
+  PATIENT_EDIT: "PATIENT_EDIT",
+  PATIENT_DELETE: "PATIENT_DELETE",
+  CONSULTATION_NEW: "CONSULTATION_NEW",
+  CONSULTATION_EDIT: "CONSULTATION_EDIT",
+  ANAMNESIS_SAVE: "ANAMNESIS_SAVE",
+  LGPD_CONSENT: "LGPD_CONSENT",
+  LGPD_REVOKE: "LGPD_REVOKE",
+  EXPORT: "EXPORT",
+  SETTINGS_SAVE: "SETTINGS_SAVE",
+  LGPD_EXPORT: "LGPD_EXPORT",
+  LGPD_ANONYMIZE: "LGPD_ANONYMIZE",
+  LGPD_DELETE: "LGPD_DELETE",
+  DOCUMENT_CREATE: "DOCUMENT_CREATE",
+  DOCUMENT_VIEW: "DOCUMENT_VIEW",
+  DOCUMENT_DELETE: "DOCUMENT_DELETE",
+  APPOINTMENT_NEW: "APPOINTMENT_NEW",
+  APPOINTMENT_EDIT: "APPOINTMENT_EDIT",
+  APPOINTMENT_CANCEL: "APPOINTMENT_CANCEL",
+  FINANCIAL_NEW: "FINANCIAL_NEW",
+} as const;
+
+export type AuditAction = (typeof AuditActions)[keyof typeof AuditActions];
+
+export async function logAudit(params: {
+  clinicId: string;
+  userId?: string;
+  action: AuditAction;
+  details?: string;
+  ip?: string;
+}) {
+  await prisma.auditLog.create({
+    data: {
+      clinicId: params.clinicId,
+      userId: params.userId,
+      action: params.action,
+      details: params.details,
+      ip: params.ip,
+    },
+  });
+}

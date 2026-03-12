@@ -1,0 +1,286 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Clinic {
+  id        String   @id @default(cuid())
+  name      String
+  cnpj      String?
+  phone     String?
+  email     String?
+  address   String?
+  crm       String?
+  dpoName   String?
+  dpoEmail  String?
+  settings  String?
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Stripe subscription fields
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?
+  stripePriceId        String?
+  subscriptionStatus   String    @default("trialing")
+  trialEndsAt          DateTime?
+  currentPeriodEnd     DateTime?
+  maxPatients          Int       @default(10)
+  maxUsersPerClinic    Int       @default(1)
+
+  users     User[]
+  patients  Patient[]
+  auditLogs AuditLog[]
+  invites   ClinicInvite[]
+}
+
+model User {
+  id           String   @id @default(cuid())
+  clinicId     String
+  clinic       Clinic   @relation(fields: [clinicId], references: [id])
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("doctor")
+  crm          String?
+  specialty    String?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  consultations  Consultation[]
+  auditLogs      AuditLog[]
+  passwordResets PasswordReset[]
+
+  @@index([clinicId])
+}
+
+model Patient {
+  id              String    @id @default(cuid())
+  clinicId        String
+  clinic          Clinic    @relation(fields: [clinicId], references: [id])
+  name            String
+  cpf             String?
+  rg              String?
+  birthDate       DateTime?
+  sex             String?
+  phone           String?
+  email           String?
+  address         String?
+  profession      String?
+  insurance       String?
+  notes           String?
+  lgpdConsent     Boolean   @default(false)
+  lgpdConsentDate DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  consultations Consultation[]
+  anamnesis     Anamnesis?
+  lgpdConsents  LgpdConsent[]
+  documents    Document[]
+  appointments Appointment[]
+  financials   Financial[]
+
+  @@index([clinicId])
+  @@index([name])
+}
+
+model Consultation {
+  id                  String   @id @default(cuid())
+  patientId           String
+  patient             Patient  @relation(fields: [patientId], references: [id])
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  date                DateTime
+  complaint           String
+  anamnesis           String?
+  physicalExam        String?
+  diagnosis           String?
+  repertorialSymptoms String?
+  prescription        String?
+  evolution           String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model Anamnesis {
+  id               String   @id @default(cuid())
+  patientId        String   @unique
+  patient          Patient  @relation(fields: [patientId], references: [id])
+  mental           String?
+  general          String?
+  desires          String?
+  sleep            String?
+  perspiration     String?
+  thermoregulation String?
+  gyneco           String?
+  particular       String?
+  updatedAt        DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  clinicId  String
+  clinic    Clinic   @relation(fields: [clinicId], references: [id])
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  details   String?
+  ip        String?
+  timestamp DateTime @default(now())
+
+  @@index([clinicId, timestamp])
+}
+
+model PasswordReset {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([token])
+}
+
+model LgpdConsent {
+  id          String    @id @default(cuid())
+  patientId   String
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  consentType String
+  granted     Boolean
+  date        DateTime  @default(now())
+  revokedDate DateTime?
+}
+
+// ========== Repertory (read-only, seeded from extracted data) ==========
+
+model Chapter {
+  id          String   @id
+  name        String
+  rubricCount Int
+  rubrics     Rubric[]
+}
+
+model Rubric {
+  id          Int      @id @default(autoincrement())
+  chapterId   String
+  chapter     Chapter  @relation(fields: [chapterId], references: [id])
+  symptomPt   String
+  symptomEn   String?
+  remedies    String
+  remedyCount Int
+  miasm       String?
+
+  @@index([chapterId])
+}
+
+model Remedy {
+  id      Int    @id @default(autoincrement())
+  code    String @unique
+  name    String
+  synonym String?
+}
+
+// ========== Materia Medica + Correlates ==========
+
+model MateriaMedica {
+  id         Int      @id @default(autoincrement())
+  remedyCode String
+  remedyName String
+  source     String   @default("SIHORE")
+  content    String
+  sections   String?
+  createdAt  DateTime @default(now())
+
+  @@unique([remedyCode, source])
+  @@index([remedyCode])
+}
+
+model RemedyCorrelate {
+  id          Int    @id @default(autoincrement())
+  term        String
+  relatedTerm String
+  type        String
+
+  @@index([term])
+}
+
+// ========== Phase 4: Documents ==========
+
+model Document {
+  id        String   @id @default(cuid())
+  clinicId  String
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  userId    String
+  type      String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([patientId])
+  @@index([clinicId])
+}
+
+// ========== Phase 5: Agenda + Financial ==========
+
+model Appointment {
+  id        String   @id @default(cuid())
+  clinicId  String
+  patientId String?
+  patient   Patient? @relation(fields: [patientId], references: [id])
+  userId    String
+  date      DateTime
+  time      String
+  duration  Int      @default(30)
+  type      String   @default("consultation")
+  notes     String?
+  status    String   @default("scheduled")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clinicId, date])
+  @@index([patientId])
+}
+
+model Financial {
+  id          String   @id @default(cuid())
+  clinicId    String
+  date        DateTime
+  type        String
+  description String
+  patientId   String?
+  patient     Patient? @relation(fields: [patientId], references: [id])
+  amount      Float
+  category    String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+
+  @@index([clinicId, date])
+}
+
+// ========== Phase 6: Multi-Tenant Invites ==========
+
+model ClinicInvite {
+  id        String    @id @default(cuid())
+  clinicId  String
+  clinic    Clinic    @relation(fields: [clinicId], references: [id])
+  email     String
+  role      String    @default("doctor")
+  token     String    @unique @default(cuid())
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([clinicId])
+  @@index([token])
+}

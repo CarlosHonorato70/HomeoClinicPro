@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "prisma/seed.mts", "prisma/seed-repertory.mts", "prisma/seed-materia-medica.mts", "prisma/seed-correlatos.mts", "prisma.config.ts"]
 }

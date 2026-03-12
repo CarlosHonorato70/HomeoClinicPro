@@ -1,0 +1,2006 @@
+<!-- === 01_head.html === -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeoClinic Pro - Plataforma Clínica Profissional</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+--bg0:#0a0a0f;--bg1:#111118;--bg2:#16161f;--bg3:#1c1c28;--bgi:#1a1a25;
+--brd:#2a2a3a;--brd2:#353548;
+--t1:#e8e8f0;--t2:#9898b0;--t3:#666680;
+--ac:#6366f1;--ac2:#818cf8;--acg:rgba(99,102,241,.12);
+--grn:#10b981;--grnd:rgba(16,185,129,.12);
+--amb:#f59e0b;--ambd:rgba(245,158,11,.12);
+--ros:#f43f5e;--rosd:rgba(244,63,94,.12);
+--cyn:#06b6d4;--cynd:rgba(6,182,212,.12);
+--pur:#a855f7;--purd:rgba(168,85,247,.12);
+--teal:#14b8a6;--teald:rgba(20,184,166,.12);
+--side-w:240px;--hdr-h:56px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg0);color:var(--t1);min-height:100vh;font-size:14px;overflow:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
+input,select,textarea,button{font-family:inherit}
+a{color:var(--ac2);text-decoration:none}
+
+/* ===== LOGIN SCREEN ===== */
+.login-bg{position:fixed;inset:0;background:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-bg .particles{position:absolute;inset:0;overflow:hidden}
+.login-bg .particle{position:absolute;width:2px;height:2px;background:var(--teal);border-radius:50%;opacity:.3;animation:float 20s infinite linear}
+@keyframes float{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:.3}90%{opacity:.3}100%{transform:translateY(-100vh) rotate(720deg);opacity:0}}
+.login-card{background:var(--bg1);border:1px solid var(--brd);border-radius:20px;padding:40px;width:420px;max-width:90vw;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.login-logo{text-align:center;margin-bottom:30px}
+.login-logo-icon{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--teal),var(--ac));display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:#fff;box-shadow:0 0 40px rgba(20,184,166,.3);margin-bottom:12px}
+.login-logo h1{font-size:24px;font-weight:800;letter-spacing:-.5px}.login-logo h1 b{color:var(--teal)}
+.login-logo p{font-size:11px;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.login-fg{margin-bottom:18px}
+.login-fl{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.login-fi{width:100%;padding:12px 14px;background:var(--bg2);border:1px solid var(--brd);border-radius:10px;color:var(--t1);font-size:14px;outline:0;transition:.2s}
+.login-fi:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teald)}
+.login-btn{width:100%;padding:14px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,var(--teal),var(--ac));color:#fff;transition:.2s;letter-spacing:.3px}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(20,184,166,.3)}
+.login-err{background:var(--rosd);color:var(--ros);padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;display:none}
+.login-info{text-align:center;margin-top:16px;font-size:10px;color:var(--t3)}
+.login-info a{color:var(--teal)}
+.login-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;padding-top:16px;border-top:1px solid var(--brd)}
+.login-badge span{font-size:9px;color:var(--t3);letter-spacing:1px;text-transform:uppercase}
+.login-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--grn)}
+
+/* ===== LGPD CONSENT ===== */
+.lgpd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9998;backdrop-filter:blur(8px)}
+.lgpd-card{background:var(--bg1);border:1px solid var(--brd);border-radius:16px;width:600px;max-width:92vw;max-height:85vh;overflow:hidden;display:flex;flex-direction:column}
+.lgpd-header{padding:20px 24px;border-bottom:1px solid var(--brd);background:linear-gradient(135deg,rgba(20,184,166,.06),rgba(99,102,241,.06))}
+.lgpd-header h2{font-size:18px;font-weight:700}.lgpd-header p{font-size:12px;color:var(--t3);margin-top:4px}
+.lgpd-body{padding:20px 24px;overflow-y:auto;flex:1}
+.lgpd-section{margin-bottom:20px}
+.lgpd-section h3{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.lgpd-section p{font-size:12px;color:var(--t2);line-height:1.7}
+.lgpd-check{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--bg2);border-radius:8px;margin-bottom:8px;cursor:pointer}
+.lgpd-check input{margin-top:2px;accent-color:var(--teal);width:16px;height:16px;flex-shrink:0}
+.lgpd-check label{font-size:12px;color:var(--t2);line-height:1.5;cursor:pointer}
+.lgpd-check label b{color:var(--t1)}
+.lgpd-footer{padding:16px 24px;border-top:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
+.lgpd-footer .req{font-size:10px;color:var(--ros)}
+
+/* ===== MAIN LAYOUT ===== */
+.app{display:none;height:100vh;flex-direction:column}
+.app.active{display:flex}
+.app-hdr{height:var(--hdr-h);background:var(--bg1);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 20px;justify-content:space-between;flex-shrink:0}
+.app-hdr-left{display:flex;align-items:center;gap:12px}
+.app-hdr-logo{display:flex;align-items:center;gap:8px}
+.app-hdr-logo-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--ac));display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff}
+.app-hdr-logo span{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.app-hdr-logo span b{color:var(--teal)}
+.app-hdr-right{display:flex;align-items:center;gap:14px}
+.app-hdr-stat{text-align:center}.app-hdr-stat .v{font-size:13px;font-weight:700;font-family:monospace;color:var(--teal)}.app-hdr-stat .l{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.app-hdr-user{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:var(--bg2);cursor:pointer;transition:.2s}
+.app-hdr-user:hover{background:var(--bg3)}
+.app-hdr-user .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--ac));display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700}
+.app-hdr-user .name{font-size:12px;font-weight:500}.app-hdr-user .role{font-size:9px;color:var(--t3)}
+
+.app-body{display:flex;flex:1;overflow:hidden}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--side-w);min-width:var(--side-w);background:var(--bg1);border-right:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px}
+.nav-group{margin-bottom:4px}
+.nav-label{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1.2px;padding:12px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:.15s;margin-bottom:1px;color:var(--t2);font-size:12px;font-weight:500}
+.nav-item:hover{background:var(--bg2);color:var(--t1)}
+.nav-item.on{background:var(--acg);color:var(--ac2)}
+.nav-item .ico{width:20px;text-align:center;font-size:13px;flex-shrink:0}
+.nav-item .badge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--rosd);color:var(--ros);font-family:monospace}
+.sidebar-footer{padding:10px 12px;border-top:1px solid var(--brd);font-size:9px;color:var(--t3);text-align:center}
+.sidebar-footer .ver{color:var(--teal);font-weight:600}
+
+/* ===== CONTENT AREA ===== */
+.content{flex:1;overflow-y:auto;padding:20px 24px;background:var(--bg0)}
+.page-hdr{margin-bottom:20px}
+.page-hdr h1{font-size:20px;font-weight:800;letter-spacing:-.3px}.page-hdr p{font-size:12px;color:var(--t3);margin-top:2px}
+
+/* ===== COMMON COMPONENTS ===== */
+.card{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.card-h{padding:12px 16px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(20,184,166,.04),rgba(99,102,241,.04))}
+.card-h h3{font-size:13px;font-weight:700}.card-h p{font-size:10px;color:var(--t3)}
+.card-b{padding:14px 16px}
+.btn{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--brd);transition:.2s;font-family:inherit;display:inline-flex;align-items:center;gap:5px;color:var(--t2);background:transparent}
+.btn:hover{background:var(--bg3);color:var(--t1)}
+.btn-p{background:var(--teal);color:#fff;border-color:var(--teal)}.btn-p:hover{background:#0d9488;border-color:#0d9488}
+.btn-a{background:var(--ac);color:#fff;border-color:var(--ac)}.btn-a:hover{background:#4f46e5}
+.btn-d{background:var(--rosd);color:var(--ros);border-color:rgba(244,63,94,.2)}.btn-d:hover{background:rgba(244,63,94,.2)}
+.btn-s{background:var(--grnd);color:var(--grn);border-color:rgba(16,185,129,.2)}
+.btn-w{background:var(--ambd);color:var(--amb);border-color:rgba(245,158,11,.2)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-lg{padding:10px 20px;font-size:13px}
+
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.fi{width:100%;padding:9px 12px;background:var(--bgi);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;outline:0;transition:.2s}
+.fi:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teald)}
+.fi::placeholder{color:var(--t3)}
+.fta{width:100%;padding:9px 12px;background:var(--bgi);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:12px;outline:0;resize:vertical;min-height:70px;line-height:1.5;transition:.2s}
+.fta:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teald)}
+.fsel{width:100%;padding:9px 12px;background:var(--bgi);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;outline:0;appearance:none;cursor:pointer}
+.fsel option{background:var(--bg2);color:var(--t1)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.frow4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+
+.grid{display:grid;gap:12px}.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr 1fr}.grid-4{grid-template-columns:repeat(4,1fr)}
+.stat-card{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:16px;transition:.2s}
+.stat-card:hover{border-color:rgba(20,184,166,.3);transform:translateY(-1px)}
+.stat-card .ico{font-size:18px;margin-bottom:6px}
+.stat-card .val{font-size:22px;font-weight:800;font-family:monospace}
+.stat-card .lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+
+.badge{font-size:9px;font-weight:600;padding:2px 7px;border-radius:5px;font-family:monospace}
+.badge-g{background:var(--grnd);color:var(--grn)}.badge-a{background:var(--ambd);color:var(--amb)}.badge-r{background:var(--rosd);color:var(--ros)}.badge-c{background:var(--cynd);color:var(--cyn)}.badge-p{background:var(--purd);color:var(--pur)}.badge-t{background:var(--teald);color:var(--teal)}.badge-i{background:var(--acg);color:var(--ac2)}
+
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 3px 0}
+
+.empty{text-align:center;padding:40px 20px;color:var(--t3)}.empty .ico{font-size:36px;margin-bottom:10px;opacity:.3}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;border-bottom:1px solid var(--brd)}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(42,42,58,.5);font-size:12px;color:var(--t2)}
+.tbl tr:hover td{background:var(--bg3);color:var(--t1)}
+.tbl tr{cursor:pointer;transition:.15s}
+
+.search-box{position:relative;margin-bottom:14px}
+.search-box .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:13px}
+.search-box input{width:100%;padding:10px 14px 10px 36px;background:var(--bg2);border:1px solid var(--brd);border-radius:10px;color:var(--t1);font-size:13px;outline:0;transition:.2s}
+.search-box input:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acg)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px)}
+.modal{background:var(--bg1);border:1px solid var(--brd);border-radius:14px;width:560px;max-width:92vw;max-height:85vh;overflow:hidden;display:flex;flex-direction:column}
+.modal-h{padding:14px 18px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
+.modal-h h3{font-size:15px;font-weight:700}
+.modal-b{padding:18px;overflow-y:auto;flex:1}
+.modal-f{padding:12px 18px;border-top:1px solid var(--brd);display:flex;justify-content:flex-end;gap:8px}
+.modal-close{width:24px;height:24px;border-radius:50%;background:var(--rosd);color:var(--ros);border:0;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+
+.tabs-bar{display:flex;gap:3px;margin-bottom:16px;border-bottom:1px solid var(--brd);padding-bottom:8px}
+.tab-btn{padding:6px 14px;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;color:var(--t3);transition:.2s;border:none;background:none}
+.tab-btn:hover{color:var(--t1);background:var(--bg2)}
+.tab-btn.on{color:var(--teal);background:var(--teald)}
+
+/* Repertory specific */
+.rub{padding:10px 14px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:.15s;margin-bottom:3px}
+.rub:hover{background:var(--bg2);border-color:var(--brd)}.rub.sel{background:var(--acg);border-color:rgba(99,102,241,.3)}
+.rub .rp{font-size:12px;font-weight:500;margin-bottom:2px}.rub .re{font-size:10px;color:var(--t3);font-style:italic;margin-bottom:3px}
+.rub .rm{display:flex;gap:4px;flex-wrap:wrap}
+
+.pg{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 0}
+.pg .btn{min-width:30px;justify-content:center}
+.pg-info{font-size:10px;color:var(--t3);font-family:monospace}
+
+/* Repertorization ranking */
+.rank-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--brd);margin-bottom:5px;transition:.2s}
+.rank-row:hover{border-color:var(--ac);background:var(--acg)}
+.rank-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:monospace;flex-shrink:0}
+.rk1{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000}
+.rk2{background:linear-gradient(135deg,#94a3b8,#64748b);color:#000}
+.rk3{background:linear-gradient(135deg,#b45309,#92400e);color:#fff}
+.rko{background:var(--bgi);color:var(--t2)}
+.rank-info{flex:1;overflow:hidden}.rank-name{font-weight:600;font-size:12px}.rank-detail{font-size:9px;color:var(--t3);font-family:monospace}
+.rank-bar{width:80px}.rank-bar-bg{height:5px;border-radius:3px;background:var(--bgi)}.rank-bar-fg{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--ac))}
+.rank-score{font-family:monospace;font-weight:700;font-size:14px;color:var(--ac2)}
+
+/* Consultation */
+.cons-card{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:10px}
+.cons-card .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cons-card .date{font-size:11px;color:var(--teal);font-weight:600}
+.cons-card .num{font-size:10px;color:var(--t3)}
+.cons-section{margin-bottom:8px}.cons-section .lbl{font-size:10px;font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+.cons-section .val{font-size:12px;color:var(--t2);line-height:1.6}
+.cons-rx{padding:8px 12px;background:var(--bg1);border-radius:7px;border-left:3px solid var(--teal);margin-top:8px}
+.cons-rx .lbl{font-size:10px;font-weight:600;color:var(--teal);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+
+/* Patient list */
+.pat-card{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:12px;margin-bottom:6px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:10px}
+.pat-card:hover{border-color:var(--teal)}.pat-card.on{border-color:var(--teal);background:var(--teald)}
+.pat-card .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--ac));display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700;flex-shrink:0}
+.pat-card .info{flex:1;overflow:hidden}.pat-card .nm{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pat-card .dt{font-size:10px;color:var(--t3)}
+
+/* Agenda */
+.agenda-slot{display:flex;align-items:stretch;gap:10px;padding:8px 0;border-bottom:1px solid rgba(42,42,58,.3)}
+.agenda-time{width:50px;font-size:11px;font-family:monospace;color:var(--t3);padding-top:4px;flex-shrink:0}
+.agenda-event{flex:1;background:var(--bg2);border-radius:8px;padding:8px 12px;border-left:3px solid var(--teal);cursor:pointer;transition:.2s}
+.agenda-event:hover{background:var(--bg3)}
+.agenda-event.empty{border-left-color:var(--brd);opacity:.4;cursor:default}
+.agenda-event .nm{font-size:12px;font-weight:600}.agenda-event .tp{font-size:10px;color:var(--t3)}
+
+/* Print styles */
+@media print{.sidebar,.app-hdr{display:none!important}.content{padding:0!important}.app-body{display:block!important}}
+@media(max-width:768px){.sidebar{display:none}.content{padding:12px}}
+
+/* Loading */
+.loader{text-align:center;padding:40px;color:var(--t3)}
+.loader-spin{width:36px;height:36px;border:3px solid var(--brd);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* LGPD shield */
+.lgpd-shield{display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--grn);background:var(--grnd);padding:2px 8px;border-radius:10px;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- === 02_login_lgpd_html.html === -->
+
+<!-- LOGIN SCREEN -->
+<div class="login-bg" id="loginScreen">
+  <div class="particles" id="particles"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🏥</div>
+      <h1>Homeo<b>Clinic</b> Pro</h1>
+      <p>Plataforma Clínica Profissional</p>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <div class="login-fg">
+      <label class="login-fl">E-mail ou Usuário</label>
+      <input class="login-fi" id="loginUser" type="text" placeholder="seu@email.com" autocomplete="username">
+    </div>
+    <div class="login-fg">
+      <label class="login-fl">Senha</label>
+      <input class="login-fi" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="login-fg" id="clinicSetup" style="display:none">
+      <label class="login-fl">Nome da Clínica (primeiro acesso)</label>
+      <input class="login-fi" id="loginClinic" type="text" placeholder="Clínica Homeopática...">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Entrar</button>
+    <div class="login-info">
+      Primeiro acesso? Use qualquer e-mail e senha para criar sua conta.<br>
+      <a href="#" onclick="toggleSetup()">Configurar clínica</a>
+    </div>
+    <div class="login-badge">
+      <div class="dot"></div>
+      <span>Dados criptografados AES-256 • LGPD Compliant</span>
+    </div>
+  </div>
+</div>
+
+<!-- LGPD CONSENT SCREEN -->
+<div class="lgpd-overlay" id="lgpdScreen" style="display:none">
+  <div class="lgpd-card">
+    <div class="lgpd-header">
+      <h2>🛡️ Termos de Uso e Política de Privacidade</h2>
+      <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)</p>
+    </div>
+    <div class="lgpd-body">
+      <div class="lgpd-section">
+        <h3>1. Tratamento de Dados Pessoais Sensíveis</h3>
+        <p>O HomeoClinic Pro processa dados pessoais sensíveis de saúde conforme Art. 11, II, "f" da LGPD — tutela da saúde em procedimento realizado por profissional de saúde. Todos os dados são criptografados com AES-256 e armazenados localmente no dispositivo do profissional. Nenhum dado é transmitido para servidores externos sem consentimento explícito.</p>
+      </div>
+      <div class="lgpd-section">
+        <h3>2. Finalidades do Tratamento</h3>
+        <p>Os dados coletados são utilizados exclusivamente para: (a) prestação de assistência à saúde homeopática; (b) gestão do prontuário eletrônico conforme Resolução CFM nº 1.821/2007; (c) emissão de prescrições e documentos clínicos; (d) repertorização e análise de sintomas para tratamento homeopático. O período de retenção é de 20 anos conforme legislação vigente.</p>
+      </div>
+      <div class="lgpd-section">
+        <h3>3. Direitos do Titular dos Dados</h3>
+        <p>O paciente possui direito a: confirmação de tratamento, acesso aos dados, correção de dados incompletos, anonimização ou bloqueio de dados desnecessários, portabilidade dos dados (exportação), eliminação de dados (respeitando prazos legais de retenção), informação sobre compartilhamento, e revogação do consentimento.</p>
+      </div>
+      <div class="lgpd-section">
+        <h3>4. Medidas de Segurança</h3>
+        <p>Implementamos: criptografia AES-256 para dados em repouso; controle de acesso por autenticação; registro de auditoria de todas as operações; backup criptografado; conformidade com NGS2 (Nível de Garantia de Segurança 2) da SBIS/CFM. O encarregado de dados (DPO) pode ser contactado através das configurações do sistema.</p>
+      </div>
+      <div class="lgpd-section">
+        <h3>5. Consentimentos Necessários</h3>
+        <div class="lgpd-check" onclick="this.querySelector('input').click()">
+          <input type="checkbox" id="lgpdC1">
+          <label for="lgpdC1"><b>Aceito os Termos de Uso</b> — Li e concordo com os termos de uso da plataforma HomeoClinic Pro, incluindo a política de privacidade e tratamento de dados. <b>(Obrigatório)</b></label>
+        </div>
+        <div class="lgpd-check" onclick="this.querySelector('input').click()">
+          <input type="checkbox" id="lgpdC2">
+          <label for="lgpdC2"><b>Autorizo o tratamento de dados sensíveis</b> — Autorizo o tratamento de dados pessoais sensíveis de saúde para fins de assistência homeopática, conforme Art. 11 da LGPD. <b>(Obrigatório)</b></label>
+        </div>
+        <div class="lgpd-check" onclick="this.querySelector('input').click()">
+          <input type="checkbox" id="lgpdC3">
+          <label for="lgpdC3"><b>Reconheço a responsabilidade sobre os dados</b> — Como profissional de saúde e controlador dos dados, assumo responsabilidade pela segurança, sigilo e uso adequado dos dados dos pacientes. <b>(Obrigatório)</b></label>
+        </div>
+        <div class="lgpd-check" onclick="this.querySelector('input').click()">
+          <input type="checkbox" id="lgpdC4">
+          <label for="lgpdC4"><b>Autorizo backup automático criptografado</b> — Autorizo a realização de backups automáticos dos dados, sempre criptografados, para proteção contra perda de dados. (Opcional)</label>
+        </div>
+      </div>
+    </div>
+    <div class="lgpd-footer">
+      <div class="req">* Campos obrigatórios devem ser aceitos para continuar</div>
+      <button class="btn btn-p btn-lg" onclick="acceptLGPD()">Aceitar e Continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APPLICATION -->
+<div class="app" id="mainApp">
+  <!-- Header -->
+  <div class="app-hdr">
+    <div class="app-hdr-left">
+      <div class="app-hdr-logo">
+        <div class="app-hdr-logo-i">🏥</div>
+        <span>Homeo<b>Clinic</b> Pro</span>
+      </div>
+      <span class="lgpd-shield">🛡️ LGPD</span>
+    </div>
+    <div class="app-hdr-right">
+      <div class="app-hdr-stat"><div class="v" id="hRub">—</div><div class="l">Rubricas</div></div>
+      <div class="app-hdr-stat"><div class="v" id="hRem">—</div><div class="l">Remédios</div></div>
+      <div class="app-hdr-stat"><div class="v" id="hPat">0</div><div class="l">Pacientes</div></div>
+      <div class="app-hdr-user" onclick="toggleUserMenu()">
+        <div class="avatar" id="userAv">D</div>
+        <div><div class="name" id="userName">Doutor(a)</div><div class="role">Homeopata</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- Body -->
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sidebar-nav" id="sideNav"></div>
+      <div class="sidebar-footer">
+        <div class="ver">HomeoClinic Pro v2.0</div>
+        LGPD Compliant • CFM 1821/2007 • Dados Criptografados
+      </div>
+    </div>
+    <div class="content" id="mainContent"></div>
+  </div>
+</div>
+
+<!-- === 03_script_core.html === -->
+
+<script>
+// ==================== CORE STATE & CONFIG ====================
+var DATA = null;
+var APP = {
+  page: 'dashboard',
+  clinic: {name:'Clínica Homeopática', cnpj:'', phone:'', email:'', address:'', crm:'', dpo:'', dpoEmail:''},
+  user: {name:'', email:'', role:'homeopata'},
+  patients: [],
+  curPat: -1, patTab: 'dados',
+  newPat: false, newCons: false, editPat: false,
+  nf: {}, cf: {},
+  sel: [], // repertorization selections
+  repPage: 0, repPageSize: 50, ch: null, repQ: '', chQ: '',
+  searchResults: null, searchPage: 0,
+  aim: [{t:'Bem-vindo ao HomeoClinic Pro! Descreva sintomas para sugestões de rubricas e medicamentos.',u:0}], ai:'',
+  agenda: [],
+  audit: [],
+  lgpdAccepted: false, lgpdDate: null,
+  financeiro: [],
+  // LGPD patient consents
+  patientConsents: {}
+};
+
+// ==================== ENCRYPTION (Web Crypto API) ====================
+var CRYPTO_KEY = null;
+async function deriveKey(password) {
+  var enc = new TextEncoder();
+  var keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits','deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:enc.encode('HomeoClinicPro2026'), iterations:100000, hash:'SHA-256'}, keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function encryptData(data) {
+  if (!CRYPTO_KEY) return JSON.stringify(data);
+  var enc = new TextEncoder();
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  var encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv:iv}, CRYPTO_KEY, enc.encode(JSON.stringify(data)));
+  return JSON.stringify({iv:Array.from(iv), data:Array.from(new Uint8Array(encrypted))});
+}
+async function decryptData(stored) {
+  if (!CRYPTO_KEY) return JSON.parse(stored);
+  try {
+    var obj = JSON.parse(stored);
+    if (!obj.iv) return obj; // legacy unencrypted
+    var decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv:new Uint8Array(obj.iv)}, CRYPTO_KEY, new Uint8Array(obj.data));
+    return JSON.parse(new TextDecoder().decode(decrypted));
+  } catch(e) { return JSON.parse(stored); }
+}
+
+// ==================== PERSISTENCE ====================
+async function saveAll() {
+  try {
+    var data = {
+      clinic: APP.clinic, user: APP.user, patients: APP.patients,
+      agenda: APP.agenda, audit: APP.audit, sel: APP.sel,
+      lgpdAccepted: APP.lgpdAccepted, lgpdDate: APP.lgpdDate,
+      financeiro: APP.financeiro, patientConsents: APP.patientConsents
+    };
+    var encrypted = await encryptData(data);
+    localStorage.setItem('hcp_pro', encrypted);
+  } catch(e) { console.error('Save error:', e); }
+}
+async function loadAll() {
+  try {
+    var stored = localStorage.getItem('hcp_pro');
+    if (!stored) return false;
+    var data = await decryptData(stored);
+    if (data.clinic) APP.clinic = Object.assign(APP.clinic, data.clinic);
+    if (data.user) APP.user = Object.assign(APP.user, data.user);
+    if (data.patients) APP.patients = data.patients;
+    if (data.agenda) APP.agenda = data.agenda;
+    if (data.audit) APP.audit = data.audit;
+    if (data.sel) APP.sel = data.sel;
+    if (data.lgpdAccepted) APP.lgpdAccepted = data.lgpdAccepted;
+    if (data.lgpdDate) APP.lgpdDate = data.lgpdDate;
+    if (data.financeiro) APP.financeiro = data.financeiro;
+    if (data.patientConsents) APP.patientConsents = data.patientConsents;
+    return true;
+  } catch(e) { return false; }
+}
+function addAudit(action, details) {
+  APP.audit.unshift({ts: new Date().toISOString(), action: action, details: details, user: APP.user.name || 'Sistema'});
+  if (APP.audit.length > 1000) APP.audit = APP.audit.slice(0, 1000);
+  saveAll();
+}
+
+// ==================== HELPERS ====================
+function nm(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function fmtNum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+function fmtDate(d) { if(!d) return ''; var p=d.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : d; }
+function age(d) { if(!d) return ''; var b=new Date(d),t=new Date(); return Math.floor((t-b)/31557600000)+' anos'; }
+function today() { var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function nowStr() { return new Date().toLocaleString('pt-BR'); }
+function parseRemedies(s) {
+  if(!s||!s.trim()) return [];
+  return s.trim().split(/\s+/).filter(function(x){return x.length>0}).map(function(n){
+    var g3=n===n.toUpperCase()&&n.length>1; var g2=!g3&&n[0]===n[0].toUpperCase()&&n.length>1;
+    return {n:n,g:g3?3:g2?2:1};
+  });
+}
+
+function el(t,a) {
+  var e = document.createElement(t);
+  if(a) for(var k in a) {
+    if(k==='on') for(var ev in a[k]) e.addEventListener(ev, a[k][ev]);
+    else if(k==='s') for(var sk in a[k]) e.style[sk]=a[k][sk];
+    else if(k==='c') e.className=a[k];
+    else if(k==='h') e.innerHTML=a[k];
+    else e.setAttribute(k,a[k]);
+  }
+  for(var i=2;i<arguments.length;i++){
+    var c=arguments[i];
+    if(c!=null){if(typeof c==='string')e.appendChild(document.createTextNode(c));
+    else if(Array.isArray(c))c.forEach(function(x){if(x)e.appendChild(x);});
+    else e.appendChild(c);}
+  }
+  return e;
+}
+
+// Chapter icons
+var ICONS={PSI:'🧠',MEN:'🧠',MIN:'🧠',ILU:'💭',EMO:'🌸',CAB:'🗣',HEA:'🗣',OLH:'👁',EYE:'👁',VIS:'👀',SEE:'👀',OUV:'👂',AUD:'👂',EAR:'👂',NAR:'👃',NOS:'👃',BOC:'👄',MOU:'👄',DEN:'🦷',GAR:'🫁',THR:'🫁',PES:'🦒',NEC:'🦒',PEI:'🫀',CHE:'🫀',CAR:'❤️',LAR:'🎵',TOS:'💨',RES:'🌬',EXP:'💧',ABD:'🤰',WOM:'🤰',EST:'🤢',STO:'🤢',RET:'🔽',FEZ:'💩',URE:'💦',URI:'💧',BEX:'💧',BLA:'💧',RIN:'🫘',KID:'🫘',FEM:'♀️',WIF:'♀️',MAS:'♂️',MAL:'♂️',PRO:'♂️',EXT:'🦵',LIM:'🦵',COS:'🔙',BAC:'🔙',UNH:'💅',PEL:'🩹',SKI:'🩹',GEN:'⚡',GER:'⚡',ELE:'⚡',FEB:'🌡',FEV:'🌡',CAL:'🥶',TRA:'💦',SON:'😴',SLE:'😴',SOH:'💤',VER:'🌀',COM:'🍽',SAN:'📘',CLI:'🏥',BLO:'🩸',MXX:'📋',PAL:'👅',TAS:'👅',SME:'👃'};
+function getIcon(c){return ICONS[c]||'📋'}
+
+// ==================== LOGIN & AUTH ====================
+function toggleSetup() {
+  var el = document.getElementById('clinicSetup');
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+async function doLogin() {
+  var user = document.getElementById('loginUser').value.trim();
+  var pass = document.getElementById('loginPass').value;
+  var clinic = document.getElementById('loginClinic').value.trim();
+  if (!user || !pass) {
+    showLoginErr('Preencha e-mail e senha.'); return;
+  }
+  if (pass.length < 4) {
+    showLoginErr('Senha deve ter pelo menos 4 caracteres.'); return;
+  }
+  // Derive encryption key from password
+  try { CRYPTO_KEY = await deriveKey(pass); } catch(e) { CRYPTO_KEY = null; }
+
+  // Try to load existing data
+  var loaded = await loadAll();
+
+  // Check if stored user matches
+  if (loaded && APP.user.email && APP.user.email !== user) {
+    // Check stored password hash
+    var storedHash = localStorage.getItem('hcp_auth');
+    if (storedHash) {
+      var hash = await hashPassword(user + pass);
+      if (hash !== storedHash) {
+        showLoginErr('Credenciais inválidas.'); return;
+      }
+    }
+  }
+
+  if (!loaded) {
+    // First time - create profile
+    APP.user.name = user.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(l){return l.toUpperCase()});
+    APP.user.email = user;
+    if (clinic) APP.clinic.name = clinic;
+    addDefaultPatients();
+  }
+
+  // Store auth hash
+  var authHash = await hashPassword(user + pass);
+  localStorage.setItem('hcp_auth', authHash);
+
+  addAudit('LOGIN', 'Usuário: ' + user + ' — IP: local');
+
+  // Hide login
+  document.getElementById('loginScreen').style.display = 'none';
+
+  // Check LGPD consent
+  if (!APP.lgpdAccepted) {
+    document.getElementById('lgpdScreen').style.display = 'flex';
+  } else {
+    startApp();
+  }
+}
+
+async function hashPassword(s) {
+  var enc = new TextEncoder();
+  var hash = await crypto.subtle.digest('SHA-256', enc.encode(s));
+  return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+
+function showLoginErr(msg) {
+  var e = document.getElementById('loginErr');
+  e.textContent = msg; e.style.display = 'block';
+  setTimeout(function(){ e.style.display='none'; }, 3000);
+}
+
+function acceptLGPD() {
+  var c1 = document.getElementById('lgpdC1').checked;
+  var c2 = document.getElementById('lgpdC2').checked;
+  var c3 = document.getElementById('lgpdC3').checked;
+  if (!c1 || !c2 || !c3) {
+    alert('Você deve aceitar todos os termos obrigatórios para continuar.');
+    return;
+  }
+  APP.lgpdAccepted = true;
+  APP.lgpdDate = new Date().toISOString();
+  APP.lgpdBackup = document.getElementById('lgpdC4').checked;
+  addAudit('LGPD_CONSENT', 'Termos aceitos em ' + nowStr());
+  document.getElementById('lgpdScreen').style.display = 'none';
+  startApp();
+}
+
+function addDefaultPatients() {
+  APP.patients = [
+    {id:1,nome:'Maria Silva',nasc:'1985-03-15',sexo:'F',tel:'(11) 99999-0001',email:'maria@email.com',prof:'Professora',conv:'Particular',cpf:'123.456.789-00',rg:'12.345.678-9',endereco:'Rua das Flores, 123 - SP',obs:'Tendência a ansiedade e distúrbios digestivos.',lgpdConsent:true,lgpdDate:'2026-02-10',
+    consultas:[
+      {id:1,data:'2026-02-10',queixa:'Ansiedade intensa com palpitações, piora à noite.',anamnese:'Ansiedade há 3 meses, piora após estresse no trabalho. Palpitações noturnas. Sono agitado. Melhora ao ar livre. Desejo de coisas quentes. Sede de pequenos goles.',exame:'PA: 130/85 mmHg. FC: 88 bpm. Abdome distendido, timpânico.',sintomas:'PSI: Ansiedade, Inquietude, Insônia | ABD: Distensão | GEN: Agravação noite',rx:'Arsenicum Album 30CH - 3 glóbulos sublinguais, 2x/dia por 15 dias',evolucao:'Retorno em 15 dias.',profissional:APP.user.name},
+      {id:2,data:'2026-02-25',queixa:'Melhora parcial da ansiedade (60%). Distensão leve persistente.',anamnese:'Sono melhorou significativamente. Ansiedade reduziu. Distensão abdominal menos intensa.',exame:'PA: 120/80 mmHg. FC: 76 bpm. Abdome com leve distensão.',sintomas:'ABD: Distensão (melhor) | GEN: Melhora geral',rx:'Arsenicum Album 200CH - dose única. Lycopodium 30CH se distensão persistir.',evolucao:'Retorno em 30 dias.',profissional:APP.user.name}
+    ]},
+    {id:2,nome:'João Santos',nasc:'1970-08-22',sexo:'M',tel:'(11) 99999-0002',email:'joao@email.com',prof:'Engenheiro',conv:'Unimed',cpf:'987.654.321-00',rg:'98.765.432-1',endereco:'Av. Paulista, 1000 - SP',obs:'Enxaquecas recorrentes e dores articulares.',lgpdConsent:true,lgpdDate:'2026-03-01',
+    consultas:[
+      {id:1,data:'2026-03-01',queixa:'Enxaqueca forte, lado direito, com náuseas.',anamnese:'Enxaquecas há 10 anos, lado D predominante. Piora: luz, barulho. Melhora: pressão firme, escuro. Joelhos: dor bilateral, piora frio/umidade.',exame:'PA: 125/82 mmHg. Sensibilidade temporal D. Joelhos: crepitação bilateral.',sintomas:'CAB: Enxaqueca, Dor pulsátil | EST: Náusea | EXT: Dor articular | GEN: Agravação frio',rx:'Sanguinaria 30CH - 3 glóbulos 3x/dia. Rhus Tox 30CH para articulações.',evolucao:'Retorno em 20 dias.',profissional:APP.user.name}
+    ]}
+  ];
+}
+
+// Create particles for login
+function createParticles() {
+  var cont = document.getElementById('particles');
+  if (!cont) return;
+  for (var i = 0; i < 30; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDelay = Math.random()*20+'s';
+    p.style.animationDuration = (15+Math.random()*15)+'s';
+    cont.appendChild(p);
+  }
+}
+createParticles();
+
+// Enter key on login
+document.getElementById('loginPass').addEventListener('keydown', function(e) { if(e.key==='Enter') doLogin(); });
+</script>
+
+<!-- === 04_script_navigation.html === -->
+
+<script>
+// ==================== NAVIGATION & MAIN RENDER ====================
+var NAV_ITEMS = [
+  {group:'PRINCIPAL', items:[
+    {id:'dashboard',icon:'📊',label:'Dashboard'},
+    {id:'agenda',icon:'📅',label:'Agenda'},
+  ]},
+  {group:'CLÍNICA', items:[
+    {id:'patients',icon:'👥',label:'Pacientes'},
+    {id:'prontuario',icon:'🩺',label:'Prontuário'},
+    {id:'prescricoes',icon:'💊',label:'Prescrições'},
+    {id:'documentos',icon:'📄',label:'Documentos'},
+  ]},
+  {group:'REPERTÓRIO', items:[
+    {id:'repertory',icon:'📖',label:'Repertório'},
+    {id:'repertorization',icon:'⚡',label:'Repertorização'},
+    {id:'ai',icon:'🧠',label:'Assistente IA'},
+  ]},
+  {group:'GESTÃO', items:[
+    {id:'financeiro',icon:'💰',label:'Financeiro'},
+    {id:'lgpd',icon:'🛡️',label:'LGPD / Compliance'},
+    {id:'audit',icon:'📋',label:'Auditoria'},
+    {id:'settings',icon:'⚙️',label:'Configurações'},
+  ]}
+];
+
+function startApp() {
+  document.getElementById('mainApp').classList.add('active');
+  saveAll();
+  render();
+}
+
+function render() {
+  renderNav();
+  renderHeader();
+  renderContent();
+}
+
+function renderNav() {
+  var nav = document.getElementById('sideNav');
+  nav.innerHTML = '';
+  NAV_ITEMS.forEach(function(group) {
+    nav.appendChild(el('div',{c:'nav-label'}, group.group));
+    group.items.forEach(function(item) {
+      var n = el('div', {c:'nav-item'+(APP.page===item.id?' on':''), on:{click:function(){
+        APP.page = item.id;
+        if (item.id === 'patients') { APP.newPat=false; APP.newCons=false; APP.editPat=false; }
+        render();
+      }}},
+        el('span',{c:'ico'}, item.icon),
+        el('span',null, item.label)
+      );
+      // Badges
+      if (item.id==='patients' && APP.patients.length) n.appendChild(el('span',{c:'badge badge-t'},String(APP.patients.length)));
+      if (item.id==='repertorization' && APP.sel.length) n.appendChild(el('span',{c:'badge badge-i'},String(APP.sel.length)));
+      nav.appendChild(n);
+    });
+  });
+}
+
+function renderHeader() {
+  var st = DATA && DATA.stats ? DATA.stats : null;
+  document.getElementById('hRub').textContent = st ? fmtNum(st.totalRubrics) : '—';
+  document.getElementById('hRem').textContent = st ? fmtNum(st.totalRemedies) : '—';
+  document.getElementById('hPat').textContent = APP.patients.length;
+  document.getElementById('userName').textContent = APP.user.name || 'Doutor(a)';
+  document.getElementById('userAv').textContent = (APP.user.name||'D')[0].toUpperCase();
+}
+
+function renderContent() {
+  var c = document.getElementById('mainContent');
+  c.innerHTML = '';
+  switch(APP.page) {
+    case 'dashboard': renderDashboard(c); break;
+    case 'agenda': renderAgenda(c); break;
+    case 'patients': renderPatients(c); break;
+    case 'prontuario': renderProntuario(c); break;
+    case 'prescricoes': renderPrescricoes(c); break;
+    case 'documentos': renderDocumentos(c); break;
+    case 'repertory': renderRepertory(c); break;
+    case 'repertorization': renderRepertorization(c); break;
+    case 'ai': renderAI(c); break;
+    case 'financeiro': renderFinanceiro(c); break;
+    case 'lgpd': renderLGPD(c); break;
+    case 'audit': renderAudit(c); break;
+    case 'settings': renderSettings(c); break;
+  }
+}
+
+function toggleUserMenu() {
+  if(confirm('Deseja sair do sistema?')) {
+    addAudit('LOGOUT', 'Sessão encerrada');
+    location.reload();
+  }
+}
+</script>
+
+<!-- === 05_script_dashboard_agenda.html === -->
+
+<script>
+// ==================== DASHBOARD ====================
+function renderDashboard(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'📊 Dashboard'),el('p',null,APP.clinic.name+' — '+nowStr())));
+
+  // Stats
+  var totalCons = APP.patients.reduce(function(a,p){return a+p.consultas.length},0);
+  var todayAgenda = APP.agenda.filter(function(a){return a.data===today()}).length;
+  var g = el('div',{c:'grid grid-4',s:{marginBottom:'20px'}});
+  [
+    ['👥',String(APP.patients.length),'Pacientes','teal'],
+    ['🩺',String(totalCons),'Consultas','ac'],
+    ['📅',String(todayAgenda),'Agenda Hoje','amb'],
+    ['⚡',String(APP.sel.length),'Rubricas Sel.','pur']
+  ].forEach(function(x){
+    g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},x[0]),el('div',{c:'val',s:{color:'var(--'+x[3]+')'}},x[1]),el('div',{c:'lbl'},x[2])));
+  });
+  c.appendChild(g);
+
+  // DB Stats
+  if (DATA && DATA.stats) {
+    var st = DATA.stats;
+    var g2 = el('div',{c:'grid grid-4',s:{marginBottom:'20px'}});
+    [['📖',fmtNum(st.totalRubrics),'Rubricas','teal'],['💊',fmtNum(st.totalRemedies),'Remédios','grn'],['📚',fmtNum(st.totalTextos),'Mat. Médica','amb'],['💉',fmtNum(st.totalMedications),'Alopáticos','ros']].forEach(function(x){
+      g2.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},x[0]),el('div',{c:'val',s:{color:'var(--'+x[3]+')'}},x[1]),el('div',{c:'lbl'},x[2])));
+    });
+    c.appendChild(g2);
+  }
+
+  // Recent activity
+  var rc = el('div',{c:'card'});
+  rc.appendChild(el('div',{c:'card-h'},el('h3',null,'Atividade Recente')));
+  var rb = el('div',{c:'card-b'});
+  if (!APP.audit.length) {
+    rb.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'📋'),el('div',null,'Nenhuma atividade registrada')));
+  } else {
+    var tbl = el('table',{c:'tbl'});
+    tbl.appendChild(el('thead',null,el('tr',null,el('th',null,'Data/Hora'),el('th',null,'Ação'),el('th',null,'Detalhes'),el('th',null,'Usuário'))));
+    var tbody = el('tbody');
+    APP.audit.slice(0,10).forEach(function(a){
+      var tr = el('tr',null,
+        el('td',null,new Date(a.ts).toLocaleString('pt-BR')),
+        el('td',null,el('span',{c:'badge badge-t'},a.action)),
+        el('td',null,a.details),
+        el('td',null,a.user)
+      );
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);
+    rb.appendChild(tbl);
+  }
+  rc.appendChild(rb);
+  c.appendChild(rc);
+
+  // Quick actions
+  var qa = el('div',{c:'card'});
+  qa.appendChild(el('div',{c:'card-h'},el('h3',null,'Ações Rápidas')));
+  var qb = el('div',{c:'card-b',s:{display:'flex',gap:'10px',flexWrap:'wrap'}});
+  [
+    ['👥 Novo Paciente','patients',function(){APP.page='patients';APP.newPat=true;APP.nf={nome:'',nasc:'',sexo:'F',tel:'',email:'',prof:'',conv:'Particular',cpf:'',rg:'',endereco:'',obs:''};render();}],
+    ['📅 Nova Consulta','prontuario',function(){if(APP.patients.length){APP.page='prontuario';APP.curPat=0;APP.newCons=true;APP.cf={};render();}else alert('Cadastre um paciente primeiro.')}],
+    ['📖 Repertório','repertory',function(){APP.page='repertory';render();}],
+    ['🛡️ LGPD','lgpd',function(){APP.page='lgpd';render();}],
+    ['💾 Backup','settings',function(){doBackup();}]
+  ].forEach(function(x){
+    qb.appendChild(el('button',{c:'btn btn-p',on:{click:x[2]}},x[0]));
+  });
+  qa.appendChild(qb);
+  c.appendChild(qa);
+}
+
+// ==================== AGENDA ====================
+function renderAgenda(c) {
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'📅 Agenda'),el('p',null,fmtDate(today()))),
+    el('button',{c:'btn btn-p',on:{click:function(){showAgendaModal()}}},'+ Novo Agendamento')
+  ));
+
+  var slots = [];
+  for (var h = 7; h <= 20; h++) {
+    for (var m = 0; m < 60; m += 30) {
+      var time = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+      var evt = APP.agenda.find(function(a){ return a.data===today() && a.hora===time; });
+      slots.push({time:time, evt:evt});
+    }
+  }
+
+  var card = el('div',{c:'card'});
+  card.appendChild(el('div',{c:'card-h'},el('h3',null,'Agenda do Dia — '+fmtDate(today()))));
+  var body = el('div',{c:'card-b'});
+  slots.forEach(function(s){
+    var slot = el('div',{c:'agenda-slot'});
+    slot.appendChild(el('div',{c:'agenda-time'},s.time));
+    if (s.evt) {
+      var ev = el('div',{c:'agenda-event'});
+      ev.appendChild(el('div',{c:'nm'},s.evt.paciente));
+      ev.appendChild(el('div',{c:'tp'},s.evt.tipo||'Consulta'));
+      slot.appendChild(ev);
+    } else {
+      var ev = el('div',{c:'agenda-event empty',on:{click:function(){showAgendaModal(s.time)}}});
+      ev.appendChild(el('div',{c:'nm'},'Horário disponível'));
+      slot.appendChild(ev);
+    }
+    body.appendChild(slot);
+  });
+  card.appendChild(body);
+  c.appendChild(card);
+}
+
+function showAgendaModal(time) {
+  var bg = el('div',{c:'modal-bg',on:{click:function(e){if(e.target===bg)bg.remove()}}});
+  var m = el('div',{c:'modal'});
+  m.appendChild(el('div',{c:'modal-h'},el('h3',null,'Novo Agendamento'),el('button',{c:'modal-close',on:{click:function(){bg.remove()}}},'×')));
+  var b = el('div',{c:'modal-b'});
+
+  var data = el('div',{c:'fg'}); data.appendChild(el('label',{c:'fl'},'Data'));
+  var dataI = el('input',{c:'fi',type:'date',value:today()}); data.appendChild(dataI); b.appendChild(data);
+
+  var hora = el('div',{c:'fg'}); hora.appendChild(el('label',{c:'fl'},'Hora'));
+  var horaI = el('input',{c:'fi',type:'time',value:time||'08:00'}); hora.appendChild(horaI); b.appendChild(hora);
+
+  var pac = el('div',{c:'fg'}); pac.appendChild(el('label',{c:'fl'},'Paciente'));
+  var pacS = el('select',{c:'fsel'});
+  pacS.appendChild(el('option',{value:''},'Selecione...'));
+  APP.patients.forEach(function(p){pacS.appendChild(el('option',{value:p.nome},p.nome))});
+  pac.appendChild(pacS); b.appendChild(pac);
+
+  var tipo = el('div',{c:'fg'}); tipo.appendChild(el('label',{c:'fl'},'Tipo'));
+  var tipoS = el('select',{c:'fsel'});
+  ['Consulta','Retorno','Primeira Consulta','Encaixe','Teleconsulta'].forEach(function(t){tipoS.appendChild(el('option',{value:t},t))});
+  tipo.appendChild(tipoS); b.appendChild(tipo);
+
+  var obs = el('div',{c:'fg'}); obs.appendChild(el('label',{c:'fl'},'Observações'));
+  var obsT = el('textarea',{c:'fta',placeholder:'Observações...'}); obs.appendChild(obsT); b.appendChild(obs);
+
+  m.appendChild(b);
+  m.appendChild(el('div',{c:'modal-f'},
+    el('button',{c:'btn',on:{click:function(){bg.remove()}}},'Cancelar'),
+    el('button',{c:'btn btn-p',on:{click:function(){
+      APP.agenda.push({data:dataI.value, hora:horaI.value, paciente:pacS.value||'Não informado', tipo:tipoS.value, obs:obsT.value});
+      addAudit('AGENDA_NEW','Agendamento: '+pacS.value+' em '+fmtDate(dataI.value)+' '+horaI.value);
+      bg.remove(); render();
+    }}},'💾 Salvar')
+  ));
+  bg.appendChild(m);
+  document.body.appendChild(bg);
+}
+</script>
+
+<!-- === 06_script_patients.html === -->
+
+<script>
+// ==================== PATIENTS ====================
+function renderPatients(c) {
+  if (APP.newPat) { renderNewPatient(c); return; }
+
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'👥 Pacientes'),el('p',null,APP.patients.length+' pacientes cadastrados')),
+    el('div',{s:{display:'flex',gap:'8px'}},
+      el('button',{c:'btn btn-s',on:{click:function(){exportPatients()}}},'📤 Exportar'),
+      el('button',{c:'btn btn-p',on:{click:function(){
+        APP.newPat=true;APP.nf={nome:'',nasc:'',sexo:'F',tel:'',email:'',prof:'',conv:'Particular',cpf:'',rg:'',endereco:'',obs:''};render();
+      }}},'+ Novo Paciente')
+    )
+  ));
+
+  // Search
+  var sb = el('div',{c:'search-box'});
+  sb.appendChild(el('span',{c:'ico'},'🔍'));
+  var patQ = '';
+  sb.appendChild(el('input',{placeholder:'Buscar por nome, CPF, telefone...',on:{input:function(e){
+    patQ = nm(e.target.value);
+    renderPatientList(list, patQ);
+  }}}));
+  c.appendChild(sb);
+
+  var list = el('div');
+  renderPatientList(list, '');
+  c.appendChild(list);
+}
+
+function renderPatientList(container, query) {
+  container.innerHTML = '';
+  var filtered = APP.patients.filter(function(p){
+    if (!query) return true;
+    return nm(p.nome).indexOf(query)>=0 || nm(p.cpf||'').indexOf(query)>=0 || nm(p.tel||'').indexOf(query)>=0;
+  });
+
+  if (!filtered.length) {
+    container.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'👥'),el('div',null,query?'Nenhum paciente encontrado':'Nenhum paciente cadastrado')));
+    return;
+  }
+
+  // Table
+  var tbl = el('table',{c:'tbl'});
+  tbl.appendChild(el('thead',null,el('tr',null,
+    el('th',null,'Paciente'),el('th',null,'CPF'),el('th',null,'Idade'),el('th',null,'Telefone'),el('th',null,'Convênio'),el('th',null,'Consultas'),el('th',null,'LGPD')
+  )));
+  var tbody = el('tbody');
+  filtered.forEach(function(p,i) {
+    var realIdx = APP.patients.indexOf(p);
+    var tr = el('tr',{on:{click:function(){APP.curPat=realIdx;APP.page='prontuario';APP.patTab='dados';APP.newCons=false;render();}}},
+      el('td',null,el('div',{s:{display:'flex',alignItems:'center',gap:'8px'}},
+        el('div',{s:{width:'30px',height:'30px',borderRadius:'50%',background:'linear-gradient(135deg,var(--teal),var(--ac))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',color:'#fff',fontWeight:'700',flexShrink:'0'}},p.nome[0]),
+        el('div',null,el('div',{s:{fontWeight:'600',color:'var(--t1)',fontSize:'12px'}},p.nome),el('div',{s:{fontSize:'10px',color:'var(--t3)'}},p.email||''))
+      )),
+      el('td',null,p.cpf||'—'),
+      el('td',null,age(p.nasc)),
+      el('td',null,p.tel||'—'),
+      el('td',null,el('span',{c:'badge badge-t'},p.conv||'—')),
+      el('td',null,el('span',{c:'badge badge-i'},String(p.consultas.length))),
+      el('td',null,p.lgpdConsent ? el('span',{c:'badge badge-g'},'✓ Consentido') : el('span',{c:'badge badge-r'},'⚠ Pendente'))
+    );
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+  container.appendChild(el('div',{c:'card'},el('div',{c:'card-b',s:{padding:'0',overflowX:'auto'}},tbl)));
+}
+
+function renderNewPatient(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'👤 Novo Paciente'),el('p',null,'Preencha os dados para cadastro — Campos com * são obrigatórios')));
+
+  var card = el('div',{c:'card'});
+  var body = el('div',{c:'card-b'});
+
+  // Personal data
+  body.appendChild(el('div',{s:{fontSize:'13px',fontWeight:'700',marginBottom:'12px',color:'var(--teal)'}},'📋 Dados Pessoais'));
+  var r1=el('div',{c:'frow'}); r1.appendChild(mkFG('Nome Completo *','nome','text',APP.nf)); r1.appendChild(mkFG('Data de Nascimento *','nasc','date',APP.nf)); body.appendChild(r1);
+  var r2=el('div',{c:'frow3'}); r2.appendChild(mkFG('CPF *','cpf','text',APP.nf)); r2.appendChild(mkFG('RG','rg','text',APP.nf)); r2.appendChild(mkSel('Sexo *','sexo',APP.nf,['F','M'])); body.appendChild(r2);
+
+  body.appendChild(el('div',{s:{fontSize:'13px',fontWeight:'700',margin:'18px 0 12px',color:'var(--teal)'}},'📞 Contato'));
+  var r3=el('div',{c:'frow'}); r3.appendChild(mkFG('Telefone *','tel','tel',APP.nf)); r3.appendChild(mkFG('E-mail','email','email',APP.nf)); body.appendChild(r3);
+  body.appendChild(mkFG('Endereço Completo','endereco','text',APP.nf));
+
+  body.appendChild(el('div',{s:{fontSize:'13px',fontWeight:'700',margin:'18px 0 12px',color:'var(--teal)'}},'🏥 Dados Clínicos'));
+  var r4=el('div',{c:'frow'}); r4.appendChild(mkFG('Profissão','prof','text',APP.nf));
+  r4.appendChild(mkSel('Convênio','conv',APP.nf,['Particular','Unimed','SulAmérica','Bradesco','Amil','Outro'])); body.appendChild(r4);
+  body.appendChild(mkTA('Observações / Antecedentes','obs',APP.nf,'Antecedentes patológicos, alergias, medicações em uso...'));
+
+  // LGPD Consent
+  body.appendChild(el('div',{s:{fontSize:'13px',fontWeight:'700',margin:'18px 0 12px',color:'var(--teal)'}},'🛡️ Consentimento LGPD'));
+  var lgpdBox = el('div',{s:{background:'var(--bg1)',borderRadius:'8px',padding:'12px',border:'1px solid var(--brd)'}});
+  lgpdBox.appendChild(el('div',{s:{fontSize:'11px',color:'var(--t2)',lineHeight:'1.6',marginBottom:'10px'}},'Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), é necessário o consentimento do paciente para o tratamento de seus dados pessoais sensíveis de saúde. O paciente deve ser informado sobre as finalidades do tratamento, período de retenção (20 anos) e seus direitos.'));
+  var chk = el('div',{s:{display:'flex',alignItems:'center',gap:'8px'}});
+  var lgpdI = el('input',{type:'checkbox',id:'patLgpd',s:{accentColor:'var(--teal)',width:'16px',height:'16px'}});
+  chk.appendChild(lgpdI);
+  chk.appendChild(el('label',{for:'patLgpd',s:{fontSize:'12px',cursor:'pointer'}},'Paciente forneceu consentimento para tratamento de dados (TCLE assinado)'));
+  lgpdBox.appendChild(chk);
+  body.appendChild(lgpdBox);
+
+  // Buttons
+  var btns = el('div',{s:{display:'flex',gap:'8px',marginTop:'18px'}});
+  btns.appendChild(el('button',{c:'btn btn-p btn-lg',on:{click:function(){
+    if (!APP.nf.nome) { alert('Nome é obrigatório'); return; }
+    var p = {
+      id:Date.now(), nome:APP.nf.nome, nasc:APP.nf.nasc, sexo:APP.nf.sexo,
+      tel:APP.nf.tel, email:APP.nf.email, prof:APP.nf.prof, conv:APP.nf.conv,
+      cpf:APP.nf.cpf, rg:APP.nf.rg, endereco:APP.nf.endereco, obs:APP.nf.obs,
+      lgpdConsent:lgpdI.checked, lgpdDate:lgpdI.checked?new Date().toISOString():null,
+      consultas:[]
+    };
+    APP.patients.push(p);
+    APP.curPat = APP.patients.length-1;
+    APP.newPat = false;
+    APP.page = 'prontuario';
+    addAudit('PATIENT_NEW','Paciente cadastrado: '+p.nome+' (CPF: '+(p.cpf||'N/I')+')');
+    render();
+  }}},'💾 Cadastrar Paciente'));
+  btns.appendChild(el('button',{c:'btn',on:{click:function(){APP.newPat=false;render()}}},'Cancelar'));
+  body.appendChild(btns);
+
+  card.appendChild(body);
+  c.appendChild(card);
+}
+
+function mkFG(label,key,type,obj) {
+  var fg = el('div',{c:'fg'}); fg.appendChild(el('label',{c:'fl'},label));
+  fg.appendChild(el('input',{c:'fi',type:type||'text',value:obj[key]||'',placeholder:label.replace(' *',''),on:{input:function(e){obj[key]=e.target.value}}}));
+  return fg;
+}
+function mkTA(label,key,obj,ph) {
+  var fg = el('div',{c:'fg'}); fg.appendChild(el('label',{c:'fl'},label));
+  var ta = el('textarea',{c:'fta',placeholder:ph||'',on:{input:function(e){obj[key]=e.target.value}}});
+  ta.value = obj[key]||''; fg.appendChild(ta); return fg;
+}
+function mkSel(label,key,obj,opts) {
+  var fg = el('div',{c:'fg'}); fg.appendChild(el('label',{c:'fl'},label));
+  var s = el('select',{c:'fsel',on:{change:function(e){obj[key]=e.target.value}}});
+  opts.forEach(function(o){var op=el('option',{value:o},o);if(o===obj[key])op.selected=true;s.appendChild(op)});
+  fg.appendChild(s); return fg;
+}
+
+function exportPatients() {
+  var csv = 'Nome,CPF,Nascimento,Sexo,Telefone,Email,Profissão,Convênio,Consultas,LGPD\n';
+  APP.patients.forEach(function(p){
+    csv += [p.nome,p.cpf||'',p.nasc||'',p.sexo,p.tel||'',p.email||'',p.prof||'',p.conv||'',p.consultas.length,p.lgpdConsent?'Sim':'Não'].join(',')+'\n';
+  });
+  var blob = new Blob([csv],{type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='pacientes_homeoclinicpro_'+today()+'.csv'; a.click();
+  addAudit('EXPORT','Exportação de lista de pacientes (CSV)');
+}
+</script>
+
+<!-- === 07_script_prontuario.html === -->
+
+<script>
+// ==================== PRONTUÁRIO ====================
+function renderProntuario(c) {
+  var p = APP.patients[APP.curPat];
+  if (!p) {
+    c.appendChild(el('div',{c:'empty',s:{padding:'60px'}},
+      el('div',{c:'ico'},'🩺'),
+      el('div',null,'Selecione um paciente na seção Pacientes para abrir o prontuário.'),
+      el('button',{c:'btn btn-p',s:{marginTop:'16px'},on:{click:function(){APP.page='patients';render()}}},'Ir para Pacientes')
+    ));
+    return;
+  }
+
+  if (APP.newCons) { renderNewConsultation(c, p); return; }
+
+  // Patient header
+  var hdr = el('div',{c:'card',s:{marginBottom:'16px'}});
+  var hdrH = el('div',{c:'card-h'});
+  hdrH.appendChild(el('div',null,
+    el('div',{s:{display:'flex',alignItems:'center',gap:'10px'}},
+      el('div',{s:{width:'40px',height:'40px',borderRadius:'50%',background:'linear-gradient(135deg,var(--teal),var(--ac))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'16px',color:'#fff',fontWeight:'700'}},p.nome[0]),
+      el('div',null,
+        el('div',{s:{fontSize:'17px',fontWeight:'700'}},p.nome),
+        el('div',{s:{fontSize:'11px',color:'var(--t3)'}},age(p.nasc)+' • '+(p.sexo==='M'?'Masculino':'Feminino')+' • '+(p.prof||'')+' • '+(p.conv||'')+' • CPF: '+(p.cpf||'N/I'))
+      )
+    )
+  ));
+  var hdrBtns = el('div',{s:{display:'flex',gap:'6px'}});
+  hdrBtns.appendChild(el('button',{c:'btn btn-s btn-sm',on:{click:function(){
+    APP.newCons=true;APP.cf={queixa:'',anamnese:'',exame:'',sintomas:'',rx:'',evolucao:'',diagnostico:''};render();
+  }}},'📋 Nova Consulta'));
+  hdrBtns.appendChild(el('button',{c:'btn btn-w btn-sm',on:{click:function(){generateTCLE(p)}}},'📄 TCLE'));
+  hdrBtns.appendChild(el('button',{c:'btn btn-sm',on:{click:function(){
+    APP.page='patients';render();
+  }}},'◀ Voltar'));
+  hdrH.appendChild(hdrBtns);
+  hdr.appendChild(hdrH);
+
+  // Contact info
+  var cinfo = el('div',{s:{padding:'10px 16px',display:'flex',gap:'16px',flexWrap:'wrap',fontSize:'12px',color:'var(--t2)'}});
+  if(p.tel) cinfo.appendChild(el('span',null,'📞 '+p.tel));
+  if(p.email) cinfo.appendChild(el('span',null,'✉️ '+p.email));
+  if(p.endereco) cinfo.appendChild(el('span',null,'📍 '+p.endereco));
+  if(p.lgpdConsent) cinfo.appendChild(el('span',{c:'lgpd-shield'},'🛡️ LGPD OK — '+fmtDate((p.lgpdDate||'').split('T')[0])));
+  else cinfo.appendChild(el('span',{c:'badge badge-r'},'⚠ LGPD Pendente'));
+  hdr.appendChild(cinfo);
+  c.appendChild(hdr);
+
+  // Tabs
+  var tabs = el('div',{c:'tabs-bar'});
+  ['dados','consultas','anamnese','repertorizacao'].forEach(function(t){
+    var labels = {dados:'📋 Dados Pessoais',consultas:'🩺 Consultas ('+p.consultas.length+')',anamnese:'📝 Anamnese Homeopática',repertorizacao:'⚡ Repertorização'};
+    tabs.appendChild(el('button',{c:'tab-btn'+(APP.patTab===t?' on':''),on:{click:function(){APP.patTab=t;render()}}},labels[t]));
+  });
+  c.appendChild(tabs);
+
+  switch(APP.patTab) {
+    case 'dados': renderPatData(c,p); break;
+    case 'consultas': renderPatConsultas(c,p); break;
+    case 'anamnese': renderAnamnese(c,p); break;
+    case 'repertorizacao': renderPatRep(c,p); break;
+  }
+}
+
+function renderPatData(c,p) {
+  var card = el('div',{c:'card'});
+  card.appendChild(el('div',{c:'card-h'},el('h3',null,'Dados do Paciente')));
+  var b = el('div',{c:'card-b'});
+  var grid = el('div',{s:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}});
+  [['Nome',p.nome],['Data de Nascimento',fmtDate(p.nasc)+' ('+age(p.nasc)+')'],['CPF',p.cpf||'—'],['RG',p.rg||'—'],['Sexo',p.sexo==='M'?'Masculino':'Feminino'],['Profissão',p.prof||'—'],['Telefone',p.tel||'—'],['E-mail',p.email||'—'],['Convênio',p.conv||'—'],['Endereço',p.endereco||'—']].forEach(function(x){
+    grid.appendChild(el('div',{c:'fg',s:{margin:0}},el('div',{c:'fl'},x[0]),el('div',{s:{fontSize:'13px',color:'var(--t1)',padding:'4px 0'}},x[1])));
+  });
+  b.appendChild(grid);
+  if(p.obs) {
+    b.appendChild(el('div',{s:{marginTop:'12px',padding:'10px',background:'var(--bg1)',borderRadius:'8px',fontSize:'12px',color:'var(--t2)',borderLeft:'3px solid var(--amb)'}},
+      el('div',{s:{fontSize:'10px',fontWeight:'600',color:'var(--amb)',marginBottom:'4px'}},'OBSERVAÇÕES'),
+      el('div',null,p.obs)
+    ));
+  }
+  card.appendChild(b);
+  c.appendChild(card);
+
+  // History summary
+  var hs = el('div',{c:'card'});
+  hs.appendChild(el('div',{c:'card-h'},el('h3',null,'Resumo do Histórico')));
+  var hb = el('div',{c:'card-b'});
+  var lastCon = p.consultas.length ? p.consultas[p.consultas.length-1] : null;
+  var sg = el('div',{c:'grid grid-3'});
+  sg.appendChild(el('div',{c:'stat-card',s:{padding:'12px'}},el('div',{c:'val',s:{fontSize:'20px',color:'var(--teal)'}},String(p.consultas.length)),el('div',{c:'lbl'},'Consultas')));
+  sg.appendChild(el('div',{c:'stat-card',s:{padding:'12px'}},el('div',{c:'val',s:{fontSize:'16px',color:'var(--ac2)'}},lastCon?fmtDate(lastCon.data):'—'),el('div',{c:'lbl'},'Última Consulta')));
+  sg.appendChild(el('div',{c:'stat-card',s:{padding:'12px'}},el('div',{c:'val',s:{fontSize:'14px',color:'var(--amb)'}},lastCon?lastCon.rx.split(' ').slice(0,2).join(' '):'—'),el('div',{c:'lbl'},'Último Rx')));
+  hb.appendChild(sg);
+  hs.appendChild(hb);
+  c.appendChild(hs);
+}
+
+function renderPatConsultas(c,p) {
+  if (!p.consultas.length) {
+    c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'🩺'),el('div',null,'Nenhuma consulta. Clique em "Nova Consulta".')));
+    return;
+  }
+  p.consultas.slice().reverse().forEach(function(con,i){
+    var idx = p.consultas.length-1-i;
+    var d = el('div',{c:'cons-card'});
+    d.appendChild(el('div',{c:'hdr'},el('div',{c:'date'},'📅 '+fmtDate(con.data)),el('div',{c:'num'},'Consulta #'+(idx+1)+(con.profissional?' — Dr(a). '+con.profissional:''))));
+
+    if(con.queixa) d.appendChild(el('div',{c:'cons-section'},el('div',{c:'lbl',s:{color:'var(--amb)'}},'Queixa Principal'),el('div',{c:'val'},con.queixa)));
+    if(con.anamnese) d.appendChild(el('div',{c:'cons-section'},el('div',{c:'lbl',s:{color:'var(--cyn)'}},'Anamnese'),el('div',{c:'val'},con.anamnese)));
+    if(con.exame) d.appendChild(el('div',{c:'cons-section'},el('div',{c:'lbl',s:{color:'var(--pur)'}},'Exame Físico'),el('div',{c:'val'},con.exame)));
+    if(con.diagnostico) d.appendChild(el('div',{c:'cons-section'},el('div',{c:'lbl',s:{color:'var(--ros)'}},'Diagnóstico / Hipótese'),el('div',{c:'val'},con.diagnostico)));
+
+    if(con.sintomas) {
+      var tags = con.sintomas.split('|').map(function(s){return el('span',{c:'tag',s:{background:'var(--acg)',color:'var(--ac2)'}},s.trim())});
+      d.appendChild(el('div',{c:'cons-section'},el('div',{c:'lbl',s:{color:'var(--ac2)'}},'Sintomas Repertoriais'),el('div',{s:{display:'flex',flexWrap:'wrap',gap:'2px'}},tags)));
+    }
+    if(con.rx) {
+      var rx = el('div',{c:'cons-rx'}); rx.appendChild(el('div',{c:'lbl'},'💊 Prescrição')); rx.appendChild(el('div',{s:{fontSize:'12px',color:'var(--t2)'}},con.rx));
+      d.appendChild(rx);
+    }
+    if(con.evolucao) d.appendChild(el('div',{s:{marginTop:'8px',fontSize:'11px',color:'var(--t3)',fontStyle:'italic'}},'📌 '+con.evolucao));
+    c.appendChild(d);
+  });
+}
+
+function renderNewConsultation(c,p) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'📋 Nova Consulta'),el('p',null,p.nome+' — '+fmtDate(today()))));
+
+  var card = el('div',{c:'card'});
+  var b = el('div',{c:'card-b'});
+  b.appendChild(mkFG('Data','data','date',APP.cf));
+  if(!APP.cf.data) APP.cf.data = today();
+  b.appendChild(mkTA('Queixa Principal *','queixa',APP.cf,'O que trouxe o paciente à consulta?'));
+  b.appendChild(mkTA('Anamnese Homeopática','anamnese',APP.cf,'HDA, sintomas mentais, gerais e particulares. Modalidades (melhora/piora). Desejos/aversões alimentares. Sono. Transpiraçao. Calor/frio.'));
+  b.appendChild(mkTA('Exame Físico','exame',APP.cf,'Sinais vitais, inspeção, palpação, ausculta, exames específicos...'));
+  b.appendChild(mkTA('Diagnóstico / Hipótese','diagnostico',APP.cf,'CID-10 ou diagnóstico clínico...'));
+  b.appendChild(mkTA('Sintomas Repertoriais','sintomas',APP.cf,'Ex: PSI: Ansiedade | CAB: Dor pulsátil | GEN: Agravação noite'));
+  b.appendChild(mkTA('Prescrição (Rx)','rx',APP.cf,'Medicamento, potência, posologia, duração...'));
+  b.appendChild(mkTA('Evolução / Plano','evolucao',APP.cf,'Plano terapêutico, retorno, orientações...'));
+
+  var btns = el('div',{s:{display:'flex',gap:'8px',marginTop:'14px'}});
+  btns.appendChild(el('button',{c:'btn btn-p btn-lg',on:{click:function(){
+    if(!APP.cf.queixa){alert('Queixa principal é obrigatória');return}
+    var con = {id:Date.now(),data:APP.cf.data||today(),queixa:APP.cf.queixa,anamnese:APP.cf.anamnese,exame:APP.cf.exame,diagnostico:APP.cf.diagnostico,sintomas:APP.cf.sintomas,rx:APP.cf.rx,evolucao:APP.cf.evolucao,profissional:APP.user.name,timestamp:new Date().toISOString()};
+    p.consultas.push(con);
+    APP.newCons=false; APP.patTab='consultas';
+    addAudit('CONSULTATION_NEW','Consulta para '+p.nome+' em '+fmtDate(con.data));
+    render();
+  }}},'💾 Salvar Consulta'));
+  btns.appendChild(el('button',{c:'btn',on:{click:function(){APP.newCons=false;render()}}},'Cancelar'));
+  b.appendChild(btns);
+  card.appendChild(b);
+  c.appendChild(card);
+}
+
+function renderAnamnese(c,p) {
+  var card = el('div',{c:'card'});
+  card.appendChild(el('div',{c:'card-h'},el('h3',null,'📝 Anamnese Homeopática Completa')));
+  var b = el('div',{c:'card-b'});
+  b.appendChild(el('div',{s:{fontSize:'12px',color:'var(--t2)',marginBottom:'16px',lineHeight:'1.6'}},'A anamnese homeopática avalia o paciente de forma integral: sintomas mentais, gerais e particulares, com suas modalidades (o que melhora/piora), sensações, desejos/aversões, sono, sonhos e constituição.'));
+
+  var sections = [
+    ['🧠 Sintomas Mentais','mental','Estado emocional, medos, fobias, ansiedade, irritabilidade, tristeza, concentração, memória...'],
+    ['⚡ Sintomas Gerais','geral','Lateralidade, periodicidade, agravações/melhorias por hora do dia, clima, posição, movimento, alimentos...'],
+    ['🍽 Desejos e Aversões','desejos','Desejos: salgado, doce, gordura, picante, ácido. Aversões alimentares. Sede. Apetite.'],
+    ['😴 Sono e Sonhos','sono','Qualidade do sono, posição ao dormir, horário que acorda, sonhos recorrentes...'],
+    ['💦 Transpiração','transpiracao','Localização, odor, horário, o que provoca...'],
+    ['🌡 Termorregulação','termo','Friorento ou calorento? Intolerância a calor/frio? Cobertores?'],
+    ['♀️ Ginecológico (se aplicável)','gineco','Menstruação (regularidade, fluxo, cor, coágulos, TPM), leucorreia...'],
+    ['📌 Sintomas Particulares','particular','Sintomas específicos por região, com modalidades detalhadas...']
+  ];
+
+  // Load existing anamnese from patient
+  if (!p.anamnese) p.anamnese = {};
+
+  sections.forEach(function(s){
+    b.appendChild(el('div',{s:{fontSize:'12px',fontWeight:'700',color:'var(--teal)',margin:'14px 0 6px'}},s[0]));
+    var ta = el('textarea',{c:'fta',placeholder:s[2],s:{minHeight:'60px'},on:{input:function(e){p.anamnese[s[1]]=e.target.value;}}});
+    ta.value = p.anamnese[s[1]]||'';
+    b.appendChild(ta);
+  });
+
+  b.appendChild(el('button',{c:'btn btn-p',s:{marginTop:'14px'},on:{click:function(){
+    addAudit('ANAMNESE_SAVE','Anamnese salva para '+p.nome);
+    saveAll();
+    alert('Anamnese salva com sucesso!');
+  }}},'💾 Salvar Anamnese'));
+
+  card.appendChild(b);
+  c.appendChild(card);
+}
+
+function renderPatRep(c,p) {
+  if(!APP.sel.length) {
+    c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'⚡'),el('div',null,'Selecione rubricas no Repertório para repertorizar.')));
+    return;
+  }
+  c.appendChild(el('div',{s:{fontSize:'13px',color:'var(--t3)',marginBottom:'12px'}},'Repertorização vinculada a '+p.nome+' — '+APP.sel.length+' rubricas'));
+  renderRepResults(c);
+}
+
+function generateTCLE(p) {
+  var w = window.open('','_blank','width=800,height=600');
+  w.document.write('<html><head><title>TCLE - '+p.nome+'</title><style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;font-size:14px;line-height:1.8;color:#333}h1{font-size:18px;text-align:center;margin-bottom:20px}h2{font-size:14px;margin-top:20px}.sig{margin-top:60px;display:flex;justify-content:space-between}.sig div{text-align:center;width:45%}.sig .line{border-top:1px solid #333;padding-top:4px;margin-top:40px}</style></head><body>');
+  w.document.write('<h1>TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO</h1>');
+  w.document.write('<h1>Tratamento Homeopático e Proteção de Dados</h1>');
+  w.document.write('<p><strong>Clínica:</strong> '+APP.clinic.name+'</p>');
+  w.document.write('<p><strong>Paciente:</strong> '+p.nome+' — CPF: '+(p.cpf||'N/I')+'</p>');
+  w.document.write('<p><strong>Data:</strong> '+fmtDate(today())+'</p>');
+  w.document.write('<h2>1. Do Tratamento</h2><p>Declaro que fui informado(a) sobre o tratamento homeopático proposto, seus objetivos, procedimentos, riscos e benefícios. A homeopatia é uma especialidade médica reconhecida pelo CFM que utiliza medicamentos em doses infinitesimais.</p>');
+  w.document.write('<h2>2. Da Proteção de Dados (LGPD)</h2><p>Em conformidade com a Lei nº 13.709/2018 (LGPD), autorizo o tratamento dos meus dados pessoais e dados sensíveis de saúde para as seguintes finalidades: (a) prestação de assistência à saúde; (b) gestão do prontuário eletrônico; (c) emissão de prescrições e documentos clínicos; (d) repertorização homeopática.</p>');
+  w.document.write('<h2>3. Dos Direitos</h2><p>Estou ciente dos meus direitos como titular dos dados: acesso, correção, anonimização, portabilidade, eliminação (respeitado o prazo legal de 20 anos para prontuários), e revogação do consentimento.</p>');
+  w.document.write('<h2>4. Da Confidencialidade</h2><p>Todos os dados são criptografados e armazenados com segurança. O profissional de saúde se compromete a manter o sigilo médico conforme o Código de Ética Médica.</p>');
+  w.document.write('<div class="sig"><div><div class="line">'+p.nome+'<br>Paciente</div></div><div><div class="line">'+APP.user.name+'<br>Profissional de Saúde</div></div></div>');
+  w.document.write('<p style="text-align:center;margin-top:30px;font-size:11px;color:#666">Documento gerado pelo HomeoClinic Pro em '+fmtDate(today())+' — '+APP.clinic.name+'</p>');
+  w.document.write('</body></html>');
+  w.document.close();
+  addAudit('TCLE_GENERATED','TCLE gerado para '+p.nome);
+}
+</script>
+
+<!-- === 08_script_repertory.html === -->
+
+<script>
+// ==================== REPERTORY ====================
+var searchTimer = null;
+
+function doSearch(query) {
+  if (!DATA || !DATA.chapters) return [];
+  var q = nm(query); if (q.length < 2) return [];
+  var results = [], limit = 200;
+  var codes = Object.keys(DATA.chapters);
+  for (var ci=0; ci<codes.length && results.length<limit; ci++) {
+    var code=codes[ci], ch=DATA.chapters[code];
+    for (var ri=0; ri<ch.rubrics.length && results.length<limit; ri++) {
+      var r = ch.rubrics[ri];
+      if (nm(r[0]).indexOf(q)>=0 || nm(r[1]).indexOf(q)>=0)
+        results.push({p:r[0],e:r[1],d:r[2],num:r[3],miasm:r[4],ch:code,cn:ch.name});
+    }
+  }
+  return results;
+}
+
+function renderRepertory(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'📖 Repertório Homeopático'),
+    el('p',null,DATA?fmtNum(DATA.stats.totalRubrics)+' rubricas em '+DATA.stats.totalChapters+' capítulos':'Carregando base de dados...')));
+
+  if (!DATA) { c.appendChild(el('div',{c:'loader'},el('div',{c:'loader-spin'}),el('div',null,'Carregando sr_homeopata_data.js...'))); return; }
+
+  // Search
+  var sb = el('div',{c:'search-box',s:{maxWidth:'700px'}});
+  sb.appendChild(el('span',{c:'ico'},'🔍'));
+  sb.appendChild(el('input',{placeholder:'Buscar em '+fmtNum(DATA.stats.totalRubrics)+' rubricas...', value:APP.repQ,
+    on:{input:function(e){
+      APP.repQ=e.target.value; APP.searchPage=0;
+      if(searchTimer) clearTimeout(searchTimer);
+      searchTimer=setTimeout(function(){
+        APP.searchResults = APP.repQ.length>=2 ? doSearch(APP.repQ) : null;
+        render();
+      },300);
+    }}}));
+  c.appendChild(sb);
+
+  if (APP.searchResults !== null) {
+    renderSearchResults(c); return;
+  }
+
+  // Chapter sidebar + content layout
+  var layout = el('div',{s:{display:'flex',gap:'16px'}});
+
+  // Chapter list
+  var chList = el('div',{s:{width:'240px',minWidth:'240px',maxHeight:'calc(100vh - 240px)',overflowY:'auto'}});
+  var chSearch = el('div',{c:'search-box',s:{marginBottom:'8px'}});
+  chSearch.appendChild(el('span',{c:'ico'},'🔍'));
+  chSearch.appendChild(el('input',{placeholder:'Filtrar capítulos...',value:APP.chQ,s:{fontSize:'12px',padding:'8px 10px 8px 32px'},
+    on:{input:function(e){APP.chQ=e.target.value;render()}}}));
+  chList.appendChild(chSearch);
+
+  var q = nm(APP.chQ);
+  Object.keys(DATA.chapters).sort().forEach(function(code){
+    var ch = DATA.chapters[code];
+    if(q && nm(ch.name).indexOf(q)<0 && nm(code).indexOf(q)<0) return;
+    if(!APP.ch) APP.ch = code;
+    chList.appendChild(el('div',{c:'pat-card'+(APP.ch===code?' on':''),s:{padding:'8px 10px'},on:{click:function(){APP.ch=code;APP.repPage=0;render()}}},
+      el('div',{c:'av',s:{width:'26px',height:'26px',fontSize:'11px'}},getIcon(code)),
+      el('div',{c:'info'},el('div',{c:'nm',s:{fontSize:'11px'}},ch.name),el('div',{c:'dt'},fmtNum(ch.count)+' rubricas'))
+    ));
+  });
+  layout.appendChild(chList);
+
+  // Rubric list
+  var rubList = el('div',{s:{flex:'1'}});
+  var ch = DATA.chapters[APP.ch];
+  if (ch) {
+    rubList.appendChild(el('div',{s:{marginBottom:'12px'}},
+      el('div',{s:{fontSize:'16px',fontWeight:'700'}},getIcon(APP.ch)+' '+ch.name),
+      el('div',{s:{fontSize:'11px',color:'var(--t3)',marginTop:'2px'}},fmtNum(ch.count)+' rubricas — Página '+(APP.repPage+1)+'/'+Math.ceil(ch.count/APP.repPageSize))
+    ));
+
+    var start = APP.repPage * APP.repPageSize;
+    var end = Math.min(start + APP.repPageSize, ch.rubrics.length);
+    for (var i=start; i<end; i++) {
+      var r = ch.rubrics[i];
+      mkRub({p:r[0],e:r[1],d:r[2]}, APP.ch, rubList);
+    }
+    var totalPages = Math.ceil(ch.count/APP.repPageSize);
+    var pg = mkPg(APP.repPage, totalPages, function(p){APP.repPage=p;render();document.getElementById('mainContent').scrollTop=0});
+    if(pg) rubList.appendChild(pg);
+  }
+  layout.appendChild(rubList);
+  c.appendChild(layout);
+}
+
+function renderSearchResults(c) {
+  var results = APP.searchResults;
+  c.appendChild(el('div',{s:{marginBottom:'12px',fontSize:'12px',color:'var(--t3)'}},
+    (results.length>=200?'200+':results.length)+' resultados para "'+APP.repQ+'"'));
+  if(!results.length){c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'🔍'),el('div',null,'Nenhum resultado')));return}
+
+  var ps=APP.repPageSize, tp=Math.ceil(results.length/ps), pg=APP.searchPage;
+  var s=pg*ps, e=Math.min(s+ps,results.length);
+  for(var i=s;i<e;i++) {
+    var r=results[i];
+    mkRub(r, r.ch, c, r.cn);
+  }
+  var pgEl = mkPg(pg,tp,function(p){APP.searchPage=p;render();document.getElementById('mainContent').scrollTop=0});
+  if(pgEl) c.appendChild(pgEl);
+}
+
+function mkRub(r, chCode, cnt, chName) {
+  var rems = parseRemedies(r.d);
+  var isSel = APP.sel.some(function(x){return x.p===r.p && x.ch===chCode});
+  var d = el('div',{c:'rub'+(isSel?' sel':''),on:{click:function(){
+    var idx = APP.sel.findIndex(function(x){return x.p===r.p && x.ch===chCode});
+    if(idx>=0) APP.sel.splice(idx,1); else APP.sel.push({p:r.p,e:r.e,d:r.d,ch:chCode});
+    saveAll(); render();
+  }}});
+  d.appendChild(el('div',{c:'rp'},r.p));
+  if(r.e) d.appendChild(el('div',{c:'re'},r.e));
+  var m = el('div',{c:'rm'});
+  m.appendChild(el('span',{c:'badge badge-g'},rems.length+' rem'));
+  rems.filter(function(x){return x.g===3}).slice(0,5).forEach(function(x){m.appendChild(el('span',{c:'badge badge-a'},x.n))});
+  rems.filter(function(x){return x.g===2}).slice(0,3).forEach(function(x){m.appendChild(el('span',{c:'badge badge-c'},x.n))});
+  if(rems.length>8) m.appendChild(el('span',{s:{fontSize:'9px',color:'var(--t3)'}},'+'+(rems.length-8)));
+  d.appendChild(m);
+  if(chName) d.appendChild(el('span',{c:'badge badge-p',s:{position:'absolute',right:'12px',top:'8px'}},chName));
+  d.style.position = 'relative';
+  cnt.appendChild(d);
+}
+
+function mkPg(page, total, onPage) {
+  if(total<=1) return null;
+  var pg = el('div',{c:'pg'});
+  if(page>0) pg.appendChild(el('button',{c:'btn btn-sm',on:{click:function(){onPage(page-1)}}},'◀'));
+  var s=Math.max(0,page-3),e=Math.min(total,page+4);
+  if(s>0){pg.appendChild(el('button',{c:'btn btn-sm',on:{click:function(){onPage(0)}}},'1'));if(s>1)pg.appendChild(el('span',{c:'pg-info'},'...'))}
+  for(var i=s;i<e;i++){(function(idx){pg.appendChild(el('button',{c:'btn btn-sm'+(idx===page?' btn-a':''),on:{click:function(){onPage(idx)}}},''+(idx+1)))})(i)}
+  if(e<total){if(e<total-1)pg.appendChild(el('span',{c:'pg-info'},'...'));pg.appendChild(el('button',{c:'btn btn-sm',on:{click:function(){onPage(total-1)}}},''+total))}
+  if(page<total-1) pg.appendChild(el('button',{c:'btn btn-sm',on:{click:function(){onPage(page+1)}}},'▶'));
+  pg.appendChild(el('span',{c:'pg-info',s:{marginLeft:'8px'}},'Pág '+(page+1)+'/'+total));
+  return pg;
+}
+
+// ==================== REPERTORIZATION ====================
+function renderRepResults(c) {
+  var sc = {};
+  APP.sel.forEach(function(rub){
+    parseRemedies(rub.d).forEach(function(rem){
+      var k=rem.n.toLowerCase();
+      if(!sc[k]) sc[k]={n:rem.n,t:0,h:0,mg:0};
+      sc[k].t+=rem.g; sc[k].h++; sc[k].mg=Math.max(sc[k].mg,rem.g);
+    });
+  });
+  var sorted = Object.values(sc).sort(function(a,b){return b.h!==a.h?b.h-a.h:b.t-a.t}).slice(0,30);
+  if(!sorted.length) return;
+  var mx = sorted[0].t;
+  sorted.forEach(function(rem,i){
+    var pct = Math.round(rem.t/mx*100);
+    var row = el('div',{c:'rank-row'});
+    row.appendChild(el('div',{c:'rank-num '+(i===0?'rk1':i===1?'rk2':i===2?'rk3':'rko')},''+(i+1)));
+    row.appendChild(el('div',{c:'rank-info'},el('div',{c:'rank-name',s:{color:rem.mg===3?'var(--ac2)':'var(--t1)'}},rem.n),el('div',{c:'rank-detail'},rem.h+'/'+APP.sel.length+' rub — grau máx: '+rem.mg)));
+    var bar=el('div',{c:'rank-bar'});var bg=el('div',{c:'rank-bar-bg'});bg.appendChild(el('div',{c:'rank-bar-fg',s:{width:pct+'%'}}));bar.appendChild(bg);row.appendChild(bar);
+    row.appendChild(el('div',{c:'rank-score'},''+rem.t));
+    c.appendChild(row);
+  });
+}
+
+function renderRepertorization(c) {
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'⚡ Repertorização'),el('p',null,APP.sel.length+' rubricas selecionadas')),
+    el('button',{c:'btn btn-d',on:{click:function(){APP.sel=[];saveAll();render()}}},'🗑 Limpar Seleção')
+  ));
+
+  if(!APP.sel.length){
+    c.appendChild(el('div',{c:'empty',s:{padding:'60px'}},el('div',{c:'ico'},'📋'),el('div',null,'Vá ao Repertório e clique em rubricas para selecioná-las.')));
+    return;
+  }
+
+  // Selected rubrics
+  var selCard = el('div',{c:'card'});
+  selCard.appendChild(el('div',{c:'card-h'},el('h3',null,'Rubricas Selecionadas ('+APP.sel.length+')')));
+  var selB = el('div',{c:'card-b'});
+  APP.sel.forEach(function(r,i){
+    selB.appendChild(el('div',{s:{display:'flex',alignItems:'center',gap:'8px',padding:'4px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},
+      el('button',{c:'modal-close',s:{width:'16px',height:'16px',fontSize:'9px'},on:{click:function(){APP.sel.splice(i,1);saveAll();render()}}},'×'),
+      el('span',{c:'badge badge-t'},r.ch),
+      el('span',{s:{fontSize:'11px',flex:'1'}},r.p),
+      el('span',{s:{fontSize:'9px',color:'var(--t3)',fontFamily:'monospace'}},parseRemedies(r.d).length+' rem')
+    ));
+  });
+  selCard.appendChild(selB);
+  c.appendChild(selCard);
+
+  // Results
+  var resCard = el('div',{c:'card'});
+  resCard.appendChild(el('div',{c:'card-h'},el('h3',null,'Resultado — Top Medicamentos')));
+  var resB = el('div',{c:'card-b'});
+  renderRepResults(resB);
+  resCard.appendChild(resB);
+  c.appendChild(resCard);
+}
+</script>
+
+<!-- === 09_script_docs_financial.html === -->
+
+<script>
+// ==================== PRESCRIPTIONS ====================
+function renderPrescricoes(c) {
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'💊 Prescrições'),el('p',null,'Gerar e gerenciar prescrições homeopáticas')),
+    el('button',{c:'btn btn-p',on:{click:function(){showPrescModal()}}},'+ Nova Prescrição')
+  ));
+
+  // Recent prescriptions from consultations
+  var allRx = [];
+  APP.patients.forEach(function(p){ p.consultas.forEach(function(con){
+    if(con.rx) allRx.push({patient:p.nome,date:con.data,rx:con.rx,doctor:con.profissional||APP.user.name});
+  })});
+  allRx.sort(function(a,b){return b.date.localeCompare(a.date)});
+
+  if (!allRx.length) {
+    c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'💊'),el('div',null,'Nenhuma prescrição encontrada')));
+    return;
+  }
+
+  var card = el('div',{c:'card'});
+  card.appendChild(el('div',{c:'card-h'},el('h3',null,'Prescrições Recentes')));
+  var tbl = el('table',{c:'tbl'});
+  tbl.appendChild(el('thead',null,el('tr',null,el('th',null,'Data'),el('th',null,'Paciente'),el('th',null,'Prescrição'),el('th',null,'Profissional'),el('th',null,'Ações'))));
+  var tbody = el('tbody');
+  allRx.forEach(function(rx){
+    tbody.appendChild(el('tr',{on:{click:function(){}}},
+      el('td',null,fmtDate(rx.date)),
+      el('td',{s:{fontWeight:'600',color:'var(--t1)'}},rx.patient),
+      el('td',{s:{maxWidth:'300px'}},rx.rx),
+      el('td',null,rx.doctor),
+      el('td',null,el('button',{c:'btn btn-sm btn-s',on:{click:function(e){e.stopPropagation();printPrescription(rx)}}},'🖨 Imprimir'))
+    ));
+  });
+  tbl.appendChild(tbody);
+  card.appendChild(el('div',{c:'card-b',s:{padding:'0',overflowX:'auto'}},tbl));
+  c.appendChild(card);
+}
+
+function showPrescModal() {
+  var bg = el('div',{c:'modal-bg',on:{click:function(e){if(e.target===bg)bg.remove()}}});
+  var m = el('div',{c:'modal'});
+  m.appendChild(el('div',{c:'modal-h'},el('h3',null,'Nova Prescrição'),el('button',{c:'modal-close',on:{click:function(){bg.remove()}}},'×')));
+  var b = el('div',{c:'modal-b'});
+
+  var pacS = el('select',{c:'fsel'});
+  pacS.appendChild(el('option',{value:''},'Selecione paciente...'));
+  APP.patients.forEach(function(p,i){pacS.appendChild(el('option',{value:String(i)},p.nome))});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Paciente'),pacS));
+
+  var rxTA = el('textarea',{c:'fta',placeholder:'Medicamento, potência, posologia...\nEx: Arsenicum Album 30CH - 3 glóbulos, 2x/dia, 15 dias',s:{minHeight:'100px'}});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Prescrição'),rxTA));
+
+  var obsTA = el('textarea',{c:'fta',placeholder:'Orientações ao paciente...'});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Orientações'),obsTA));
+
+  m.appendChild(b);
+  m.appendChild(el('div',{c:'modal-f'},
+    el('button',{c:'btn',on:{click:function(){bg.remove()}}},'Cancelar'),
+    el('button',{c:'btn btn-s',on:{click:function(){
+      var pi = parseInt(pacS.value);
+      if(isNaN(pi)){alert('Selecione um paciente');return}
+      var p = APP.patients[pi];
+      printPrescription({patient:p.nome,date:today(),rx:rxTA.value,doctor:APP.user.name,obs:obsTA.value});
+      bg.remove();
+    }}},'🖨 Imprimir'),
+    el('button',{c:'btn btn-p',on:{click:function(){
+      var pi = parseInt(pacS.value);
+      if(isNaN(pi)){alert('Selecione um paciente');return}
+      var p = APP.patients[pi];
+      p.consultas.push({id:Date.now(),data:today(),queixa:'Prescrição avulsa',rx:rxTA.value,anamnese:'',exame:'',sintomas:'',evolucao:obsTA.value,profissional:APP.user.name,timestamp:new Date().toISOString()});
+      addAudit('PRESCRIPTION','Prescrição para '+p.nome);
+      bg.remove(); render();
+    }}},'💾 Salvar e Imprimir')
+  ));
+  bg.appendChild(m); document.body.appendChild(bg);
+}
+
+function printPrescription(rx) {
+  var w = window.open('','_blank','width=800,height=600');
+  w.document.write('<html><head><title>Prescrição - '+rx.patient+'</title><style>body{font-family:Arial;max-width:600px;margin:40px auto;font-size:14px;line-height:1.8}h1{text-align:center;font-size:16px;border-bottom:2px solid #14b8a6;padding-bottom:10px}h2{font-size:14px;color:#14b8a6}.rx{font-size:16px;line-height:2;margin:30px 0;padding:20px;border:1px solid #ddd;border-radius:8px;white-space:pre-line}.footer{margin-top:60px;text-align:center;font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:10px}</style></head><body>');
+  w.document.write('<h1>'+APP.clinic.name+'</h1>');
+  w.document.write('<p style="text-align:center;font-size:12px;color:#666">'+(APP.clinic.address||'')+(APP.clinic.phone?' — Tel: '+APP.clinic.phone:'')+'</p>');
+  w.document.write('<h2>PRESCRIÇÃO HOMEOPÁTICA</h2>');
+  w.document.write('<p><strong>Paciente:</strong> '+rx.patient+'</p>');
+  w.document.write('<p><strong>Data:</strong> '+fmtDate(rx.date)+'</p>');
+  w.document.write('<div class="rx">'+rx.rx+'</div>');
+  if(rx.obs) w.document.write('<p><strong>Orientações:</strong> '+rx.obs+'</p>');
+  w.document.write('<div class="footer"><p>'+rx.doctor+(APP.clinic.crm?' — CRM: '+APP.clinic.crm:'')+'</p><p>'+APP.clinic.name+'</p></div>');
+  w.document.write('</body></html>'); w.document.close(); w.print();
+  addAudit('PRINT_RX','Prescrição impressa: '+rx.patient);
+}
+
+// ==================== DOCUMENTS ====================
+function renderDocumentos(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'📄 Documentos Clínicos'),el('p',null,'Gerar atestados, declarações e termos')));
+
+  var docs = [
+    {icon:'📋',title:'Atestado Médico',desc:'Atestado de comparecimento ou afastamento',action:function(){generateAtestado()}},
+    {icon:'📄',title:'TCLE — Consentimento',desc:'Termo de Consentimento Livre e Esclarecido',action:function(){if(APP.patients[APP.curPat])generateTCLE(APP.patients[APP.curPat]);else alert('Selecione um paciente primeiro')}},
+    {icon:'📊',title:'Relatório Clínico',desc:'Relatório detalhado do tratamento',action:function(){generateRelatorio()}},
+    {icon:'🛡️',title:'Política de Privacidade',desc:'Documento LGPD para pacientes',action:function(){generatePrivacyPolicy()}},
+    {icon:'💊',title:'Prescrição',desc:'Receituário homeopático',action:function(){showPrescModal()}},
+    {icon:'📤',title:'Exportar Prontuário',desc:'Exportar dados do paciente (portabilidade LGPD)',action:function(){exportProntuario()}}
+  ];
+
+  var grid = el('div',{c:'grid grid-3'});
+  docs.forEach(function(d){
+    grid.appendChild(el('div',{c:'stat-card',s:{cursor:'pointer',textAlign:'center'},on:{click:d.action}},
+      el('div',{s:{fontSize:'32px',marginBottom:'8px'}},d.icon),
+      el('div',{s:{fontSize:'13px',fontWeight:'700',marginBottom:'4px'}},d.title),
+      el('div',{s:{fontSize:'11px',color:'var(--t3)'}},d.desc)
+    ));
+  });
+  c.appendChild(grid);
+}
+
+function generateAtestado() {
+  var bg = el('div',{c:'modal-bg',on:{click:function(e){if(e.target===bg)bg.remove()}}});
+  var m = el('div',{c:'modal'});
+  m.appendChild(el('div',{c:'modal-h'},el('h3',null,'Atestado Médico'),el('button',{c:'modal-close',on:{click:function(){bg.remove()}}},'×')));
+  var b = el('div',{c:'modal-b'});
+
+  var pacS = el('select',{c:'fsel'});
+  APP.patients.forEach(function(p,i){pacS.appendChild(el('option',{value:String(i)},p.nome))});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Paciente'),pacS));
+
+  var tipoS = el('select',{c:'fsel'});
+  ['Comparecimento','Afastamento','Acompanhante'].forEach(function(t){tipoS.appendChild(el('option',{value:t},t))});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Tipo'),tipoS));
+
+  var diasI = el('input',{c:'fi',type:'number',value:'1',placeholder:'Dias'});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Período (dias)'),diasI));
+
+  var obsTA = el('textarea',{c:'fta',placeholder:'Observações adicionais...'});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Observações'),obsTA));
+
+  m.appendChild(b);
+  m.appendChild(el('div',{c:'modal-f'},
+    el('button',{c:'btn',on:{click:function(){bg.remove()}}},'Cancelar'),
+    el('button',{c:'btn btn-p',on:{click:function(){
+      var p = APP.patients[parseInt(pacS.value)];
+      var w = window.open('','_blank','width=800,height=600');
+      w.document.write('<html><head><title>Atestado - '+p.nome+'</title><style>body{font-family:Arial;max-width:600px;margin:40px auto;font-size:14px;line-height:1.8}h1{text-align:center;font-size:16px}h2{text-align:center;font-size:18px;margin:30px 0}.footer{margin-top:80px;text-align:center}</style></head><body>');
+      w.document.write('<h1>'+APP.clinic.name+'</h1>');
+      w.document.write('<h2>ATESTADO MÉDICO</h2>');
+      w.document.write('<p>Atesto para os devidos fins que o(a) Sr(a). <strong>'+p.nome+'</strong>');
+      if(p.cpf) w.document.write(', CPF '+p.cpf+',');
+      if(tipoS.value==='Comparecimento') w.document.write(' compareceu a esta clínica na data de hoje, '+fmtDate(today())+', para consulta médica homeopática.');
+      else if(tipoS.value==='Afastamento') w.document.write(' necessita de afastamento de suas atividades por '+diasI.value+' dia(s) a partir de '+fmtDate(today())+', por motivo de tratamento de saúde.');
+      else w.document.write(' esteve acompanhando paciente nesta clínica na data de '+fmtDate(today())+'.');
+      w.document.write('</p>');
+      if(obsTA.value) w.document.write('<p>'+obsTA.value+'</p>');
+      w.document.write('<div class="footer"><p>'+fmtDate(today())+'</p><br><br><p style="border-top:1px solid #333;display:inline-block;padding-top:4px">'+APP.user.name+(APP.clinic.crm?'<br>CRM: '+APP.clinic.crm:'')+'</p></div>');
+      w.document.write('</body></html>'); w.document.close(); w.print();
+      addAudit('ATESTADO','Atestado de '+tipoS.value+' para '+p.nome);
+      bg.remove();
+    }}},'🖨 Gerar e Imprimir')
+  ));
+  bg.appendChild(m); document.body.appendChild(bg);
+}
+
+function generateRelatorio() {
+  var p = APP.patients[APP.curPat];
+  if(!p){alert('Selecione um paciente primeiro');return}
+  var w = window.open('','_blank','width=800,height=600');
+  w.document.write('<html><head><title>Relatório - '+p.nome+'</title><style>body{font-family:Arial;max-width:700px;margin:40px auto;font-size:13px;line-height:1.7}h1{font-size:16px;text-align:center;border-bottom:2px solid #14b8a6;padding-bottom:10px}h2{font-size:14px;color:#14b8a6;margin-top:20px}.cons{border:1px solid #ddd;padding:12px;margin:10px 0;border-radius:4px}</style></head><body>');
+  w.document.write('<h1>RELATÓRIO CLÍNICO HOMEOPÁTICO</h1>');
+  w.document.write('<p><strong>Clínica:</strong> '+APP.clinic.name+'</p>');
+  w.document.write('<p><strong>Paciente:</strong> '+p.nome+' — CPF: '+(p.cpf||'N/I')+' — '+age(p.nasc)+'</p>');
+  w.document.write('<p><strong>Período:</strong> '+(p.consultas.length?fmtDate(p.consultas[0].data)+' a '+fmtDate(p.consultas[p.consultas.length-1].data):'N/A')+'</p>');
+  w.document.write('<h2>Histórico de Consultas ('+p.consultas.length+')</h2>');
+  p.consultas.forEach(function(con,i){
+    w.document.write('<div class="cons"><strong>Consulta '+(i+1)+' — '+fmtDate(con.data)+'</strong>');
+    if(con.queixa) w.document.write('<br><em>Queixa:</em> '+con.queixa);
+    if(con.rx) w.document.write('<br><em>Prescrição:</em> '+con.rx);
+    if(con.evolucao) w.document.write('<br><em>Evolução:</em> '+con.evolucao);
+    w.document.write('</div>');
+  });
+  w.document.write('<p style="margin-top:40px;text-align:center;border-top:1px solid #333;padding-top:10px">'+APP.user.name+(APP.clinic.crm?' — CRM: '+APP.clinic.crm:'')+'<br>'+fmtDate(today())+'</p>');
+  w.document.write('</body></html>'); w.document.close();
+  addAudit('RELATORIO','Relatório clínico gerado para '+p.nome);
+}
+
+function generatePrivacyPolicy() {
+  var w = window.open('','_blank','width=800,height=600');
+  w.document.write('<html><head><title>Política de Privacidade</title><style>body{font-family:Arial;max-width:700px;margin:40px auto;font-size:13px;line-height:1.8}h1{font-size:18px;text-align:center}h2{font-size:14px;color:#14b8a6;margin-top:20px}</style></head><body>');
+  w.document.write('<h1>POLÍTICA DE PRIVACIDADE E PROTEÇÃO DE DADOS</h1>');
+  w.document.write('<p style="text-align:center">'+APP.clinic.name+' — Em conformidade com a LGPD (Lei nº 13.709/2018)</p>');
+  w.document.write('<h2>1. Controlador</h2><p>'+APP.clinic.name+(APP.clinic.cnpj?' — CNPJ: '+APP.clinic.cnpj:'')+'. Encarregado de Dados (DPO): '+(APP.clinic.dpo||APP.user.name)+' — E-mail: '+(APP.clinic.dpoEmail||APP.user.email||'')+'.</p>');
+  w.document.write('<h2>2. Dados Coletados</h2><p>Coletamos dados pessoais (nome, CPF, contato, endereço) e dados sensíveis de saúde (anamnese, sintomas, prescrições, evolução clínica) necessários para a prestação de assistência homeopática.</p>');
+  w.document.write('<h2>3. Base Legal</h2><p>Art. 11, II, "f" da LGPD — tutela da saúde em procedimento realizado por profissional de saúde. Art. 7º, VIII — para cumprimento de obrigação legal (guarda de prontuário por 20 anos).</p>');
+  w.document.write('<h2>4. Finalidades</h2><p>(a) Assistência à saúde homeopática; (b) Gestão de prontuário eletrônico (CFM 1821/2007); (c) Prescrições e documentos; (d) Repertorização homeopática.</p>');
+  w.document.write('<h2>5. Compartilhamento</h2><p>Dados não são compartilhados com terceiros, exceto por obrigação legal ou mediante consentimento expresso do titular.</p>');
+  w.document.write('<h2>6. Segurança</h2><p>Criptografia AES-256, controle de acesso por autenticação, registro de auditoria, backups criptografados.</p>');
+  w.document.write('<h2>7. Direitos do Titular</h2><p>Acesso, correção, anonimização, portabilidade, eliminação (respeitados prazos legais), informação sobre compartilhamento, revogação do consentimento.</p>');
+  w.document.write('<h2>8. Retenção</h2><p>Prontuários: 20 anos (CFM). Demais dados: enquanto necessário para a finalidade. Após, anonimizados ou eliminados.</p>');
+  w.document.write('<p style="margin-top:30px;text-align:center;font-size:11px;color:#666">Documento gerado em '+fmtDate(today())+' — '+APP.clinic.name+'</p>');
+  w.document.write('</body></html>'); w.document.close();
+}
+
+function exportProntuario() {
+  var p = APP.patients[APP.curPat];
+  if(!p){alert('Selecione um paciente primeiro');return}
+  var data = JSON.stringify(p, null, 2);
+  var blob = new Blob([data],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='prontuario_'+p.nome.replace(/\s/g,'_')+'_'+today()+'.json'; a.click();
+  addAudit('EXPORT_PRONTUARIO','Prontuário exportado (portabilidade LGPD): '+p.nome);
+}
+
+// ==================== FINANCIAL ====================
+function renderFinanceiro(c) {
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'💰 Financeiro'),el('p',null,'Gestão financeira simplificada')),
+    el('button',{c:'btn btn-p',on:{click:function(){showFinModal()}}},'+ Novo Lançamento')
+  ));
+
+  var totalRec = APP.financeiro.filter(function(f){return f.tipo==='receita'}).reduce(function(a,f){return a+f.valor},0);
+  var totalDes = APP.financeiro.filter(function(f){return f.tipo==='despesa'}).reduce(function(a,f){return a+f.valor},0);
+  var saldo = totalRec - totalDes;
+
+  var g = el('div',{c:'grid grid-3',s:{marginBottom:'20px'}});
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'📈'),el('div',{c:'val',s:{color:'var(--grn)'}},'R$ '+totalRec.toFixed(2)),el('div',{c:'lbl'},'Receitas')));
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'📉'),el('div',{c:'val',s:{color:'var(--ros)'}},'R$ '+totalDes.toFixed(2)),el('div',{c:'lbl'},'Despesas')));
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'💰'),el('div',{c:'val',s:{color:saldo>=0?'var(--teal)':'var(--ros)'}},'R$ '+saldo.toFixed(2)),el('div',{c:'lbl'},'Saldo')));
+  c.appendChild(g);
+
+  if(!APP.financeiro.length){c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'💰'),el('div',null,'Nenhum lançamento')));return}
+
+  var card = el('div',{c:'card'});
+  var tbl = el('table',{c:'tbl'});
+  tbl.appendChild(el('thead',null,el('tr',null,el('th',null,'Data'),el('th',null,'Tipo'),el('th',null,'Descrição'),el('th',null,'Paciente'),el('th',null,'Valor'))));
+  var tbody = el('tbody');
+  APP.financeiro.sort(function(a,b){return b.data.localeCompare(a.data)}).forEach(function(f){
+    tbody.appendChild(el('tr',null,
+      el('td',null,fmtDate(f.data)),
+      el('td',null,f.tipo==='receita'?el('span',{c:'badge badge-g'},'Receita'):el('span',{c:'badge badge-r'},'Despesa')),
+      el('td',null,f.descricao),
+      el('td',null,f.paciente||'—'),
+      el('td',{s:{fontWeight:'700',color:f.tipo==='receita'?'var(--grn)':'var(--ros)'}},'R$ '+f.valor.toFixed(2))
+    ));
+  });
+  tbl.appendChild(tbody);
+  card.appendChild(el('div',{c:'card-b',s:{padding:'0',overflowX:'auto'}},tbl));
+  c.appendChild(card);
+}
+
+function showFinModal() {
+  var bg = el('div',{c:'modal-bg',on:{click:function(e){if(e.target===bg)bg.remove()}}});
+  var m = el('div',{c:'modal'});
+  m.appendChild(el('div',{c:'modal-h'},el('h3',null,'Novo Lançamento'),el('button',{c:'modal-close',on:{click:function(){bg.remove()}}},'×')));
+  var b = el('div',{c:'modal-b'});
+  var obj = {data:today(),tipo:'receita',descricao:'',paciente:'',valor:''};
+
+  b.appendChild(el('div',{c:'frow'},mkFG('Data','data','date',obj),mkSel('Tipo','tipo',obj,['receita','despesa'])));
+  b.appendChild(mkFG('Descrição','descricao','text',obj));
+
+  var pacS = el('select',{c:'fsel',on:{change:function(e){obj.paciente=e.target.value}}});
+  pacS.appendChild(el('option',{value:''},'Nenhum'));
+  APP.patients.forEach(function(p){pacS.appendChild(el('option',{value:p.nome},p.nome))});
+  b.appendChild(el('div',{c:'fg'},el('label',{c:'fl'},'Paciente'),pacS));
+  b.appendChild(mkFG('Valor (R$)','valor','number',obj));
+
+  m.appendChild(b);
+  m.appendChild(el('div',{c:'modal-f'},
+    el('button',{c:'btn',on:{click:function(){bg.remove()}}},'Cancelar'),
+    el('button',{c:'btn btn-p',on:{click:function(){
+      APP.financeiro.push({data:obj.data,tipo:obj.tipo,descricao:obj.descricao,paciente:obj.paciente,valor:parseFloat(obj.valor)||0});
+      addAudit('FINANCEIRO',obj.tipo+': R$ '+obj.valor+' — '+obj.descricao);
+      bg.remove(); render();
+    }}},'💾 Salvar')
+  ));
+  bg.appendChild(m); document.body.appendChild(bg);
+}
+</script>
+
+<!-- === 10_script_lgpd_audit_settings.html === -->
+
+<script>
+// ==================== LGPD COMPLIANCE ====================
+function renderLGPD(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'🛡️ LGPD / Compliance'),el('p',null,'Gestão de conformidade com a Lei Geral de Proteção de Dados')));
+
+  // Status cards
+  var g = el('div',{c:'grid grid-4',s:{marginBottom:'20px'}});
+  var consented = APP.patients.filter(function(p){return p.lgpdConsent}).length;
+  var pending = APP.patients.length - consented;
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'✅'),el('div',{c:'val',s:{color:'var(--grn)'}},String(consented)),el('div',{c:'lbl'},'Consentidos')));
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'⚠️'),el('div',{c:'val',s:{color:pending?'var(--ros)':'var(--grn)'}},String(pending)),el('div',{c:'lbl'},'Pendentes')));
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'🔐'),el('div',{c:'val',s:{color:'var(--teal)'}},'AES-256'),el('div',{c:'lbl'},'Criptografia')));
+  g.appendChild(el('div',{c:'stat-card'},el('div',{c:'ico'},'📋'),el('div',{c:'val',s:{color:'var(--ac2)'}},String(APP.audit.length)),el('div',{c:'lbl'},'Registros Audit.')));
+  c.appendChild(g);
+
+  // LGPD Info cards
+  var tabs = el('div',{c:'tabs-bar'});
+  var lgpdTab = 'overview';
+  ['overview','consents','rights','dpo','retention'].forEach(function(t){
+    var labels = {overview:'📋 Visão Geral',consents:'✅ Consentimentos',rights:'⚖️ Direitos do Titular',dpo:'👤 DPO',retention:'📅 Retenção'};
+    tabs.appendChild(el('button',{c:'tab-btn'+(t==='overview'?' on':''),on:{click:function(){
+      document.querySelectorAll('.lgpd-tab').forEach(function(x){x.style.display='none'});
+      document.getElementById('lgpd-'+t).style.display='';
+      document.querySelectorAll('.tabs-bar .tab-btn').forEach(function(x){x.classList.remove('on')});
+      this.classList.add('on');
+    }}},labels[t]));
+  });
+  c.appendChild(tabs);
+
+  // Overview
+  var ov = el('div',{c:'card lgpd-tab',id:'lgpd-overview'});
+  ov.appendChild(el('div',{c:'card-h'},el('h3',null,'Status de Conformidade LGPD')));
+  var ovB = el('div',{c:'card-b'});
+  var checks = [
+    ['Termos de Uso Aceitos',APP.lgpdAccepted,APP.lgpdDate?'Aceito em '+new Date(APP.lgpdDate).toLocaleString('pt-BR'):''],
+    ['Criptografia AES-256 Ativa',true,'Dados criptografados com Web Crypto API'],
+    ['Registro de Auditoria',APP.audit.length>0,APP.audit.length+' registros'],
+    ['Política de Privacidade',true,'Disponível em Documentos > Política de Privacidade'],
+    ['TCLE Disponível',true,'Gerável para cada paciente em Prontuário > TCLE'],
+    ['Exportação de Dados (Portabilidade)',true,'Disponível em Documentos > Exportar Prontuário'],
+    ['Encarregado de Dados (DPO)',!!(APP.clinic.dpo),APP.clinic.dpo||'Não configurado — Configure em Configurações'],
+    ['Backup Criptografado',true,'Disponível nas Configurações'],
+    ['Consentimento de Todos Pacientes',pending===0,pending?pending+' paciente(s) pendente(s)':'Todos consentidos']
+  ];
+  checks.forEach(function(ch){
+    ovB.appendChild(el('div',{s:{display:'flex',alignItems:'center',gap:'10px',padding:'8px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},
+      el('span',{s:{fontSize:'16px'}},ch[1]?'✅':'⚠️'),
+      el('div',{s:{flex:'1'}},el('div',{s:{fontSize:'12px',fontWeight:'600',color:ch[1]?'var(--t1)':'var(--amb)'}},ch[0]),el('div',{s:{fontSize:'10px',color:'var(--t3)'}},ch[2]))
+    ));
+  });
+  ov.appendChild(ovB); c.appendChild(ov);
+
+  // Consents
+  var co = el('div',{c:'card lgpd-tab',id:'lgpd-consents',s:{display:'none'}});
+  co.appendChild(el('div',{c:'card-h'},el('h3',null,'Consentimentos dos Pacientes')));
+  var coB = el('div',{c:'card-b'});
+  if(!APP.patients.length) coB.appendChild(el('div',{c:'empty'},el('div',null,'Nenhum paciente')));
+  else {
+    var tbl = el('table',{c:'tbl'});
+    tbl.appendChild(el('thead',null,el('tr',null,el('th',null,'Paciente'),el('th',null,'CPF'),el('th',null,'Status'),el('th',null,'Data Consentimento'),el('th',null,'Ação'))));
+    var tbody = el('tbody');
+    APP.patients.forEach(function(p,i){
+      tbody.appendChild(el('tr',null,
+        el('td',{s:{fontWeight:'600'}},p.nome),
+        el('td',null,p.cpf||'—'),
+        el('td',null,p.lgpdConsent?el('span',{c:'badge badge-g'},'✓ Consentido'):el('span',{c:'badge badge-r'},'⚠ Pendente')),
+        el('td',null,p.lgpdDate?new Date(p.lgpdDate).toLocaleString('pt-BR'):'—'),
+        el('td',null,p.lgpdConsent?
+          el('button',{c:'btn btn-sm btn-d',on:{click:function(){p.lgpdConsent=false;p.lgpdDate=null;addAudit('LGPD_REVOKE','Consentimento revogado: '+p.nome);render()}}},'Revogar'):
+          el('button',{c:'btn btn-sm btn-s',on:{click:function(){p.lgpdConsent=true;p.lgpdDate=new Date().toISOString();addAudit('LGPD_CONSENT_PAT','Consentimento registrado: '+p.nome);render()}}},'Registrar'))
+      ));
+    });
+    tbl.appendChild(tbody); coB.appendChild(tbl);
+  }
+  co.appendChild(coB); c.appendChild(co);
+
+  // Rights
+  var ri = el('div',{c:'card lgpd-tab',id:'lgpd-rights',s:{display:'none'}});
+  ri.appendChild(el('div',{c:'card-h'},el('h3',null,'Direitos do Titular (Art. 18 LGPD)')));
+  var riB = el('div',{c:'card-b'});
+  [['Confirmação de Tratamento','O titular pode confirmar se seus dados são tratados','Informar através do prontuário'],
+   ['Acesso aos Dados','Acesso a todos os dados pessoais mantidos','Exportar via Documentos > Exportar Prontuário'],
+   ['Correção de Dados','Correção de dados incompletos ou inexatos','Editar dados do paciente no Prontuário'],
+   ['Anonimização/Bloqueio','De dados desnecessários ou excessivos','Solicitar ao DPO'],
+   ['Portabilidade','Transferência dos dados a outro prestador','Exportar JSON via Documentos'],
+   ['Eliminação','Apagar dados (respeitando prazo de 20 anos)','Solicitar ao DPO para avaliação legal'],
+   ['Informação sobre Compartilhamento','Saber com quem os dados são compartilhados','Nenhum compartilhamento com terceiros'],
+   ['Revogação do Consentimento','Retirar consentimento a qualquer momento','Gerenciar na aba Consentimentos']
+  ].forEach(function(r){
+    riB.appendChild(el('div',{s:{padding:'10px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},
+      el('div',{s:{fontSize:'12px',fontWeight:'700',color:'var(--teal)'}},r[0]),
+      el('div',{s:{fontSize:'11px',color:'var(--t2)',margin:'2px 0'}},r[1]),
+      el('div',{s:{fontSize:'10px',color:'var(--t3)',fontStyle:'italic'}},r[2])
+    ));
+  });
+  ri.appendChild(riB); c.appendChild(ri);
+
+  // DPO & Retention placeholders
+  var dpo = el('div',{c:'card lgpd-tab',id:'lgpd-dpo',s:{display:'none'}});
+  dpo.appendChild(el('div',{c:'card-h'},el('h3',null,'Encarregado de Dados (DPO)')));
+  dpo.appendChild(el('div',{c:'card-b'},
+    el('div',{s:{fontSize:'12px',color:'var(--t2)',lineHeight:'1.7'}},
+      'O DPO (Data Protection Officer) é o encarregado de dados pessoais, responsável por: aceitar reclamações dos titulares, receber comunicações da ANPD, orientar funcionários sobre proteção de dados.'),
+    el('div',{s:{marginTop:'12px',padding:'12px',background:'var(--bg1)',borderRadius:'8px'}},
+      el('div',{s:{fontSize:'11px',fontWeight:'600',color:'var(--teal)'}},'DPO Atual: '+(APP.clinic.dpo||'Não configurado')),
+      el('div',{s:{fontSize:'11px',color:'var(--t3)'}},'E-mail: '+(APP.clinic.dpoEmail||'—')),
+      el('button',{c:'btn btn-sm btn-p',s:{marginTop:'8px'},on:{click:function(){APP.page='settings';render()}}},'Configurar nas Settings')
+    )
+  ));
+  c.appendChild(dpo);
+
+  var ret = el('div',{c:'card lgpd-tab',id:'lgpd-retention',s:{display:'none'}});
+  ret.appendChild(el('div',{c:'card-h'},el('h3',null,'Política de Retenção de Dados')));
+  ret.appendChild(el('div',{c:'card-b'},
+    el('div',{s:{fontSize:'12px',color:'var(--t2)',lineHeight:'1.7'}},
+      'Conforme a legislação brasileira e Resolução CFM 1.821/2007:'),
+    el('div',{s:{marginTop:'12px'}},
+      el('div',{s:{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},el('span',{s:{fontSize:'12px',fontWeight:'600'}},'Prontuário Médico'),el('span',{c:'badge badge-a'},'20 anos')),
+      el('div',{s:{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},el('span',{s:{fontSize:'12px',fontWeight:'600'}},'Dados de Contato'),el('span',{c:'badge badge-t'},'Enquanto necessário')),
+      el('div',{s:{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid rgba(42,42,58,.3)'}},el('span',{s:{fontSize:'12px',fontWeight:'600'}},'Registro de Auditoria'),el('span',{c:'badge badge-c'},'5 anos')),
+      el('div',{s:{display:'flex',justifyContent:'space-between',padding:'8px 0'}},el('span',{s:{fontSize:'12px',fontWeight:'600'}},'Dados Financeiros'),el('span',{c:'badge badge-i'},'5 anos'))
+    )
+  ));
+  c.appendChild(ret);
+}
+
+// ==================== AUDIT ====================
+function renderAudit(c) {
+  c.appendChild(el('div',{c:'page-hdr',s:{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}},
+    el('div',null,el('h1',null,'📋 Trilha de Auditoria'),el('p',null,APP.audit.length+' registros — Conforme CFM 1821/2007 e LGPD')),
+    el('button',{c:'btn btn-s',on:{click:function(){
+      var csv='Data/Hora,Ação,Detalhes,Usuário\n';
+      APP.audit.forEach(function(a){csv+=new Date(a.ts).toLocaleString('pt-BR')+','+a.action+',"'+a.details+'",'+a.user+'\n'});
+      var blob=new Blob([csv],{type:'text/csv'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='auditoria_'+today()+'.csv';a.click();
+    }}},'📤 Exportar CSV')
+  ));
+
+  if(!APP.audit.length){c.appendChild(el('div',{c:'empty'},el('div',{c:'ico'},'📋'),el('div',null,'Nenhum registro de auditoria')));return}
+
+  var card = el('div',{c:'card'});
+  var tbl = el('table',{c:'tbl'});
+  tbl.appendChild(el('thead',null,el('tr',null,el('th',null,'Data/Hora'),el('th',null,'Ação'),el('th',null,'Detalhes'),el('th',null,'Usuário'))));
+  var tbody = el('tbody');
+  APP.audit.forEach(function(a){
+    var actionColor = {'LOGIN':'grn','LOGOUT':'amb','PATIENT_NEW':'teal','CONSULTATION_NEW':'ac','LGPD_CONSENT':'grn','LGPD_REVOKE':'ros','EXPORT':'cyn','PRESCRIPTION':'pur'}[a.action]||'t3';
+    tbody.appendChild(el('tr',null,
+      el('td',{s:{fontFamily:'monospace',fontSize:'11px'}},new Date(a.ts).toLocaleString('pt-BR')),
+      el('td',null,el('span',{c:'badge badge-'+actionColor[0]},a.action)),
+      el('td',null,a.details),
+      el('td',null,a.user)
+    ));
+  });
+  tbl.appendChild(tbody);
+  card.appendChild(el('div',{c:'card-b',s:{padding:'0',overflowX:'auto',maxHeight:'500px',overflowY:'auto'}},tbl));
+  c.appendChild(card);
+}
+
+// ==================== SETTINGS ====================
+function renderSettings(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'⚙️ Configurações'),el('p',null,'Configurações da clínica e do sistema')));
+
+  // Clinic settings
+  var card = el('div',{c:'card'});
+  card.appendChild(el('div',{c:'card-h'},el('h3',null,'🏥 Dados da Clínica')));
+  var b = el('div',{c:'card-b'});
+  b.appendChild(el('div',{c:'frow'},mkFG('Nome da Clínica','name','text',APP.clinic),mkFG('CNPJ','cnpj','text',APP.clinic)));
+  b.appendChild(el('div',{c:'frow'},mkFG('Telefone','phone','tel',APP.clinic),mkFG('E-mail','email','email',APP.clinic)));
+  b.appendChild(mkFG('Endereço','address','text',APP.clinic));
+  b.appendChild(el('div',{c:'frow'},mkFG('CRM/CRH do Responsável','crm','text',APP.clinic),mkFG('Especialidade','specialty','text',APP.clinic)));
+  card.appendChild(b); c.appendChild(card);
+
+  // DPO
+  var dpo = el('div',{c:'card'});
+  dpo.appendChild(el('div',{c:'card-h'},el('h3',null,'🛡️ Encarregado de Dados (DPO) — LGPD')));
+  var db = el('div',{c:'card-b'});
+  db.appendChild(el('div',{c:'frow'},mkFG('Nome do DPO','dpo','text',APP.clinic),mkFG('E-mail do DPO','dpoEmail','email',APP.clinic)));
+  db.appendChild(el('div',{s:{fontSize:'11px',color:'var(--t3)',marginTop:'8px'}},'O DPO é obrigatório conforme Art. 41 da LGPD. Pode ser o próprio profissional em clínicas individuais.'));
+  dpo.appendChild(db); c.appendChild(dpo);
+
+  // User
+  var usr = el('div',{c:'card'});
+  usr.appendChild(el('div',{c:'card-h'},el('h3',null,'👤 Perfil do Profissional')));
+  var ub = el('div',{c:'card-b'});
+  ub.appendChild(el('div',{c:'frow'},mkFG('Nome','name','text',APP.user),mkFG('E-mail','email','email',APP.user)));
+  usr.appendChild(ub); c.appendChild(usr);
+
+  // Save
+  c.appendChild(el('div',{s:{display:'flex',gap:'8px',marginTop:'8px'}},
+    el('button',{c:'btn btn-p btn-lg',on:{click:function(){saveAll();addAudit('SETTINGS_SAVE','Configurações atualizadas');alert('Configurações salvas!')}}},'💾 Salvar Configurações'),
+    el('button',{c:'btn btn-s btn-lg',on:{click:doBackup}},'💾 Fazer Backup'),
+    el('button',{c:'btn btn-w btn-lg',on:{click:function(){
+      if(confirm('Importar backup? Os dados atuais serão substituídos.')){
+        var inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=function(e){
+          var r=new FileReader();r.onload=function(ev){
+            try{var d=JSON.parse(ev.target.result);
+            if(d.clinic)APP.clinic=Object.assign(APP.clinic,d.clinic);
+            if(d.patients)APP.patients=d.patients;
+            if(d.audit)APP.audit=d.audit;
+            if(d.agenda)APP.agenda=d.agenda;
+            if(d.financeiro)APP.financeiro=d.financeiro;
+            saveAll();addAudit('BACKUP_RESTORE','Backup restaurado');render();alert('Backup restaurado!');}
+            catch(e){alert('Erro ao importar: '+e.message)}};
+          r.readAsText(e.target.files[0]);};inp.click();}
+    }}},'📥 Importar Backup')
+  ));
+}
+
+function doBackup() {
+  var data = {clinic:APP.clinic,user:APP.user,patients:APP.patients,agenda:APP.agenda,audit:APP.audit,financeiro:APP.financeiro,sel:APP.sel,exportDate:new Date().toISOString(),version:'2.0'};
+  var blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='backup_homeoclinicpro_'+today()+'.json'; a.click();
+  addAudit('BACKUP','Backup realizado');
+}
+
+// ==================== AI ASSISTANT ====================
+function renderAI(c) {
+  c.appendChild(el('div',{c:'page-hdr'},el('h1',null,'🧠 Assistente IA'),el('p',null,'Busca inteligente em '+(DATA?fmtNum(DATA.stats.totalRubrics):'—')+' rubricas')));
+
+  var aip = el('div',{c:'card',s:{maxWidth:'720px'}});
+  var ah = el('div',{c:'card-h'});
+  ah.appendChild(el('div',{s:{display:'flex',alignItems:'center',gap:'8px'}},
+    el('div',{s:{width:'8px',height:'8px',borderRadius:'50%',background:'var(--grn)',animation:'pulse 2s infinite'}}),
+    el('span',{s:{fontWeight:'600',fontSize:'13px'}},'HomeoClinic Pro AI')
+  ));
+  aip.appendChild(ah);
+
+  var ab = el('div',{s:{padding:'16px',maxHeight:'400px',overflowY:'auto'},id:'aiBody'});
+  APP.aim.forEach(function(m){
+    var msg = el('div',{s:{padding:'10px 12px',borderRadius:'8px',background:m.u?'var(--bg2)':'var(--bg1)',marginBottom:'8px',fontSize:'12px',lineHeight:'1.6',color:'var(--t2)',borderLeft:'3px solid '+(m.u?'var(--ac)':'var(--teal)'),whiteSpace:'pre-line'}});
+    msg.appendChild(el('div',{s:{fontSize:'9px',fontWeight:'600',color:'var(--t3)',marginBottom:'2px'}},m.u?'👤 Você':'🏥 HomeoClinic Pro'));
+    msg.appendChild(document.createTextNode(m.t));
+    ab.appendChild(msg);
+  });
+  aip.appendChild(ab);
+
+  var ar = el('div',{s:{display:'flex',gap:'8px',padding:'12px 16px',borderTop:'1px solid var(--brd)'}});
+  ar.appendChild(el('input',{c:'fi',s:{flex:'1'},placeholder:'Descreva sintomas...',value:APP.ai,
+    on:{input:function(e){APP.ai=e.target.value},keydown:function(e){if(e.key==='Enter')sendAI()}}}));
+  ar.appendChild(el('button',{c:'btn btn-p',on:{click:sendAI}},'Enviar'));
+  aip.appendChild(ar);
+  c.appendChild(aip);
+  setTimeout(function(){var b=document.getElementById('aiBody');if(b)b.scrollTop=b.scrollHeight},50);
+}
+
+function sendAI() {
+  if(!APP.ai.trim()) return;
+  var q = APP.ai.trim(); APP.aim.push({t:q,u:1}); APP.ai='';
+  var resp='';
+  if(DATA){
+    var results=doSearch(q);
+    if(results.length){
+      resp='Encontrei '+results.length+' rubricas. Principais:\n';
+      results.slice(0,5).forEach(function(r){
+        var rems=parseRemedies(r.d);var top3=rems.filter(function(x){return x.g===3}).slice(0,3).map(function(x){return x.n});
+        resp+='• ['+r.ch+'] '+r.p+(r.e?' ('+r.e+')':'')+' — '+rems.length+' rem'+(top3.length?', destaques: '+top3.join(', '):'')+'\n';
+      });
+      resp+='\nBusque no Repertório para ver todos e selecionar.';
+    } else {
+      resp='Não encontrei rubricas para "'+q+'". Tente termos mais específicos (ex: "ansiedade", "dor cabeça", "erupção pele"). Descreva: localização, sensação, modalidades.';
+    }
+  } else resp='Base de dados carregando. Tente novamente em instantes.';
+  APP.aim.push({t:resp,u:0}); render();
+}
+</script>
+
+<!-- === 11_script_init.html === -->
+
+<script>
+// ==================== DATA LOADING ====================
+if (window.SH_DATA && window.SH_DATA._loaded) {
+  DATA = window.SH_DATA;
+}
+window.onSHDataLoaded = function() {
+  DATA = window.SH_DATA;
+  if (document.getElementById('mainApp').classList.contains('active')) render();
+};
+// Retry check
+setTimeout(function() {
+  if (!DATA && window.SH_DATA && window.SH_DATA._loaded) {
+    DATA = window.SH_DATA;
+    if (document.getElementById('mainApp').classList.contains('active')) render();
+  }
+}, 3000);
+
+// Auto-login if session exists
+(async function() {
+  var auth = localStorage.getItem('hcp_auth');
+  if (auth) {
+    // Show hint
+    document.getElementById('loginUser').placeholder = 'Insira suas credenciais para entrar';
+  }
+})();
+
+// Add pulse animation
+var style = document.createElement('style');
+style.textContent = '@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}';
+document.head.appendChild(style);
+</script>
+<script src="sr_homeopata_data.js" defer></script>
+</body>
+</html>
