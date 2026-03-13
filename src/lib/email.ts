@@ -1,11 +1,16 @@
 import { Resend } from "resend";
 
-function getResend() {
+let resendInstance: Resend | null = null;
+
+function getResend(): Resend | null {
+  if (resendInstance) return resendInstance;
   const key = process.env.RESEND_API_KEY;
   if (!key) {
-    throw new Error("RESEND_API_KEY não configurada. Configure a variável de ambiente.");
+    console.warn("[email] RESEND_API_KEY não configurada — emails serão ignorados.");
+    return null;
   }
-  return new Resend(key);
+  resendInstance = new Resend(key);
+  return resendInstance;
 }
 
 const FROM_EMAIL = process.env.EMAIL_FROM || "HomeoClinic Pro <noreply@homeoclinic.pro>";
@@ -15,9 +20,12 @@ export async function sendPasswordResetEmail(
   token: string,
   userName: string
 ) {
+  const resend = getResend();
+  if (!resend) return;
+
   const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
 
-  await getResend().emails.send({
+  await resend.emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: "Redefinição de Senha - HomeoClinic Pro",
@@ -50,9 +58,12 @@ export async function sendInviteEmail(
   token: string,
   role: string
 ) {
+  const resend = getResend();
+  if (!resend) return;
+
   const inviteUrl = `${process.env.NEXTAUTH_URL}/invite/${token}`;
 
-  await getResend().emails.send({
+  await resend.emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: `Convite para ${clinicName} - HomeoClinic Pro`,
@@ -78,7 +89,10 @@ export async function sendInviteEmail(
 }
 
 export async function sendWelcomeEmail(email: string, userName: string) {
-  await getResend().emails.send({
+  const resend = getResend();
+  if (!resend) return;
+
+  await resend.emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: "Bem-vindo ao HomeoClinic Pro!",
