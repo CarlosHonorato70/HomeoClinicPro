@@ -28,6 +28,11 @@ function getClientIp(req: NextRequest): string {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Skip internal Next.js routes (HMR, static assets)
+  if (pathname.startsWith("/_next/") || pathname.startsWith("/__nextjs")) {
+    return NextResponse.next();
+  }
+
   // --- Rate limiting for API routes ---
   if (pathname.startsWith("/api/")) {
     const ip = getClientIp(req);
