@@ -6,6 +6,7 @@
  */
 
 import * as fs from "node:fs";
+import * as path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const mod = await import("../src/generated/prisma/client.ts");
@@ -14,7 +15,8 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 const CORRELATOS_PATH =
-  "C:/Users/Carlos Honorato/OneDrive/Área de trabalho/SIHOREMAX7/HomeoClinicPro-Projeto/data/extracted/correlatos.json";
+  process.env.CORRELATOS_PATH ||
+  path.resolve(process.cwd(), "data/extracted/correlatos.json");
 const BATCH_SIZE = 1000;
 
 interface CorrelatosEntry {

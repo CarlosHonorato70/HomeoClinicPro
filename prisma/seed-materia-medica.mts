@@ -15,7 +15,8 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 const TEXTOS_DIR =
-  "C:/Users/Carlos Honorato/OneDrive/Área de trabalho/SIHOREMAX7/TEXTOS";
+  process.env.TEXTOS_DIR ||
+  path.resolve(process.cwd(), "data/textos");
 const BATCH_SIZE = 100;
 
 interface ParsedMateriaMedica {
