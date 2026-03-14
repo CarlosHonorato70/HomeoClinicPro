@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+.env*
+!.env.example
+*.md
+.claude
+.github
+prototype
+data/extracted
+sihore_data
+*.DB
+dev.db*

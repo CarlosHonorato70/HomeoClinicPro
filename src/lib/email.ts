@@ -1,35 +1,63 @@
-import { Resend } from "resend";
+// Brevo (ex-Sendinblue) transactional email via REST API
+// No SDK dependency needed — uses native fetch
 
-let resendInstance: Resend | null = null;
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
-function getResend(): Resend | null {
-  if (resendInstance) return resendInstance;
-  const key = process.env.RESEND_API_KEY;
+function getApiKey(): string | null {
+  const key = process.env.BREVO_API_KEY;
   if (!key) {
-    console.warn("[email] RESEND_API_KEY não configurada — emails serão ignorados.");
+    console.warn("[email] BREVO_API_KEY não configurada — emails serão ignorados.");
     return null;
   }
-  resendInstance = new Resend(key);
-  return resendInstance;
+  return key;
 }
 
 const FROM_EMAIL = process.env.EMAIL_FROM || "HomeoClinic Pro <noreply@homeoclinic.pro>";
+
+function parseFromEmail(from: string): { name: string; email: string } {
+  const match = from.match(/^(.+?)\s*<(.+?)>$/);
+  if (match) return { name: match[1].trim(), email: match[2].trim() };
+  return { name: "HomeoClinic Pro", email: from };
+}
+
+async function sendEmail(to: string, subject: string, htmlContent: string) {
+  const apiKey = getApiKey();
+  if (!apiKey) return;
+
+  const sender = parseFromEmail(FROM_EMAIL);
+
+  const res = await fetch(BREVO_API_URL, {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender,
+      to: [{ email: to }],
+      subject,
+      htmlContent,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`[email] Brevo error ${res.status}: ${body}`);
+  }
+}
 
 export async function sendPasswordResetEmail(
   email: string,
   token: string,
   userName: string
 ) {
-  const resend = getResend();
-  if (!resend) return;
-
   const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
 
-  await resend.emails.send({
-    from: FROM_EMAIL,
-    to: email,
-    subject: "Redefinição de Senha - HomeoClinic Pro",
-    html: `
+  await sendEmail(
+    email,
+    "Redefinição de Senha - HomeoClinic Pro",
+    `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
         <p>Olá, ${userName}!</p>
@@ -47,8 +75,8 @@ export async function sendPasswordResetEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
       </div>
-    `,
-  });
+    `
+  );
 }
 
 export async function sendInviteEmail(
@@ -58,16 +86,12 @@ export async function sendInviteEmail(
   token: string,
   role: string
 ) {
-  const resend = getResend();
-  if (!resend) return;
-
   const inviteUrl = `${process.env.NEXTAUTH_URL}/invite/${token}`;
 
-  await resend.emails.send({
-    from: FROM_EMAIL,
-    to: email,
-    subject: `Convite para ${clinicName} - HomeoClinic Pro`,
-    html: `
+  await sendEmail(
+    email,
+    `Convite para ${clinicName} - HomeoClinic Pro`,
+    `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
         <p>Olá!</p>
@@ -84,19 +108,15 @@ export async function sendInviteEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
       </div>
-    `,
-  });
+    `
+  );
 }
 
 export async function sendWelcomeEmail(email: string, userName: string) {
-  const resend = getResend();
-  if (!resend) return;
-
-  await resend.emails.send({
-    from: FROM_EMAIL,
-    to: email,
-    subject: "Bem-vindo ao HomeoClinic Pro!",
-    html: `
+  await sendEmail(
+    email,
+    "Bem-vindo ao HomeoClinic Pro!",
+    `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
         <p>Olá, ${userName}!</p>
@@ -117,6 +137,6 @@ export async function sendWelcomeEmail(email: string, userName: string) {
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
       </div>
-    `,
-  });
+    `
+  );
 }
