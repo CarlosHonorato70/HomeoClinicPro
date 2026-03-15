@@ -73,112 +73,120 @@ const anamnesisFields = [
     key: "mental",
     label: "Sintomas Mentais",
     icon: "🧠",
-    placeholder: `Responda as perguntas abaixo:
-- Como e o temperamento do paciente? (calmo, ansioso, irritavel, melancolico)
-- Tem medos? Quais? (escuro, solidao, morte, doenca, futuro, multidoes)
-- Como reage ao estresse? (chora, isola-se, fica agressivo, come mais)
-- Ha tristeza, depressao ou apatia? Desde quando?
-- Ha ansiedade? Em que situacoes piora? (antes de compromissos, a noite)
-- Como e a memoria e concentracao?
-- Ha irritabilidade? O que a provoca?
-- Como e a relacao com outras pessoas? (ciumes, possessividade, timidez)
-- Ha pensamentos obsessivos ou compulsivos?`,
+    questions: [
+      "Como é o temperamento do paciente? (calmo, ansioso, irritável, melancólico)",
+      "Tem medos? Quais? (escuro, solidão, morte, doença, futuro, multidões)",
+      "Como reage ao estresse? (chora, isola-se, fica agressivo, come mais)",
+      "Há tristeza, depressão ou apatia? Desde quando?",
+      "Há ansiedade? Em que situações piora? (antes de compromissos, à noite)",
+      "Como é a memória e concentração?",
+      "Há irritabilidade? O que a provoca?",
+      "Como é a relação com outras pessoas? (ciúmes, possessividade, timidez)",
+      "Há pensamentos obsessivos ou compulsivos?",
+    ],
   },
   {
     key: "general",
     label: "Sintomas Gerais",
     icon: "🏥",
-    placeholder: `Responda as perguntas abaixo:
-- Qual a queixa principal e ha quanto tempo?
-- O que piora os sintomas? (frio, calor, umidade, movimento, repouso, pressao)
-- O que melhora os sintomas? (calor, frio, ar livre, repouso, movimento)
-- Ha horario de piora? (manha, tarde, noite, madrugada)
-- Ha lateralidade? (sintomas mais do lado direito ou esquerdo)
-- Como e o nivel de energia? (fadiga, prostacao, inquietude)
-- Ha tendencia a infeccoes recorrentes? Quais?
-- Ha historico familiar de doencas cronicas?`,
+    questions: [
+      "Qual a queixa principal e há quanto tempo?",
+      "O que piora os sintomas? (frio, calor, umidade, movimento, repouso, pressão)",
+      "O que melhora os sintomas? (calor, frio, ar livre, repouso, movimento)",
+      "Há horário de piora? (manhã, tarde, noite, madrugada)",
+      "Há lateralidade? (sintomas mais do lado direito ou esquerdo)",
+      "Como é o nível de energia? (fadiga, prostração, inquietude)",
+      "Há tendência a infecções recorrentes? Quais?",
+      "Há histórico familiar de doenças crônicas?",
+    ],
   },
   {
     key: "desires",
-    label: "Desejos e Aversoes Alimentares",
+    label: "Desejos e Aversões Alimentares",
     icon: "🍽️",
-    placeholder: `Responda as perguntas abaixo:
-- Quais alimentos deseja fortemente? (doces, salgados, acidos, picantes, gordurosos)
-- Deseja alimentos especificos? (chocolate, ovos, leite, pao, frutas, gelo)
-- Ha aversao a algum alimento? (carne, gordura, leite, pao, ovos)
-- Qual alimento causa mal-estar ou piora os sintomas?
-- Como e a sede? (pouca, muita, agua gelada, temperatura ambiente, pequenos goles)
-- Como e o apetite? (aumentado, diminuido, variavel)
-- Ha nausea ou vomito? Em que situacoes?`,
+    questions: [
+      "Quais alimentos deseja fortemente? (doces, salgados, ácidos, picantes, gordurosos)",
+      "Deseja alimentos específicos? (chocolate, ovos, leite, pão, frutas, gelo)",
+      "Há aversão a algum alimento? (carne, gordura, leite, pão, ovos)",
+      "Qual alimento causa mal-estar ou piora os sintomas?",
+      "Como é a sede? (pouca, muita, água gelada, temperatura ambiente, pequenos goles)",
+      "Como é o apetite? (aumentado, diminuído, variável)",
+      "Há náusea ou vômito? Em que situações?",
+    ],
   },
   {
     key: "sleep",
     label: "Sono e Sonhos",
     icon: "🌙",
-    placeholder: `Responda as perguntas abaixo:
-- Como e a qualidade do sono? (leve, profundo, interrompido)
-- Tem dificuldade para adormecer? Por que? (pensamentos, ansiedade, dor)
-- Acorda durante a noite? Em que horario?
-- Em que posicao dorme? (de costas, de brucos, lado direito, lado esquerdo)
-- Ha sonhos recorrentes? Quais temas? (queda, perseguicao, morte, agua, animais)
-- Sente-se descansado ao acordar?
-- Ha bruxismo, sonambulismo ou falar dormindo?
-- Ha somnolencia diurna?`,
+    questions: [
+      "Como é a qualidade do sono? (leve, profundo, interrompido)",
+      "Tem dificuldade para adormecer? Por quê? (pensamentos, ansiedade, dor)",
+      "Acorda durante a noite? Em que horário?",
+      "Em que posição dorme? (de costas, de bruços, lado direito, lado esquerdo)",
+      "Há sonhos recorrentes? Quais temas? (queda, perseguição, morte, água, animais)",
+      "Sente-se descansado ao acordar?",
+      "Há bruxismo, sonambulismo ou falar dormindo?",
+      "Há sonolência diurna?",
+    ],
   },
   {
     key: "perspiration",
-    label: "Transpiracao",
+    label: "Transpiração",
     icon: "💧",
-    placeholder: `Responda as perguntas abaixo:
-- Sua com facilidade ou e pouco sudoretico?
-- Em quais partes do corpo sua mais? (cabeca, maos, pes, axilas, peito)
-- O suor tem odor? Qual tipo? (acido, adocicado, ofensivo)
-- O suor mancha a roupa? Qual cor?
-- Em que situacoes sua mais? (sono, esforco, emocao, comendo)
-- O suor alivia ou piora os sintomas?`,
+    questions: [
+      "Sua com facilidade ou é pouco sudorético?",
+      "Em quais partes do corpo sua mais? (cabeça, mãos, pés, axilas, peito)",
+      "O suor tem odor? Qual tipo? (ácido, adocicado, ofensivo)",
+      "O suor mancha a roupa? Qual cor?",
+      "Em que situações sua mais? (sono, esforço, emoção, comendo)",
+      "O suor alivia ou piora os sintomas?",
+    ],
   },
   {
     key: "thermoregulation",
-    label: "Termorregulacao",
+    label: "Termorregulação",
     icon: "🌡️",
-    placeholder: `Responda as perguntas abaixo:
-- O paciente e mais friorento ou calorento?
-- Tolera bem o calor? E o frio?
-- Piora com mudanca de temperatura?
-- Prefere ambientes abertos ou fechados?
-- Ha partes do corpo especialmente frias ou quentes? (pes gelados, cabeca quente)
-- Ha fogachos ou ondas de calor?
-- Como reage ao vento, ao sol, a umidade?`,
+    questions: [
+      "O paciente é mais friorento ou calorento?",
+      "Tolera bem o calor? E o frio?",
+      "Piora com mudança de temperatura?",
+      "Prefere ambientes abertos ou fechados?",
+      "Há partes do corpo especialmente frias ou quentes? (pés gelados, cabeça quente)",
+      "Há fogachos ou ondas de calor?",
+      "Como reage ao vento, ao sol, à umidade?",
+    ],
   },
   {
     key: "gyneco",
-    label: "Ginecologico",
+    label: "Ginecológico",
     icon: "♀️",
-    placeholder: `Responda as perguntas abaixo (se aplicavel):
-- Ciclo menstrual: regular ou irregular? Quantos dias?
-- Fluxo: escasso, normal ou abundante? Cor? Coagulos?
-- Ha colica menstrual? O que piora/melhora? (calor, movimento, curvando-se)
-- Sindrome pre-menstrual: quais sintomas? (irritabilidade, inchaço, cefaleia)
-- Ha corrimento? Cor, odor, consistencia?
-- Historico gestacional: gestacoes, partos, abortos?
-- Menopausa: sintomas? (fogachos, secura, alteracao de humor)
-- Libido: normal, aumentada ou diminuida?`,
+    questions: [
+      "Ciclo menstrual: regular ou irregular? Quantos dias?",
+      "Fluxo: escasso, normal ou abundante? Cor? Coágulos?",
+      "Há cólica menstrual? O que piora/melhora? (calor, movimento, curvando-se)",
+      "Síndrome pré-menstrual: quais sintomas? (irritabilidade, inchaço, cefaleia)",
+      "Há corrimento? Cor, odor, consistência?",
+      "Histórico gestacional: gestações, partos, abortos?",
+      "Menopausa: sintomas? (fogachos, secura, alteração de humor)",
+      "Libido: normal, aumentada ou diminuída?",
+    ],
   },
   {
     key: "particular",
     label: "Sintomas Particulares",
     icon: "📋",
-    placeholder: `Descreva sintomas especificos por regiao:
-- Cabeca: cefaleias? Tipo (pulsatil, pressao, pontada)? Localizacao? Modalidades?
-- Olhos: ardor, lacrimejamento, visao turva?
-- Ouvidos: dor, zumbido, perda auditiva?
-- Nariz: coriza, espirros, obstrucao, sinusite?
-- Garganta: dor, rouquidao, sensacao de corpo estranho?
-- Respiratorio: tosse, dispneia, asma, expectoracao?
-- Digestivo: azia, refluxo, gases, diarreia, constipacao?
-- Urinario: ardor, frequencia, urgencia, cor da urina?
-- Pele: erupcoes, coceira, ressecamento, localizacao?
-- Musculoesqueletico: dores articulares, rigidez, cibras?`,
+    questions: [
+      "Cabeça: cefaleias? Tipo (pulsátil, pressão, pontada)? Localização? Modalidades?",
+      "Olhos: ardor, lacrimejamento, visão turva?",
+      "Ouvidos: dor, zumbido, perda auditiva?",
+      "Nariz: coriza, espirros, obstrução, sinusite?",
+      "Garganta: dor, rouquidão, sensação de corpo estranho?",
+      "Respiratório: tosse, dispneia, asma, expectoração?",
+      "Digestivo: azia, refluxo, gases, diarreia, constipação?",
+      "Urinário: ardor, frequência, urgência, cor da urina?",
+      "Pele: erupções, coceira, ressecamento, localização?",
+      "Musculoesquelético: dores articulares, rigidez, câimbras?",
+    ],
   },
 ] as const;
 
@@ -389,19 +397,27 @@ export default function PatientDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {anamnesisFields.map((field) => (
-                <div key={field.key} className="space-y-2">
-                  <Label className="flex items-center gap-2">
+                <div key={field.key} className="space-y-2 border border-[#1e1e2e] rounded-lg p-4">
+                  <Label className="flex items-center gap-2 text-base font-semibold">
                     <span>{field.icon}</span>
                     {field.label}
                   </Label>
+                  <div className="bg-[#0d0d14] rounded-md p-3 text-xs text-gray-400 space-y-1">
+                    <p className="text-teal-500 font-semibold mb-1">Perguntas orientadoras:</p>
+                    <ul className="list-disc list-inside space-y-0.5">
+                      {field.questions.map((q, i) => (
+                        <li key={i}>{q}</li>
+                      ))}
+                    </ul>
+                  </div>
                   <Textarea
                     value={anamnesis[field.key] || ""}
                     onChange={(e) =>
                       setAnamnesis((prev) => ({ ...prev, [field.key]: e.target.value }))
                     }
-                    placeholder={field.placeholder}
-                    rows={5}
-                    className="bg-[#16161f] border-[#2a2a3a] placeholder:text-gray-600 placeholder:text-xs"
+                    placeholder="Digite as respostas aqui..."
+                    rows={4}
+                    className="bg-[#16161f] border-[#2a2a3a]"
                   />
                 </div>
               ))}
