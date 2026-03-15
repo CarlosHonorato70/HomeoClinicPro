@@ -92,7 +92,7 @@ const plans = [
     description: "Para clínicas e redes",
     features: [
       "Pacientes ilimitados",
-      "Até 12 usuários",
+      "Até 12 usuários (extra: R$39/mês cada)",
       "Consultas ilimitadas",
       "API de integração",
       "Multi-clínica",
