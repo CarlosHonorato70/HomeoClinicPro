@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,12 +80,30 @@ const STEPS = [
 // ========== Main Component ==========
 
 export default function AIAssistantPage() {
+  return (
+    <Suspense fallback={<div className="text-gray-500">Carregando...</div>}>
+      <AIAssistantContent />
+    </Suspense>
+  );
+}
+
+function AIAssistantContent() {
+  const searchParams = useSearchParams();
+
   // Step state
   const [step, setStep] = useState(1);
 
   // Step 1: Symptoms
   const [symptomsText, setSymptomsText] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
+
+  // Pre-fill from anamnesis
+  useEffect(() => {
+    const anamnesisData = searchParams.get("anamnesis");
+    if (anamnesisData) {
+      setSymptomsText(decodeURIComponent(anamnesisData));
+    }
+  }, [searchParams]);
 
   // Step 2: Rubric review
   const [parsedSymptoms, setParsedSymptoms] = useState<string[]>([]);

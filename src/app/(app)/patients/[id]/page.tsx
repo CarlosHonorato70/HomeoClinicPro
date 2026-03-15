@@ -19,6 +19,7 @@ import {
   Calendar,
   Pencil,
   Trash2,
+  Sparkles,
 } from "lucide-react";
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
@@ -68,14 +69,117 @@ interface AnamnesisData {
 }
 
 const anamnesisFields = [
-  { key: "mental", label: "Sintomas Mentais", icon: "🧠" },
-  { key: "general", label: "Sintomas Gerais", icon: "🏥" },
-  { key: "desires", label: "Desejos e Aversões Alimentares", icon: "🍽️" },
-  { key: "sleep", label: "Sono e Sonhos", icon: "🌙" },
-  { key: "perspiration", label: "Transpiração", icon: "💧" },
-  { key: "thermoregulation", label: "Termorregulação", icon: "🌡️" },
-  { key: "gyneco", label: "Ginecológico", icon: "♀️" },
-  { key: "particular", label: "Sintomas Particulares", icon: "📋" },
+  {
+    key: "mental",
+    label: "Sintomas Mentais",
+    icon: "🧠",
+    placeholder: `Responda as perguntas abaixo:
+- Como e o temperamento do paciente? (calmo, ansioso, irritavel, melancolico)
+- Tem medos? Quais? (escuro, solidao, morte, doenca, futuro, multidoes)
+- Como reage ao estresse? (chora, isola-se, fica agressivo, come mais)
+- Ha tristeza, depressao ou apatia? Desde quando?
+- Ha ansiedade? Em que situacoes piora? (antes de compromissos, a noite)
+- Como e a memoria e concentracao?
+- Ha irritabilidade? O que a provoca?
+- Como e a relacao com outras pessoas? (ciumes, possessividade, timidez)
+- Ha pensamentos obsessivos ou compulsivos?`,
+  },
+  {
+    key: "general",
+    label: "Sintomas Gerais",
+    icon: "🏥",
+    placeholder: `Responda as perguntas abaixo:
+- Qual a queixa principal e ha quanto tempo?
+- O que piora os sintomas? (frio, calor, umidade, movimento, repouso, pressao)
+- O que melhora os sintomas? (calor, frio, ar livre, repouso, movimento)
+- Ha horario de piora? (manha, tarde, noite, madrugada)
+- Ha lateralidade? (sintomas mais do lado direito ou esquerdo)
+- Como e o nivel de energia? (fadiga, prostacao, inquietude)
+- Ha tendencia a infeccoes recorrentes? Quais?
+- Ha historico familiar de doencas cronicas?`,
+  },
+  {
+    key: "desires",
+    label: "Desejos e Aversoes Alimentares",
+    icon: "🍽️",
+    placeholder: `Responda as perguntas abaixo:
+- Quais alimentos deseja fortemente? (doces, salgados, acidos, picantes, gordurosos)
+- Deseja alimentos especificos? (chocolate, ovos, leite, pao, frutas, gelo)
+- Ha aversao a algum alimento? (carne, gordura, leite, pao, ovos)
+- Qual alimento causa mal-estar ou piora os sintomas?
+- Como e a sede? (pouca, muita, agua gelada, temperatura ambiente, pequenos goles)
+- Como e o apetite? (aumentado, diminuido, variavel)
+- Ha nausea ou vomito? Em que situacoes?`,
+  },
+  {
+    key: "sleep",
+    label: "Sono e Sonhos",
+    icon: "🌙",
+    placeholder: `Responda as perguntas abaixo:
+- Como e a qualidade do sono? (leve, profundo, interrompido)
+- Tem dificuldade para adormecer? Por que? (pensamentos, ansiedade, dor)
+- Acorda durante a noite? Em que horario?
+- Em que posicao dorme? (de costas, de brucos, lado direito, lado esquerdo)
+- Ha sonhos recorrentes? Quais temas? (queda, perseguicao, morte, agua, animais)
+- Sente-se descansado ao acordar?
+- Ha bruxismo, sonambulismo ou falar dormindo?
+- Ha somnolencia diurna?`,
+  },
+  {
+    key: "perspiration",
+    label: "Transpiracao",
+    icon: "💧",
+    placeholder: `Responda as perguntas abaixo:
+- Sua com facilidade ou e pouco sudoretico?
+- Em quais partes do corpo sua mais? (cabeca, maos, pes, axilas, peito)
+- O suor tem odor? Qual tipo? (acido, adocicado, ofensivo)
+- O suor mancha a roupa? Qual cor?
+- Em que situacoes sua mais? (sono, esforco, emocao, comendo)
+- O suor alivia ou piora os sintomas?`,
+  },
+  {
+    key: "thermoregulation",
+    label: "Termorregulacao",
+    icon: "🌡️",
+    placeholder: `Responda as perguntas abaixo:
+- O paciente e mais friorento ou calorento?
+- Tolera bem o calor? E o frio?
+- Piora com mudanca de temperatura?
+- Prefere ambientes abertos ou fechados?
+- Ha partes do corpo especialmente frias ou quentes? (pes gelados, cabeca quente)
+- Ha fogachos ou ondas de calor?
+- Como reage ao vento, ao sol, a umidade?`,
+  },
+  {
+    key: "gyneco",
+    label: "Ginecologico",
+    icon: "♀️",
+    placeholder: `Responda as perguntas abaixo (se aplicavel):
+- Ciclo menstrual: regular ou irregular? Quantos dias?
+- Fluxo: escasso, normal ou abundante? Cor? Coagulos?
+- Ha colica menstrual? O que piora/melhora? (calor, movimento, curvando-se)
+- Sindrome pre-menstrual: quais sintomas? (irritabilidade, inchaço, cefaleia)
+- Ha corrimento? Cor, odor, consistencia?
+- Historico gestacional: gestacoes, partos, abortos?
+- Menopausa: sintomas? (fogachos, secura, alteracao de humor)
+- Libido: normal, aumentada ou diminuida?`,
+  },
+  {
+    key: "particular",
+    label: "Sintomas Particulares",
+    icon: "📋",
+    placeholder: `Descreva sintomas especificos por regiao:
+- Cabeca: cefaleias? Tipo (pulsatil, pressao, pontada)? Localizacao? Modalidades?
+- Olhos: ardor, lacrimejamento, visao turva?
+- Ouvidos: dor, zumbido, perda auditiva?
+- Nariz: coriza, espirros, obstrucao, sinusite?
+- Garganta: dor, rouquidao, sensacao de corpo estranho?
+- Respiratorio: tosse, dispneia, asma, expectoracao?
+- Digestivo: azia, refluxo, gases, diarreia, constipacao?
+- Urinario: ardor, frequencia, urgencia, cor da urina?
+- Pele: erupcoes, coceira, ressecamento, localizacao?
+- Musculoesqueletico: dores articulares, rigidez, cibras?`,
+  },
 ] as const;
 
 export default function PatientDetailPage() {
@@ -295,18 +399,43 @@ export default function PatientDetailPage() {
                     onChange={(e) =>
                       setAnamnesis((prev) => ({ ...prev, [field.key]: e.target.value }))
                     }
-                    rows={3}
-                    className="bg-[#16161f] border-[#2a2a3a]"
+                    placeholder={field.placeholder}
+                    rows={5}
+                    className="bg-[#16161f] border-[#2a2a3a] placeholder:text-gray-600 placeholder:text-xs"
                   />
                 </div>
               ))}
-              <Button
-                onClick={saveAnamnesis}
-                disabled={savingAnamnesis}
-                className="bg-teal-600 hover:bg-teal-700"
-              >
-                {savingAnamnesis ? "Salvando..." : "Salvar Anamnese"}
-              </Button>
+              <div className="flex items-center gap-3 pt-2">
+                <Button
+                  onClick={saveAnamnesis}
+                  disabled={savingAnamnesis}
+                  className="bg-teal-600 hover:bg-teal-700"
+                >
+                  {savingAnamnesis ? "Salvando..." : "Salvar Anamnese"}
+                </Button>
+                <Button
+                  onClick={() => {
+                    const filledFields = anamnesisFields
+                      .filter((f) => anamnesis[f.key]?.trim())
+                      .map((f) => `${f.label}:\n${anamnesis[f.key].trim()}`)
+                      .join("\n\n");
+                    if (!filledFields) {
+                      toast.error("Preencha pelo menos uma seção da anamnese.");
+                      return;
+                    }
+                    const context = patient
+                      ? `Paciente: ${patient.name}${patient.birthDate ? `, ${calculateAge(patient.birthDate)}` : ""}${patient.sex ? `, ${sexLabels[patient.sex] || patient.sex}` : ""}\n\n`
+                      : "";
+                    const text = encodeURIComponent(context + filledFields);
+                    router.push(`/ai?anamnesis=${text}`);
+                  }}
+                  variant="outline"
+                  className="border-teal-500/30 text-teal-400 hover:bg-teal-500/10"
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Analisar com IA
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
