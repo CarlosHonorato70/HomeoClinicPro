@@ -20,6 +20,7 @@ import {
   Pencil,
   Trash2,
   Sparkles,
+  FileText,
 } from "lucide-react";
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
@@ -284,6 +285,12 @@ export default function PatientDetailPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Link href={`/patients/${id}/documents`}>
+              <Button variant="outline" size="sm" className="border-teal-500/30 text-teal-400 hover:bg-teal-500/10">
+                <FileText className="h-4 w-4 mr-1" />
+                Documentos
+              </Button>
+            </Link>
             <Link href={`/patients/${id}/edit`}>
               <Button variant="outline" size="sm" className="border-white/10 text-gray-300 hover:bg-white/5">
                 <Pencil className="h-4 w-4 mr-1" />
