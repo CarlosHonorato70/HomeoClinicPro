@@ -443,9 +443,6 @@ export default function Home() {
             <p className="text-sm text-gray-500">
               &copy; 2026 HomeoClinic Pro. Todos os direitos reservados.
             </p>
-            <p className="mt-2 text-xs text-gray-600">
-              Dados de repertório baseados no SIHORE MAX 7.0
-            </p>
           </div>
         </div>
       </footer>
