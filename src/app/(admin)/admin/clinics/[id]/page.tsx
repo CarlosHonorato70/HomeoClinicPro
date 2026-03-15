@@ -202,7 +202,7 @@ export default function AdminClinicDetailPage() {
             </div>
             <div className="space-y-2">
               <Label>Status da Assinatura</Label>
-              <Select value={status} onValueChange={setStatus}>
+              <Select value={status} onValueChange={(v) => { if (v) setStatus(v); }}>
                 <SelectTrigger className="bg-[#16161f] border-[#2a2a3a]">
                   <SelectValue />
                 </SelectTrigger>
