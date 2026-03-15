@@ -30,7 +30,7 @@ export const PLANS: Record<PlanKey, PlanDefinition> = {
     key: "enterprise",
     name: "Enterprise",
     maxPatients: -1,
-    maxUsers: -1,
+    maxUsers: 12,
     maxConsultationsPerMonth: -1,
     priceId: process.env.STRIPE_PRICE_ENTERPRISE ?? null,
   },

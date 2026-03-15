@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { rateLimit } from "@/lib/rate-limit";
+import { isSuperAdmin } from "@/lib/superadmin";
 
 // Routes that require authentication
 const AUTH_ROUTES = [
@@ -15,6 +16,7 @@ const AUTH_ROUTES = [
   "/financial",
   "/ai",
   "/onboarding",
+  "/admin",
 ];
 
 function getClientIp(req: NextRequest): string {
@@ -86,6 +88,14 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
+    // Superadmin routes — check email, skip subscription check
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+      if (!isSuperAdmin(token.email as string)) {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+      }
+      return NextResponse.next();
+    }
+
     // Allow access to billing page even with expired trial (so user can upgrade)
     const isBillingPage = pathname.startsWith("/settings/billing");
     if (!isBillingPage) {
@@ -112,5 +122,6 @@ export const config = {
     "/financial/:path*",
     "/ai/:path*",
     "/onboarding/:path*",
+    "/admin/:path*",
   ],
 };

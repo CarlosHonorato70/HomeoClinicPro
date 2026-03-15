@@ -17,6 +17,7 @@ import {
   UsersRound,
   Pill,
   Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 
 const navGroups = [
@@ -49,7 +50,7 @@ const navGroups = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isSuperAdmin = false }: { isSuperAdmin?: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -94,6 +95,26 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
+
+      {isSuperAdmin && (
+        <div className="px-3 pb-3">
+          <p className="text-xs font-semibold text-gray-500 mb-2 px-3">
+            PLATAFORMA
+          </p>
+          <Link
+            href="/admin"
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+              pathname.startsWith("/admin")
+                ? "bg-amber-500/10 text-amber-400"
+                : "text-gray-400 hover:text-white hover:bg-[#16161f]"
+            )}
+          >
+            <ShieldCheck className="h-4 w-4" />
+            Admin
+          </Link>
+        </div>
+      )}
 
       <div className="p-4 border-t border-[#1e1e2e]">
         <div className="flex items-center gap-2 text-xs text-gray-500">

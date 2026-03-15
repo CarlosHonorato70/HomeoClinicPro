@@ -66,6 +66,44 @@ export async function checkConsultationLimit(clinicId: string): Promise<void> {
 }
 
 /**
+ * Checks whether the clinic has reached its user limit.
+ * Counts active users + pending invites against the plan limit.
+ */
+export async function checkUserLimit(clinicId: string): Promise<void> {
+  const clinic = await prisma.clinic.findUniqueOrThrow({
+    where: { id: clinicId },
+    select: { stripePriceId: true, maxPatients: true, maxUsersPerClinic: true },
+  });
+
+  const limits = getClinicLimits(clinic);
+
+  // -1 means unlimited
+  if (limits.maxUsers === -1) return;
+
+  const [userCount, pendingInvites] = await Promise.all([
+    prisma.user.count({
+      where: { clinicId, active: true },
+    }),
+    prisma.clinicInvite.count({
+      where: {
+        clinicId,
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+    }),
+  ]);
+
+  const total = userCount + pendingInvites;
+
+  if (total >= limits.maxUsers) {
+    throw new Error(
+      `Limite de usuários atingido (${total}/${limits.maxUsers}). ` +
+        `Faça upgrade do seu plano para adicionar mais usuários.`
+    );
+  }
+}
+
+/**
  * Throws if the subscription status is not active or trialing.
  */
 export function requireActiveSubscription(subscriptionStatus: string): void {

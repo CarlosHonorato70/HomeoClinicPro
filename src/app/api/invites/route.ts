@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/rbac";
 import { sendInviteEmail } from "@/lib/email";
+import { checkUserLimit } from "@/lib/subscription";
 
 export const dynamic = "force-dynamic";
 
@@ -93,25 +94,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check clinic user limit
+    // Check clinic user limit (uses plan-based limits)
+    try {
+      await checkUserLimit(session.user.clinicId);
+    } catch (err) {
+      return NextResponse.json(
+        { error: err instanceof Error ? err.message : "Limite de usuários atingido" },
+        { status: 403 }
+      );
+    }
+
     const clinic = await prisma.clinic.findUnique({
       where: { id: session.user.clinicId },
     });
-
-    if (clinic) {
-      const userCount = await prisma.user.count({
-        where: { clinicId: session.user.clinicId, active: true },
-      });
-
-      if (userCount >= clinic.maxUsersPerClinic) {
-        return NextResponse.json(
-          {
-            error: `Limite de ${clinic.maxUsersPerClinic} usuário(s) atingido. Atualize seu plano.`,
-          },
-          { status: 403 }
-        );
-      }
-    }
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
