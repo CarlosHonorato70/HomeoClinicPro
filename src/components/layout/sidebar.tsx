@@ -16,6 +16,7 @@ import {
   CreditCard,
   UsersRound,
   Pill,
+  Sparkles,
 } from "lucide-react";
 
 const navGroups = [
@@ -32,6 +33,7 @@ const navGroups = [
       { href: "/repertory", icon: BookOpen, label: "Repertório" },
       { href: "/repertory/remedies", icon: Pill, label: "Remédios" },
       { href: "/agenda", icon: Calendar, label: "Agenda" },
+      { href: "/ai", icon: Sparkles, label: "Assistente IA" },
     ],
   },
   {

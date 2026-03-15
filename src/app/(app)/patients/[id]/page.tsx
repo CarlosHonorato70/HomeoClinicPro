@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +17,8 @@ import {
   Brain,
   Shield,
   Calendar,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
@@ -78,8 +80,10 @@ const anamnesisFields = [
 
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [patient, setPatient] = useState<PatientData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const [anamnesis, setAnamnesis] = useState<Record<string, string>>({});
   const [savingAnamnesis, setSavingAnamnesis] = useState(false);
 
@@ -115,6 +119,19 @@ export default function PatientDetailPage() {
       toast.success("Anamnese salva com sucesso!");
     } else {
       toast.error("Erro ao salvar anamnese");
+    }
+  }
+
+  async function handleDelete() {
+    if (!confirm("Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.")) return;
+    setDeleting(true);
+    const res = await fetch(`/api/patients/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      toast.success("Paciente excluído com sucesso!");
+      router.push("/patients");
+    } else {
+      toast.error("Erro ao excluir paciente");
+      setDeleting(false);
     }
   }
 
@@ -154,12 +171,30 @@ export default function PatientDetailPage() {
               </div>
             </div>
           </div>
-          <Link href={`/patients/${id}/consultations/new`}>
-            <Button className="bg-teal-600 hover:bg-teal-700">
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Consulta
+          <div className="flex items-center gap-2">
+            <Link href={`/patients/${id}/edit`}>
+              <Button variant="outline" size="sm" className="border-white/10 text-gray-300 hover:bg-white/5">
+                <Pencil className="h-4 w-4 mr-1" />
+                Editar
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              {deleting ? "Excluindo..." : "Excluir"}
             </Button>
-          </Link>
+            <Link href={`/patients/${id}/consultations/new`}>
+              <Button className="bg-teal-600 hover:bg-teal-700" size="sm">
+                <Plus className="h-4 w-4 mr-1" />
+                Nova Consulta
+              </Button>
+            </Link>
+          </div>
         </CardContent>
       </Card>
 
