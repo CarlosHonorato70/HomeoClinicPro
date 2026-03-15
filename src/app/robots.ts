@@ -20,6 +20,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: "https://homeoclinic.pro/sitemap.xml",
+    sitemap: "https://homeoclinic-ia.com/sitemap.xml",
   };
 }

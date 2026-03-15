@@ -18,7 +18,7 @@ export default function PrivacidadePage() {
       <p>
         O controlador dos dados pessoais é o HomeoClinic Pro. Para questões relacionadas
         à proteção de dados, entre em contato com nosso Encarregado de Proteção de Dados
-        (DPO) pelo email <strong>dpo@homeoclinic.pro</strong>.
+        (DPO) pelo email <strong>dpo@homeoclinic-ia.com</strong>.
       </p>
 
       <h2>2. Dados Coletados</h2>
@@ -133,7 +133,7 @@ export default function PrivacidadePage() {
       </ul>
       <p>
         Para exercer seus direitos, utilize o painel LGPD dentro da plataforma ou
-        entre em contato com nosso DPO pelo email <strong>dpo@homeoclinic.pro</strong>.
+        entre em contato com nosso DPO pelo email <strong>dpo@homeoclinic-ia.com</strong>.
       </p>
 
       <h2>9. Incidentes de Segurança (Art. 48 da LGPD)</h2>
@@ -165,7 +165,7 @@ export default function PrivacidadePage() {
       <h2>13. Contato</h2>
       <p>
         Para questões sobre esta Política de Privacidade:<br />
-        Email: <strong>dpo@homeoclinic.pro</strong><br />
+        Email: <strong>dpo@homeoclinic-ia.com</strong><br />
         Encarregado de Proteção de Dados (DPO): configurável no painel da clínica.
       </p>
     </article>

@@ -112,7 +112,7 @@ export default function TermosPage() {
       <h2>13. Contato</h2>
       <p>
         Para dúvidas sobre estes Termos de Uso, entre em contato pelo email{" "}
-        <strong>contato@homeoclinic.pro</strong>.
+        <strong>contato@homeoclinic-ia.com</strong>.
       </p>
     </article>
   );

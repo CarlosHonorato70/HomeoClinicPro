@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXTAUTH_URL || "https://homeoclinic.pro"
+    process.env.NEXTAUTH_URL || "https://homeoclinic-ia.com"
   ),
   title: {
     default: "HomeoClinic Pro",

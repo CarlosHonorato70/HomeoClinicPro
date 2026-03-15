@@ -22,9 +22,9 @@
 
 ## Fase 1: SSL + DNS (Bloqueante - sem isso ninguém paga)
 1. Configurar Nginx no droplet com o arquivo já pronto (`scripts/nginx.conf`)
-2. Apontar DNS `homeoclinic.pro` -> `143.244.171.61`
+2. Apontar DNS `homeoclinic-ia.com` -> `143.244.171.61`
 3. Instalar Certbot para SSL automático (Let's Encrypt)
-4. Atualizar `NEXTAUTH_URL` para `https://homeoclinic.pro`
+4. Atualizar `NEXTAUTH_URL` para `https://homeoclinic-ia.com`
 5. Recriar container Docker
 
 > **Requer ação do usuário**: Configurar DNS no registrador do domínio

@@ -18,7 +18,7 @@ export default function ContatoPage() {
     const body = encodeURIComponent(
       `Nome: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`
     );
-    window.location.href = `mailto:contato@homeoclinic.pro?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:contato@homeoclinic-ia.com?subject=${subject}&body=${body}`;
     setSubmitted(true);
   }
 
@@ -38,7 +38,7 @@ export default function ContatoPage() {
             </div>
             <div>
               <h3 className="font-semibold text-gray-100">Email</h3>
-              <p className="text-sm text-gray-400">contato@homeoclinic.pro</p>
+              <p className="text-sm text-gray-400">contato@homeoclinic-ia.com</p>
               <p className="text-sm text-gray-500">Respondemos em até 24h</p>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function ContatoPage() {
               com nosso Encarregado pelo email:
             </p>
             <p className="mt-1 text-sm font-medium text-teal-400">
-              dpo@homeoclinic.pro
+              dpo@homeoclinic-ia.com
             </p>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function ContatoPage() {
                 </h2>
                 <p className="mt-2 text-gray-400">
                   Seu cliente de email deve ter aberto com a mensagem. Se
-                  preferir, envie diretamente para contato@homeoclinic.pro.
+                  preferir, envie diretamente para contato@homeoclinic-ia.com.
                 </p>
               </div>
             </div>

@@ -12,7 +12,7 @@ function getApiKey(): string | null {
   return key;
 }
 
-const FROM_EMAIL = process.env.EMAIL_FROM || "HomeoClinic Pro <noreply@homeoclinic.pro>";
+const FROM_EMAIL = process.env.EMAIL_FROM || "HomeoClinic Pro <noreply@homeoclinic-ia.com>";
 
 function parseFromEmail(from: string): { name: string; email: string } {
   const match = from.match(/^(.+?)\s*<(.+?)>$/);
