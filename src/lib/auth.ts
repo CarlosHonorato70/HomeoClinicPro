@@ -33,6 +33,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Senha incorreta");
         }
 
+        if (!user.emailVerified) {
+          throw new Error(
+            "Email não verificado. Verifique sua caixa de entrada."
+          );
+        }
+
         return {
           id: user.id,
           clinicId: user.clinicId,
@@ -59,9 +65,25 @@ export const authOptions: NextAuthOptions = {
         try {
           const clinic = await prisma.clinic.findUnique({
             where: { id: token.clinicId as string },
-            select: { subscriptionStatus: true },
+            select: { subscriptionStatus: true, trialEndsAt: true },
           });
-          token.subscriptionStatus = clinic?.subscriptionStatus ?? "trialing";
+          let status = clinic?.subscriptionStatus ?? "trialing";
+          // Auto-expire trials
+          if (
+            status === "trialing" &&
+            clinic?.trialEndsAt &&
+            new Date(clinic.trialEndsAt) < new Date()
+          ) {
+            status = "canceled";
+            // Update DB (fire-and-forget)
+            prisma.clinic
+              .update({
+                where: { id: token.clinicId as string },
+                data: { subscriptionStatus: "canceled" },
+              })
+              .catch(() => {});
+          }
+          token.subscriptionStatus = status;
         } catch {
           token.subscriptionStatus = token.subscriptionStatus ?? "trialing";
         }

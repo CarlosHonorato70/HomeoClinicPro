@@ -10,6 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXTAUTH_URL || "https://homeoclinic.pro"
+  ),
   title: {
     default: "HomeoClinic Pro",
     template: "%s | HomeoClinic Pro",
@@ -26,6 +29,10 @@ export const metadata: Metadata = {
     "matéria médica",
   ],
   authors: [{ name: "HomeoClinic Pro" }],
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",

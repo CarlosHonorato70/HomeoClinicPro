@@ -112,6 +112,66 @@ export async function sendInviteEmail(
   );
 }
 
+export async function sendVerificationEmail(
+  email: string,
+  userName: string,
+  token: string
+) {
+  const verifyUrl = `${process.env.NEXTAUTH_URL}/verify-email?token=${token}`;
+
+  await sendEmail(
+    email,
+    "Verifique seu email - HomeoClinic Pro",
+    `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
+        <p>Olá, ${userName}!</p>
+        <p>Obrigado por criar sua conta. Para ativá-la, confirme seu endereço de email clicando no botão abaixo:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${verifyUrl}"
+             style="background-color: #0d9488; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+            Verificar Email
+          </a>
+        </div>
+        <p style="color: #666; font-size: 14px;">
+          Este link expira em 24 horas. Se você não criou esta conta, ignore este email.
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
+      </div>
+    `
+  );
+}
+
+export async function sendTrialExpiringEmail(
+  email: string,
+  userName: string,
+  daysLeft: number
+) {
+  const upgradeUrl = `${process.env.NEXTAUTH_URL}/settings/billing`;
+
+  await sendEmail(
+    email,
+    `Seu período de teste expira em ${daysLeft} dia${daysLeft > 1 ? "s" : ""} - HomeoClinic Pro`,
+    `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
+        <p>Olá, ${userName}!</p>
+        <p>Seu período de teste gratuito expira em <strong>${daysLeft} dia${daysLeft > 1 ? "s" : ""}</strong>.</p>
+        <p>Para continuar usando todos os recursos da plataforma, faça upgrade para o plano Profissional:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${upgradeUrl}"
+             style="background-color: #0d9488; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+            Fazer Upgrade
+          </a>
+        </div>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
+      </div>
+    `
+  );
+}
+
 export async function sendWelcomeEmail(email: string, userName: string) {
   await sendEmail(
     email,

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
 import { prisma } from "@/lib/prisma";
+import { sendVerificationEmail, sendWelcomeEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
+
+const TRIAL_DAYS = 14;
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,23 +50,45 @@ export async function POST(req: NextRequest) {
     // Create clinic + user
     const passwordHash = await bcrypt.hash(password, 12);
     const userName = name?.trim() || email.split("@")[0];
+    const verificationToken = randomBytes(32).toString("hex");
+
+    const trialEndsAt = new Date();
+    trialEndsAt.setDate(trialEndsAt.getDate() + TRIAL_DAYS);
 
     const clinic = await prisma.clinic.create({
-      data: { name: clinicName.trim() },
+      data: {
+        name: clinicName.trim(),
+        subscriptionStatus: "trialing",
+        trialEndsAt,
+      },
     });
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         clinicId: clinic.id,
         name: userName,
         email: email.toLowerCase().trim(),
         passwordHash,
         role: "admin",
+        emailVerificationToken: verificationToken,
       },
     });
 
+    // Send verification + welcome emails (non-blocking)
+    sendVerificationEmail(user.email, userName, verificationToken).catch((err) =>
+      console.error("[register] Failed to send verification email:", err)
+    );
+    sendWelcomeEmail(user.email, userName).catch((err) =>
+      console.error("[register] Failed to send welcome email:", err)
+    );
+
     return NextResponse.json(
-      { success: true, message: "Conta criada com sucesso." },
+      {
+        success: true,
+        message:
+          "Conta criada com sucesso! Verifique seu email para ativar a conta.",
+        requiresVerification: true,
+      },
       { status: 201 }
     );
   } catch (error) {

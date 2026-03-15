@@ -85,6 +85,15 @@ export async function middleware(req: NextRequest) {
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // Allow access to billing page even with expired trial (so user can upgrade)
+    const isBillingPage = pathname.startsWith("/settings/billing");
+    if (!isBillingPage) {
+      const subStatus = (token.subscriptionStatus as string) ?? "trialing";
+      if (subStatus === "canceled" || subStatus === "past_due") {
+        return NextResponse.redirect(new URL("/trial-expired", req.url));
+      }
+    }
   }
 
   return NextResponse.next();

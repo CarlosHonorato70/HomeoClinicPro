@@ -49,6 +49,8 @@ model User {
   crm          String?
   specialty    String?
   active       Boolean  @default(true)
+  emailVerified          Boolean   @default(false)
+  emailVerificationToken String?   @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
