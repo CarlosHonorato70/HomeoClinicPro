@@ -216,6 +216,34 @@ model RemedyCorrelate {
   @@index([term])
 }
 
+model RemedyProfile {
+  id               Int      @id @default(autoincrement())
+  remedyCode       String   @unique
+  miasms           String?
+  keynotesPt       String?
+  keynotesEn       String?
+  modalitiesBetter String?
+  modalitiesWorse  String?
+  constitution     String?
+  thermalType      String?
+  indications      String?
+  updatedAt        DateTime @updatedAt
+
+  @@index([remedyCode])
+}
+
+model MiasmClassification {
+  id         Int    @id @default(autoincrement())
+  remedyCode String
+  miasm      String
+  authority  String
+  notes      String?
+
+  @@unique([remedyCode, miasm, authority])
+  @@index([remedyCode])
+  @@index([miasm])
+}
+
 // ========== Phase 4: Documents ==========
 
 model Document {

@@ -5,13 +5,14 @@ export interface ParsedRemedy {
   grade: 1 | 2 | 3;
 }
 
-export type RepertorizationMethod = "sum" | "coverage" | "kent" | "boenninghausen";
+export type RepertorizationMethod = "sum" | "coverage" | "kent" | "boenninghausen" | "hahnemann" | "algorithmic";
 export type RubricWeight = "mental" | "general" | "particular";
 export type RubricCategory = "location" | "sensation" | "modality" | "concomitant";
 
 export interface WeightedRubric {
   id: number;
   remedies: string;
+  remedyCount?: number;
   weight?: RubricWeight;
   category?: RubricCategory;
   intensity?: 1 | 2 | 3;
@@ -73,6 +74,19 @@ const BOENNINGHAUSEN_WEIGHTS: Record<RubricCategory, number> = {
   concomitant: 3,
 };
 
+const ALGORITHMIC_KENT_WEIGHTS: Record<RubricWeight, number> = {
+  mental: 8,
+  general: 4,
+  particular: 2,
+};
+
+const ALGORITHMIC_CATEGORY_WEIGHTS: Record<RubricCategory, number> = {
+  location: 1,
+  sensation: 1.5,
+  modality: 2.5,
+  concomitant: 3,
+};
+
 // ========== Repertorization Engine ==========
 
 /**
@@ -111,7 +125,16 @@ export function repertorize(
       multiplier = KENT_WEIGHTS[rubric.weight] ?? 1;
     } else if (method === "boenninghausen" && rubric.category) {
       multiplier = BOENNINGHAUSEN_WEIGHTS[rubric.category] ?? 1;
+    } else if (method === "algorithmic") {
+      // Hybrid: combine Kent weight + Boenninghausen category
+      const wMul = rubric.weight ? (ALGORITHMIC_KENT_WEIGHTS[rubric.weight] ?? 1) : 1;
+      const cMul = rubric.category ? (ALGORITHMIC_CATEGORY_WEIGHTS[rubric.category] ?? 1) : 1;
+      multiplier = Math.max(wMul, cMul);
     }
+    // Hahnemann: multiplier stays 1 (equal weight for all symptoms)
+
+    // Specificity bonus for algorithmic method: rubrics with fewer remedies are more specific
+    const specificityBonus = (method === "algorithmic" && rubric.remedyCount && rubric.remedyCount < 10) ? 1.5 : 1;
 
     for (const r of remedies) {
       const key = r.name.toUpperCase();
@@ -119,7 +142,7 @@ export function repertorize(
         scores[key] = { total: 0, count: 0, maxGrade: 0, rubricDetails: [] };
       }
 
-      const weightedScore = r.grade * multiplier * intensity;
+      const weightedScore = r.grade * multiplier * intensity * specificityBonus;
       scores[key].total += weightedScore;
       scores[key].count += 1;
       scores[key].rubricDetails.push({ rubricId: rubric.id, grade: r.grade });
@@ -156,7 +179,30 @@ export function repertorize(
       }
     }
 
-    return { name, ...data, eliminated };
+    // Hahnemann: eliminate remedies covering less than 50% of rubrics
+    if (method === "hahnemann" && rubrics.length >= 3) {
+      const coverage = data.count / rubrics.length;
+      if (coverage < 0.5) {
+        eliminated = true;
+      }
+    }
+
+    // Algorithmic: eliminate remedies covering less than 40% of rubrics
+    if (method === "algorithmic" && rubrics.length >= 3) {
+      const coverage = data.count / rubrics.length;
+      if (coverage < 0.4) {
+        eliminated = true;
+      }
+    }
+
+    // Hahnemann: multiply score by coverage ratio to favor totalidade
+    let finalTotal = data.total;
+    if (method === "hahnemann") {
+      const coverageRatio = data.count / rubrics.length;
+      finalTotal = data.total * coverageRatio;
+    }
+
+    return { name, ...data, total: Math.round(finalTotal * 100) / 100, eliminated };
   });
 
   // Sort based on method

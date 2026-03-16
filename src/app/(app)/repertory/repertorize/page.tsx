@@ -58,6 +58,8 @@ const METHOD_LABELS: Record<RepertorizationMethod, string> = {
   coverage: "Cobertura",
   kent: "Kent",
   boenninghausen: "Boenninghausen",
+  hahnemann: "Hahnemann",
+  algorithmic: "Algorítmico",
 };
 
 const WEIGHT_LABELS: Record<string, string> = {
@@ -323,8 +325,8 @@ export default function RepertorizePage() {
                   {rubric.remedyCount} rem.
                 </span>
 
-                {/* Kent: weight selector */}
-                {method === "kent" && (
+                {/* Kent / Algorithmic: weight selector */}
+                {(method === "kent" || method === "algorithmic") && (
                   <Select
                     value={rubric.weight ?? "general"}
                     onValueChange={(v) =>
@@ -347,8 +349,8 @@ export default function RepertorizePage() {
                   </Select>
                 )}
 
-                {/* Boenninghausen: category selector */}
-                {method === "boenninghausen" && (
+                {/* Boenninghausen / Algorithmic: category selector */}
+                {(method === "boenninghausen" || method === "algorithmic") && (
                   <Select
                     value={rubric.category ?? "location"}
                     onValueChange={(v) =>

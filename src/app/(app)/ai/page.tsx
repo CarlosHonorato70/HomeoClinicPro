@@ -68,6 +68,8 @@ const METHOD_LABELS: Record<RepertorizationMethod, string> = {
   coverage: "Cobertura",
   kent: "Kent",
   boenninghausen: "Boenninghausen",
+  hahnemann: "Hahnemann",
+  algorithmic: "Algorítmico",
 };
 
 const STEPS = [

@@ -29,16 +29,27 @@ export async function GET(
 
     const rubricCount = Number(rubricCountResult[0]?.count ?? 0);
 
-    // Fetch correlates for this remedy
-    const correlates = await prisma.remedyCorrelate.findMany({
-      where: { term: { equals: remedy.code, mode: "insensitive" } },
-      orderBy: { relatedTerm: "asc" },
-    });
+    // Fetch correlates, profile, and miasm classifications in parallel
+    const [correlates, profile, miasmClassifications] = await Promise.all([
+      prisma.remedyCorrelate.findMany({
+        where: { term: { equals: remedy.code, mode: "insensitive" } },
+        orderBy: { relatedTerm: "asc" },
+      }),
+      prisma.remedyProfile.findUnique({
+        where: { remedyCode: remedy.code },
+      }),
+      prisma.miasmClassification.findMany({
+        where: { remedyCode: { equals: remedy.code, mode: "insensitive" } },
+        orderBy: { miasm: "asc" },
+      }),
+    ]);
 
     return NextResponse.json({
       remedy,
       rubricCount,
       correlates,
+      profile,
+      miasmClassifications,
     });
   } catch (error) {
     console.error("Error fetching remedy:", error);

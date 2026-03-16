@@ -13,6 +13,9 @@ import {
   GitBranch,
   ChevronDown,
   ChevronRight,
+  Dna,
+  Thermometer,
+  Target,
 } from "lucide-react";
 
 // --- Types ---
@@ -43,6 +46,27 @@ interface MateriaMedicaEntry {
 interface ParsedSection {
   title: string;
   content: string;
+}
+
+interface RemedyProfile {
+  id: number;
+  remedyCode: string;
+  miasms: string | null;
+  keynotesPt: string | null;
+  keynotesEn: string | null;
+  modalitiesBetter: string | null;
+  modalitiesWorse: string | null;
+  constitution: string | null;
+  thermalType: string | null;
+  indications: string | null;
+}
+
+interface MiasmClassification {
+  id: number;
+  remedyCode: string;
+  miasm: string;
+  authority: string;
+  notes: string | null;
 }
 
 interface RubricWithGrade {
@@ -375,6 +399,174 @@ function CorrelatesTab({ correlates }: { correlates: Correlate[] }) {
   );
 }
 
+// --- Miasm helpers ---
+
+const MIASM_COLORS: Record<string, string> = {
+  PSORA: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+  SYCOSIS: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+  SYPHILIS: "bg-red-500/20 text-red-300 border-red-500/30",
+  TUBERCULINISM: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+  CANCERINISM: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+};
+
+function MiasmBadge({ miasm }: { miasm: string }) {
+  const color = MIASM_COLORS[miasm] ?? "bg-white/10 text-gray-300";
+  return (
+    <Badge className={`${color} border text-xs`}>
+      {miasm}
+    </Badge>
+  );
+}
+
+function ProfileTab({
+  profile,
+  miasmClassifications,
+}: {
+  profile: RemedyProfile | null;
+  miasmClassifications: MiasmClassification[];
+}) {
+  if (!profile && miasmClassifications.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-40">
+        <p className="text-gray-500 text-sm">
+          Nenhum perfil enriquecido disponível para este remédio.
+        </p>
+      </div>
+    );
+  }
+
+  const keynotes = profile?.keynotesEn
+    ? JSON.parse(profile.keynotesEn) as string[]
+    : profile?.keynotesPt
+      ? JSON.parse(profile.keynotesPt) as string[]
+      : [];
+  const better = profile?.modalitiesBetter ? JSON.parse(profile.modalitiesBetter) as string[] : [];
+  const worse = profile?.modalitiesWorse ? JSON.parse(profile.modalitiesWorse) as string[] : [];
+  const indications = profile?.indications ? JSON.parse(profile.indications) as string[] : [];
+
+  // Group miasm classifications by authority
+  const miasmsByAuthority = miasmClassifications.reduce<Record<string, MiasmClassification[]>>(
+    (acc, mc) => {
+      if (!acc[mc.authority]) acc[mc.authority] = [];
+      acc[mc.authority].push(mc);
+      return acc;
+    },
+    {}
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Miasm Classifications */}
+      {miasmClassifications.length > 0 && (
+        <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <Dna className="h-4 w-4 text-teal-500" />
+            <h3 className="text-sm font-semibold text-gray-200">
+              Classificação Miasmática
+            </h3>
+          </div>
+          {Object.entries(miasmsByAuthority).map(([authority, items]) => (
+            <div key={authority} className="space-y-1">
+              <p className="text-xs text-gray-500 uppercase tracking-wider">
+                {authority.replace(/_/g, " ")}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {items.map((mc) => (
+                  <MiasmBadge key={mc.id} miasm={mc.miasm} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Thermal Type */}
+      {profile?.thermalType && (
+        <div className="bg-[#111118] border border-white/10 rounded-lg p-4">
+          <div className="flex items-center gap-2">
+            <Thermometer className="h-4 w-4 text-teal-500" />
+            <h3 className="text-sm font-semibold text-gray-200">Tipo Térmico</h3>
+          </div>
+          <Badge className="mt-2 bg-white/10 text-gray-300 border-0">
+            {profile.thermalType}
+          </Badge>
+        </div>
+      )}
+
+      {/* Keynotes */}
+      {keynotes.length > 0 && (
+        <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <Target className="h-4 w-4 text-teal-500" />
+            <h3 className="text-sm font-semibold text-gray-200">Keynotes</h3>
+          </div>
+          <ul className="space-y-1">
+            {keynotes.map((k, i) => (
+              <li key={i} className="text-sm text-gray-300 pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-teal-500">
+                {k}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Modalities */}
+      {(better.length > 0 || worse.length > 0) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {better.length > 0 && (
+            <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-2">
+              <h3 className="text-sm font-semibold text-emerald-400">
+                Melhora ({">"})
+              </h3>
+              <ul className="space-y-1">
+                {better.map((m, i) => (
+                  <li key={i} className="text-sm text-gray-300">{m}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {worse.length > 0 && (
+            <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-2">
+              <h3 className="text-sm font-semibold text-red-400">
+                Piora ({"<"})
+              </h3>
+              <ul className="space-y-1">
+                {worse.map((m, i) => (
+                  <li key={i} className="text-sm text-gray-300">{m}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Constitution */}
+      {profile?.constitution && (
+        <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-2">
+          <h3 className="text-sm font-semibold text-gray-200">Constituição</h3>
+          <p className="text-sm text-gray-300 whitespace-pre-wrap">
+            {profile.constitution}
+          </p>
+        </div>
+      )}
+
+      {/* Therapeutic Indications */}
+      {indications.length > 0 && (
+        <div className="bg-[#111118] border border-white/10 rounded-lg p-4 space-y-2">
+          <h3 className="text-sm font-semibold text-gray-200">Indicações Terapêuticas</h3>
+          <div className="flex flex-wrap gap-2">
+            {indications.map((ind, i) => (
+              <Badge key={i} className="bg-white/5 text-gray-300 border border-white/10">
+                {ind}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // --- Main Page ---
 
 export default function RemedyDetailPage({
@@ -387,6 +579,8 @@ export default function RemedyDetailPage({
   const [remedy, setRemedy] = useState<Remedy | null>(null);
   const [rubricCount, setRubricCount] = useState(0);
   const [correlates, setCorrelates] = useState<Correlate[]>([]);
+  const [profile, setProfile] = useState<RemedyProfile | null>(null);
+  const [miasmClassifications, setMiasmClassifications] = useState<MiasmClassification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -410,6 +604,8 @@ export default function RemedyDetailPage({
         setRemedy(data.remedy);
         setRubricCount(data.rubricCount ?? 0);
         setCorrelates(data.correlates ?? []);
+        setProfile(data.profile ?? null);
+        setMiasmClassifications(data.miasmClassifications ?? []);
       } catch {
         setError("Erro ao carregar remédio.");
       } finally {
@@ -459,7 +655,7 @@ export default function RemedyDetailPage({
           </Badge>
         </div>
 
-        <div className="flex items-center gap-4 pl-8">
+        <div className="flex items-center gap-4 pl-8 flex-wrap">
           {remedy.synonym && (
             <span className="text-sm text-gray-500">{remedy.synonym}</span>
           )}
@@ -470,6 +666,19 @@ export default function RemedyDetailPage({
             <Badge className="bg-white/5 text-gray-400 border-0 text-xs">
               {correlates.length} correlatos
             </Badge>
+          )}
+          {profile?.thermalType && (
+            <Badge className="bg-white/5 text-gray-400 border-0 text-xs">
+              <Thermometer className="h-3 w-3 mr-1" />
+              {profile.thermalType}
+            </Badge>
+          )}
+          {miasmClassifications.length > 0 && (
+            <div className="flex items-center gap-1">
+              {[...new Set(miasmClassifications.map((m) => m.miasm))].map((miasm) => (
+                <MiasmBadge key={miasm} miasm={miasm} />
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -500,6 +709,13 @@ export default function RemedyDetailPage({
                 <GitBranch className="h-4 w-4 mr-1.5" />
                 Correlatos
               </TabsTrigger>
+              <TabsTrigger
+                value="profile"
+                className="text-gray-400 data-active:text-teal-400 data-active:bg-transparent rounded-none border-b-2 border-transparent data-active:border-teal-500 px-4 py-2"
+              >
+                <Dna className="h-4 w-4 mr-1.5" />
+                Perfil
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -514,6 +730,13 @@ export default function RemedyDetailPage({
 
             <TabsContent value="correlates">
               <CorrelatesTab correlates={correlates} />
+            </TabsContent>
+
+            <TabsContent value="profile">
+              <ProfileTab
+                profile={profile}
+                miasmClassifications={miasmClassifications}
+              />
             </TabsContent>
           </div>
         </Tabs>

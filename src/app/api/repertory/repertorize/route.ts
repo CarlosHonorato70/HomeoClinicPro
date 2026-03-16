@@ -64,6 +64,7 @@ export async function POST(req: NextRequest) {
       return {
         id: r.id,
         remedies: r.remedies,
+        remedyCount: r.remedyCount,
         weight: cfg?.weight,
         category: cfg?.category,
         intensity: cfg?.intensity,
