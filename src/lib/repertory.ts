@@ -36,7 +36,7 @@ export interface ScoredRemedy {
 // ========== Remedy Parser ==========
 
 /**
- * Parses a space-separated remedy string using the SIHORE grading convention:
+ * Parses a space-separated remedy string using the standard grading convention:
  * - UPPERCASE (len > 1) = grade 3 (highest)
  * - Capitalized (first letter upper) = grade 2
  * - lowercase = grade 1

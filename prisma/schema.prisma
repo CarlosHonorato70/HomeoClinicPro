@@ -198,7 +198,7 @@ model MateriaMedica {
   id         Int      @id @default(autoincrement())
   remedyCode String
   remedyName String
-  source     String   @default("SIHORE")
+  source     String   @default("REPERTORIO")
   content    String
   sections   String?
   createdAt  DateTime @default(now())

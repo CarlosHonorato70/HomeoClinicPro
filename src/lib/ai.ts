@@ -54,7 +54,7 @@ export async function parseSymptoms(naturalText: string): Promise<string[]> {
         content: `Você é um especialista em homeopatia e repertorização homeopática.
 O médico descreverá os sintomas do paciente em linguagem natural em português.
 
-Sua tarefa é extrair sintomas individuais como termos de busca para um repertório homeopático (tipo Kent/Repertório SIHORE).
+Sua tarefa é extrair sintomas individuais como termos de busca para um repertório homeopático (tipo Kent).
 
 Regras:
 - Separe cada sintoma em um termo de busca curto e específico

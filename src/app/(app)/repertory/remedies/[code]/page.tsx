@@ -199,7 +199,7 @@ function MateriaMedicaTab({ code }: { code: string }) {
           <div key={entry.id} className="space-y-3">
             <div className="flex items-center gap-2">
               <Badge className="bg-white/10 text-gray-300 border-0 text-xs">
-                {entry.source}
+                {entry.source === "SIHORE" ? "Repertório" : entry.source === "AUTO_SUMMARY" ? "Resumo" : entry.source.replace(/_/g, " ")}
               </Badge>
             </div>
 
