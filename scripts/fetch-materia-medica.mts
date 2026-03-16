@@ -345,56 +345,89 @@ async function buildRemedyProfiles(remedyMap: Map<string, string>) {
     where: {
       source: { in: ["BOERICKE", "ALLEN_KEYNOTES", "KENT"] },
     },
-    select: { remedyCode: true, source: true, sections: true },
+    select: { remedyCode: true, source: true, content: true },
   });
 
   // Group by remedy code
   const grouped = new Map<
     string,
-    { source: string; sections: Record<string, string> }[]
+    { source: string; content: string }[]
   >();
   for (const entry of entries) {
-    if (!entry.sections) continue;
+    if (!entry.content) continue;
     const code = entry.remedyCode;
     if (!grouped.has(code)) grouped.set(code, []);
     grouped.get(code)!.push({
       source: entry.source,
-      sections: JSON.parse(entry.sections),
+      content: entry.content,
     });
   }
 
   let created = 0;
   for (const [remedyCode, sources] of grouped) {
-    const keynotesPt: string[] = [];
     const keynotesEn: string[] = [];
     let modalitiesBetter: string[] = [];
     let modalitiesWorse: string[] = [];
-    let constitution = "";
 
-    for (const { source, sections } of sources) {
-      // Extract keynotes from Allen
+    for (const { source, content } of sources) {
+      // Extract keynotes from Allen — the main text block is the keynote
       if (source === "ALLEN_KEYNOTES") {
-        const headerText = sections["__header__"] || "";
-        const lines = headerText.split("\n").filter((l) => l.trim().length > 10);
-        keynotesEn.push(...lines.slice(0, 10));
+        // Allen content has the keynote text after the index line
+        const lines = content.split("\n");
+        for (const line of lines) {
+          const trimmed = line.trim();
+          // Skip site header/nav lines
+          if (trimmed.startsWith("##") || trimmed.startsWith("Index ") ||
+              trimmed.startsWith("Materia Medica") || trimmed.length < 20 ||
+              trimmed.includes("Remedia Homeopathy") || trimmed.includes("customers from") ||
+              trimmed.includes("Keynotes  by") || trimmed.includes("You can read the full book")) {
+            continue;
+          }
+          // Split long text blocks into sentences for keynotes
+          const sentences = trimmed.split(/(?<=[.;])\s+/).filter(s => s.length > 15);
+          keynotesEn.push(...sentences.slice(0, 15));
+          break; // Allen has one big text block per remedy
+        }
       }
 
-      // Extract modalities from Boericke
+      // Extract modalities from Boericke — inline "Modalities.--Worse,...Better,..." pattern
       if (source === "BOERICKE") {
-        for (const [key, val] of Object.entries(sections)) {
-          const keyLower = key.toLowerCase();
-          if (keyLower.includes("modalities") || keyLower.includes("worse") || keyLower.includes("better")) {
-            const lines = val.split("\n");
-            for (const line of lines) {
-              const lower = line.toLowerCase();
-              if (lower.includes("worse") || lower.includes("<")) {
-                modalitiesWorse.push(line.trim());
-              }
-              if (lower.includes("better") || lower.includes(">")) {
-                modalitiesBetter.push(line.trim());
-              }
+        // Look for Modalities section in content
+        const modalMatch = content.match(/Modalities\.?--(.+?)(?=\s+Relationship\.|$)/si);
+        if (modalMatch) {
+          const modalText = modalMatch[1];
+          // Split on "Better" to get worse/better parts
+          const betterSplit = modalText.split(/Better[,.\s]/i);
+          if (betterSplit.length >= 2) {
+            const worseText = betterSplit[0].replace(/^\s*Worse[,.\s]*/i, "").trim();
+            const betterText = betterSplit[1].trim().replace(/\.\s*$/, "");
+            if (worseText) {
+              modalitiesWorse = worseText.split(/[,;]/).map(s => s.trim()).filter(s => s.length > 2);
+            }
+            if (betterText) {
+              modalitiesBetter = betterText.split(/[,;]/).map(s => s.trim()).filter(s => s.length > 2);
+            }
+          } else {
+            // Only worse section found
+            const worseText = modalText.replace(/^\s*Worse[,.\s]*/i, "").trim();
+            if (worseText) {
+              modalitiesWorse = worseText.split(/[,;]/).map(s => s.trim()).filter(s => s.length > 2);
             }
           }
+        }
+
+        // Also extract from Allen's < > patterns
+      }
+
+      // Allen uses < for worse and > for better
+      if (source === "ALLEN_KEYNOTES") {
+        const worseMatch = content.match(/<\s+([^>]+?)(?:\.\s*>|$)/);
+        const betterMatch = content.match(/>\s+([^<]+?)(?:\.\s*$|\n)/);
+        if (worseMatch && modalitiesWorse.length === 0) {
+          modalitiesWorse = worseMatch[1].split(/[,;]/).map(s => s.trim()).filter(s => s.length > 2);
+        }
+        if (betterMatch && modalitiesBetter.length === 0) {
+          modalitiesBetter = betterMatch[1].split(/[,;]/).map(s => s.trim()).filter(s => s.length > 2);
         }
       }
     }
@@ -412,7 +445,7 @@ async function buildRemedyProfiles(remedyMap: Map<string, string>) {
           keynotesPt: null,
           modalitiesBetter: modalitiesBetter.length > 0 ? JSON.stringify(modalitiesBetter) : null,
           modalitiesWorse: modalitiesWorse.length > 0 ? JSON.stringify(modalitiesWorse) : null,
-          constitution: constitution || null,
+          constitution: null,
         },
         update: {
           keynotesEn: keynotesEn.length > 0 ? JSON.stringify(keynotesEn) : undefined,

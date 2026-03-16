@@ -56,3 +56,8 @@ prototype/sr_homeopata_data.js
 
 # Claude local settings
 .claude/settings.local.json
+
+# Materia medica cache and exports
+data/cache/
+data/export-*.csv
+data/export-*.sql
