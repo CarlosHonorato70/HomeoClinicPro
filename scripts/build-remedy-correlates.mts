@@ -13,8 +13,8 @@ const PrismaClient = mod.PrismaClient;
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-// Known remedy codes for matching
-let remedyCodeSet: Set<string>;
+// Maps various name forms -> canonical remedy code
+let nameToCodeMap: Map<string, string>;
 
 function normalizeCode(raw: string): string | null {
   const cleaned = raw
@@ -23,15 +23,30 @@ function normalizeCode(raw: string): string | null {
     .replace(/\s+/g, "-")
     .toUpperCase();
   if (cleaned.length < 2 || cleaned.length > 20) return null;
-  if (/^\d+$/.test(cleaned)) return null; // pure numbers
+  if (/^\d+$/.test(cleaned)) return null;
+
   // Direct match
-  if (remedyCodeSet.has(cleaned)) return cleaned;
-  // Try common abbreviation patterns
-  const short = cleaned.replace(/-/g, "");
-  for (const code of remedyCodeSet) {
-    if (code === cleaned || code === short) return code;
-    if (code.replace(/-/g, "") === short) return code;
+  if (nameToCodeMap.has(cleaned)) return nameToCodeMap.get(cleaned)!;
+
+  // Try without hyphens
+  const noDash = cleaned.replace(/-/g, "");
+  if (nameToCodeMap.has(noDash)) return nameToCodeMap.get(noDash)!;
+
+  // Try first 4 chars
+  const abbr4 = cleaned.slice(0, 4);
+  if (nameToCodeMap.has(abbr4)) return nameToCodeMap.get(abbr4)!;
+
+  // Try first 3 chars
+  const abbr3 = cleaned.slice(0, 3);
+  if (nameToCodeMap.has(abbr3)) return nameToCodeMap.get(abbr3)!;
+
+  // Fuzzy: startsWith check
+  for (const [key, code] of nameToCodeMap) {
+    if (key.startsWith(cleaned) || cleaned.startsWith(key)) {
+      return code;
+    }
   }
+
   return null;
 }
 
@@ -70,10 +85,24 @@ function classifyRelationship(sectionText: string, lineText: string): RelType {
 async function main() {
   console.log("=== Build Remedy Correlates ===\n");
 
-  // Load all remedy codes
-  const remedies = await prisma.remedy.findMany({ select: { code: true } });
-  remedyCodeSet = new Set(remedies.map((r) => r.code));
-  console.log(`Loaded ${remedyCodeSet.size} remedy codes\n`);
+  // Load all remedy codes + names for matching
+  const remedies = await prisma.remedy.findMany({
+    select: { code: true, name: true, synonym: true },
+  });
+  nameToCodeMap = new Map<string, string>();
+  for (const r of remedies) {
+    nameToCodeMap.set(r.code.toUpperCase(), r.code);
+    nameToCodeMap.set(r.name.toUpperCase(), r.code);
+    // Add name without spaces/hyphens
+    nameToCodeMap.set(r.name.toUpperCase().replace(/[\s-]+/g, ""), r.code);
+    if (r.synonym) {
+      for (const syn of r.synonym.split(",")) {
+        const s = syn.trim().toUpperCase();
+        if (s.length > 1) nameToCodeMap.set(s, r.code);
+      }
+    }
+  }
+  console.log(`Loaded ${nameToCodeMap.size} remedy name variants\n`);
 
   // Fetch all materia medica entries that likely have relationship sections
   const entries = await prisma.materiaMedica.findMany({
@@ -88,37 +117,39 @@ async function main() {
   const correlates: { term: string; relatedTerm: string; type: string }[] = [];
 
   for (const entry of entries) {
-    // Extract "Relationship" section
-    const relMatch = entry.content.match(
-      /(?:^|\n)#+?\s*Relationship[s]?[\s\S]*?(?=\n#+?\s|\n\n\n|$)/im
+    // Normalize line endings
+    const content = entry.content.replace(/\r\n?/g, "\n");
+
+    // Try to extract "Relationship" section — multiple patterns
+    let relText: string | null = null;
+
+    // Pattern 1: ## Relationship heading
+    const headingMatch = content.match(
+      /(?:^|\n)#+?\s*Relationship[s]?[^\n]*\n([\s\S]*?)(?=\n#+?\s|\n\n\n|$)/im
     );
-    if (!relMatch) {
-      // Try inline pattern: "Relationship.--"
-      const inlineMatch = entry.content.match(
-        /Relationship[s]?\.?\s*[-—]+\s*([\s\S]*?)(?=\n\s*\n|\n#+|$)/im
-      );
-      if (inlineMatch) {
-        const codes = extractRemedyCodes(inlineMatch[1]);
-        for (const code of codes) {
-          if (code !== entry.remedyCode) {
-            correlates.push({
-              term: entry.remedyCode,
-              relatedTerm: code,
-              type: classifyRelationship("", inlineMatch[1]),
-            });
-          }
-        }
-      }
-      continue;
+    if (headingMatch) {
+      relText = headingMatch[1];
     }
 
-    const section = relMatch[0];
+    // Pattern 2: Inline "Relationship.--" or "Relationship--"
+    if (!relText) {
+      const inlineMatch = content.match(
+        /Relationship[s]?\.?\s*[-—]+\s*([\s\S]*?)(?=\s*Dose\.?\s*[-—]|$)/im
+      );
+      if (inlineMatch) {
+        relText = inlineMatch[1];
+      }
+    }
 
-    // Parse sub-sections: Compare, Complementary, Antidotes, Inimical, Follows well
-    const subSections = section.split(/\n(?=[A-Z])/);
-    for (const sub of subSections) {
-      const relType = classifyRelationship(sub, "");
-      const codes = extractRemedyCodes(sub);
+    if (!relText || relText.trim().length < 5) continue;
+
+    // Split into sub-relations: Complementary:, Compare:, Antidotes:, Inimical:, Follows well:
+    const subParts = relText.split(/(?=Complement|Compare|Antidot|Inimic|Incomp|Follows?\s+well)/i);
+    for (const sub of subParts) {
+      const trimmed = sub.trim();
+      if (trimmed.length < 3) continue;
+      const relType = classifyRelationship(trimmed, "");
+      const codes = extractRemedyCodes(trimmed);
       for (const code of codes) {
         if (code !== entry.remedyCode) {
           correlates.push({

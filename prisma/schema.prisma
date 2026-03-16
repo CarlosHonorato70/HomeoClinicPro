@@ -186,10 +186,11 @@ model Rubric {
 }
 
 model Remedy {
-  id      Int    @id @default(autoincrement())
-  code    String @unique
+  id      Int     @id @default(autoincrement())
+  code    String  @unique
   name    String
   synonym String?
+  visible Boolean @default(true)
 }
 
 // ========== Materia Medica + Correlates ==========

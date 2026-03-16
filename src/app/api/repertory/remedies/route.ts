@@ -11,9 +11,12 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 50));
     const skip = (page - 1) * limit;
 
-    const where = q && q.trim().length > 0
-      ? { name: { contains: q, mode: "insensitive" as const } }
-      : {};
+    const where = {
+      visible: true,
+      ...(q && q.trim().length > 0
+        ? { name: { contains: q, mode: "insensitive" as const } }
+        : {}),
+    };
 
     const [remedies, total] = await Promise.all([
       prisma.remedy.findMany({
