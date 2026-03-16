@@ -10,11 +10,14 @@
  * Usage: npx tsx scripts/fetch-materia-medica.mts [--source boericke|allen|kent|all] [--import-only]
  */
 
-import { PrismaClient } from "../src/generated/prisma/index.js";
 import * as fs from "fs";
 import * as path from "path";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const prisma = new PrismaClient();
+const mod = await import("../src/generated/prisma/client.ts");
+const PrismaClient = mod.PrismaClient;
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
 
 const BASE_URL = "https://www.materiamedica.info/en/materia-medica";
 
