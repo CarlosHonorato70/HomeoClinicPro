@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AdminGuard } from "@/components/admin-guard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,14 +80,17 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
+      <AdminGuard>
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Configurações</h1>
         <p className="text-gray-400">Carregando...</p>
       </div>
+      </AdminGuard>
     );
   }
 
   return (
+    <AdminGuard>
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Configurações</h1>
@@ -212,5 +216,6 @@ export default function SettingsPage() {
         </Button>
       </div>
     </div>
+    </AdminGuard>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AdminGuard } from "@/components/admin-guard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Download, EyeOff, FileText, Info } from "lucide-react";
 
@@ -37,6 +38,7 @@ const lgpdCards = [
 
 export default function LGPDPage() {
   return (
+    <AdminGuard>
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Conformidade LGPD</h1>
@@ -85,5 +87,6 @@ export default function LGPDPage() {
         </CardContent>
       </Card>
     </div>
+    </AdminGuard>
   );
 }

@@ -19,8 +19,21 @@ import {
   Sparkles,
   ShieldCheck,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const navGroups = [
+interface NavItem {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  adminOnly?: boolean;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+const navGroups: NavGroup[] = [
   {
     label: "PRINCIPAL",
     items: [
@@ -40,17 +53,22 @@ const navGroups = [
   {
     label: "GESTÃO",
     items: [
-      { href: "/financial", icon: DollarSign, label: "Financeiro" },
-      { href: "/audit", icon: FileText, label: "Auditoria" },
-      { href: "/lgpd", icon: Shield, label: "LGPD" },
-      { href: "/settings", icon: Settings, label: "Configurações" },
-      { href: "/settings/billing", icon: CreditCard, label: "Assinatura" },
-      { href: "/settings/team", icon: UsersRound, label: "Equipe" },
+      { href: "/financial", icon: DollarSign, label: "Financeiro", adminOnly: true },
+      { href: "/audit", icon: FileText, label: "Auditoria", adminOnly: true },
+      { href: "/lgpd", icon: Shield, label: "LGPD", adminOnly: true },
+      { href: "/settings", icon: Settings, label: "Configurações", adminOnly: true },
+      { href: "/settings/billing", icon: CreditCard, label: "Assinatura", adminOnly: true },
+      { href: "/settings/team", icon: UsersRound, label: "Equipe", adminOnly: true },
     ],
   },
 ];
 
-export function Sidebar({ isSuperAdmin = false }: { isSuperAdmin?: boolean }) {
+interface SidebarProps {
+  isSuperAdmin?: boolean;
+  userRole?: string;
+}
+
+export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -65,13 +83,18 @@ export function Sidebar({ isSuperAdmin = false }: { isSuperAdmin?: boolean }) {
       </div>
 
       <nav className="flex-1 p-3 space-y-6">
-        {navGroups.map((group) => (
+        {navGroups.map((group) => {
+          const visibleItems = group.items.filter(
+            (item) => !item.adminOnly || userRole === "admin"
+          );
+          if (visibleItems.length === 0) return null;
+          return (
           <div key={group.label}>
             <p className="text-xs font-semibold text-gray-500 mb-2 px-3">
               {group.label}
             </p>
             <div className="space-y-1">
-              {group.items.map((item) => {
+              {visibleItems.map((item) => {
                 const isActive =
                   pathname === item.href ||
                   (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -93,7 +116,8 @@ export function Sidebar({ isSuperAdmin = false }: { isSuperAdmin?: boolean }) {
               })}
             </div>
           </div>
-        ))}
+          );
+        })}
       </nav>
 
       {isSuperAdmin && (

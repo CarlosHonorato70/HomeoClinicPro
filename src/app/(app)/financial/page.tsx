@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { AdminGuard } from "@/components/admin-guard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -170,6 +171,7 @@ export default function FinancialPage() {
   }
 
   return (
+    <AdminGuard>
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -450,5 +452,6 @@ export default function FinancialPage() {
         </DialogContent>
       </Dialog>
     </div>
+    </AdminGuard>
   );
 }

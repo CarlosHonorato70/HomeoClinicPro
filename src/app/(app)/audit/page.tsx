@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { AdminGuard } from "@/components/admin-guard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -52,6 +53,7 @@ export default function AuditPage() {
   }, [page]);
 
   return (
+    <AdminGuard>
     <div className="space-y-6">
       <h1 className="text-2xl font-bold flex items-center gap-2">
         <FileText className="h-6 w-6 text-teal-400" />
@@ -112,5 +114,6 @@ export default function AuditPage() {
         </CardContent>
       </Card>
     </div>
+    </AdminGuard>
   );
 }
