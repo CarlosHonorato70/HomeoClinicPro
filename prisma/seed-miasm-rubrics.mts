@@ -2,7 +2,7 @@
  * Aggregate miasm data from existing Rubric table.
  * Rubric miasm format: "psora:100,syphi:,sicos:" or "psora:100,syphi:50,sicos:50"
  * For each remedy, counts how many rubrics with strong miasm presence (>=50) it appears in.
- * Inserts results into MiasmClassification with authority "SIHORE_REPERTORY".
+ * Inserts results into MiasmClassification with authority "REPERTORIO".
  *
  * Usage: npx tsx prisma/seed-miasm-rubrics.mts
  */
@@ -88,7 +88,7 @@ async function main() {
       batch.push({
         remedyCode,
         miasm,
-        authority: "SIHORE_REPERTORY",
+        authority: "REPERTORIO",
         notes: `Presente em ${count} rubricas com miasma ${miasm}`,
       });
     }

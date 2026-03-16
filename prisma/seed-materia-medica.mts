@@ -1,6 +1,6 @@
 /**
  * Seed script: Materia Medica
- * Imports materia medica text files from SIHORE TEXTOS directory into the database.
+ * Imports materia medica text files from REPERTORIO TEXTOS directory into the database.
  *
  * Usage: npx tsx prisma/seed-materia-medica.mts
  */
@@ -119,7 +119,7 @@ async function main() {
       records.push({
         remedyCode: parsed.remedyCode,
         remedyName: parsed.remedyName,
-        source: "SIHORE",
+        source: "REPERTORIO",
         content: parsed.content,
         sections: JSON.stringify(parsed.sections),
       });
