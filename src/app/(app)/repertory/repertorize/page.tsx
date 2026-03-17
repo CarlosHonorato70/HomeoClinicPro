@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -177,8 +177,9 @@ export default function RepertorizePage() {
 
   // ---- Actions ----
 
-  async function handleRepertorize() {
+  const handleRepertorize = useCallback(async (selectedMethod?: RepertorizationMethod) => {
     if (selectedRubrics.length === 0) return;
+    const methodToUse = selectedMethod ?? method;
 
     setLoading(true);
     setHasRun(false);
@@ -187,7 +188,7 @@ export default function RepertorizePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          method,
+          method: methodToUse,
           rubricConfigs: selectedRubrics.map((r) => ({
             id: r.id,
             weight: r.weight,
@@ -212,7 +213,20 @@ export default function RepertorizePage() {
       setLoading(false);
       setHasRun(true);
     }
-  }
+  }, [selectedRubrics, method]);
+
+  // Auto re-run when method changes and results already exist
+  const hasRunRef = useRef(false);
+  useEffect(() => {
+    if (hasRunRef.current && selectedRubrics.length > 0) {
+      handleRepertorize(method);
+    }
+  }, [method]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track whether user has run at least once
+  useEffect(() => {
+    if (hasRun) hasRunRef.current = true;
+  }, [hasRun]);
 
   function handleClear() {
     clearRubrics();
@@ -416,7 +430,7 @@ export default function RepertorizePage() {
         {/* Action buttons */}
         <div className="flex items-center gap-3 mt-4 pt-3 border-t border-white/5">
           <Button
-            onClick={handleRepertorize}
+            onClick={() => handleRepertorize()}
             disabled={selectedRubrics.length < 1 || loading}
             className="bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-40"
           >
