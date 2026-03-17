@@ -91,3 +91,22 @@ export const financialSchema = z.object({
   category: z.string().optional(),
 });
 export type FinancialInput = z.infer<typeof financialSchema>;
+
+export const clinicSettingsSchema = z.object({
+  name: z.string().min(1).max(200).optional(),
+  cnpj: z.string().max(20).optional(),
+  phone: z.string().max(20).optional(),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  address: z.string().max(500).optional(),
+  crm: z.string().max(30).optional(),
+  dpoName: z.string().max(200).optional(),
+  dpoEmail: z.string().email("Email do DPO inválido").optional().or(z.literal("")),
+});
+export type ClinicSettingsInput = z.infer<typeof clinicSettingsSchema>;
+
+export const lgpdConsentSchema = z.object({
+  patientId: z.string().min(1, "Paciente é obrigatório"),
+  consentType: z.enum(["treatment", "data_processing", "data_sharing", "marketing"]),
+  granted: z.boolean(),
+});
+export type LgpdConsentInput = z.infer<typeof lgpdConsentSchema>;

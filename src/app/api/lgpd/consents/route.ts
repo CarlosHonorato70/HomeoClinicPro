@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { lgpdConsentSchema } from "@/lib/validations";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(req: Request) {
@@ -37,14 +38,11 @@ export async function POST(req: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { patientId, consentType, granted } = body;
-
-  if (!patientId || !consentType || granted === undefined) {
-    return NextResponse.json(
-      { error: "patientId, consentType, and granted are required" },
-      { status: 400 }
-    );
+  const parsed = lgpdConsentSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
+  const { patientId, consentType, granted } = parsed.data;
 
   // Verify patient belongs to the clinic
   const patient = await prisma.patient.findFirst({

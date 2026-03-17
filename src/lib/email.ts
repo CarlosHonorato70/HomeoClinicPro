@@ -3,6 +3,16 @@
 
 const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
+/** Escape HTML special characters to prevent injection in email templates */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function getApiKey(): string | null {
   const key = process.env.BREVO_API_KEY;
   if (!key) {
@@ -60,7 +70,7 @@ export async function sendPasswordResetEmail(
     `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
-        <p>Olá, ${userName}!</p>
+        <p>Olá, ${escapeHtml(userName)}!</p>
         <p>Recebemos uma solicitação para redefinir sua senha.</p>
         <p>Clique no botão abaixo para criar uma nova senha:</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -90,12 +100,12 @@ export async function sendInviteEmail(
 
   await sendEmail(
     email,
-    `Convite para ${clinicName} - HomeoClinic Pro`,
+    `Convite para ${escapeHtml(clinicName)} - HomeoClinic Pro`,
     `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
         <p>Olá!</p>
-        <p><strong>${inviterName}</strong> convidou você para se juntar à clínica <strong>${clinicName}</strong> como <strong>${role === "admin" ? "Administrador" : "Médico"}</strong>.</p>
+        <p><strong>${escapeHtml(inviterName)}</strong> convidou você para se juntar à clínica <strong>${escapeHtml(clinicName)}</strong> como <strong>${role === "admin" ? "Administrador" : "Médico"}</strong>.</p>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${inviteUrl}"
              style="background-color: #0d9488; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">
@@ -125,7 +135,7 @@ export async function sendVerificationEmail(
     `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
-        <p>Olá, ${userName}!</p>
+        <p>Olá, ${escapeHtml(userName)}!</p>
         <p>Obrigado por criar sua conta. Para ativá-la, confirme seu endereço de email clicando no botão abaixo:</p>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${verifyUrl}"
@@ -156,7 +166,7 @@ export async function sendTrialExpiringEmail(
     `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
-        <p>Olá, ${userName}!</p>
+        <p>Olá, ${escapeHtml(userName)}!</p>
         <p>Seu período de teste gratuito expira em <strong>${daysLeft} dia${daysLeft > 1 ? "s" : ""}</strong>.</p>
         <p>Para continuar usando todos os recursos da plataforma, faça upgrade para o plano Profissional:</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -179,7 +189,7 @@ export async function sendWelcomeEmail(email: string, userName: string) {
     `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
-        <p>Olá, ${userName}!</p>
+        <p>Olá, ${escapeHtml(userName)}!</p>
         <p>Sua conta foi criada com sucesso. Agora você tem acesso ao sistema completo de prontuário eletrônico homeopático.</p>
         <p>Recursos disponíveis:</p>
         <ul>

@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { clinicSettingsSchema } from "@/lib/validations";
 import { logAudit, AuditActions } from "@/lib/audit";
 import { requirePermission } from "@/lib/rbac";
 
@@ -47,19 +48,24 @@ export async function PATCH(req: Request) {
   }
 
   const body = await req.json();
-  const { dpoName, dpoEmail, name, cnpj, phone, email, address, crm } = body;
+  const parsed = clinicSettingsSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  }
+
+  const data = parsed.data;
 
   const clinic = await prisma.clinic.update({
     where: { id: session.user.clinicId },
     data: {
-      ...(dpoName !== undefined && { dpoName }),
-      ...(dpoEmail !== undefined && { dpoEmail }),
-      ...(name !== undefined && { name }),
-      ...(cnpj !== undefined && { cnpj }),
-      ...(phone !== undefined && { phone }),
-      ...(email !== undefined && { email }),
-      ...(address !== undefined && { address }),
-      ...(crm !== undefined && { crm }),
+      ...(data.dpoName !== undefined && { dpoName: data.dpoName }),
+      ...(data.dpoEmail !== undefined && { dpoEmail: data.dpoEmail }),
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.cnpj !== undefined && { cnpj: data.cnpj }),
+      ...(data.phone !== undefined && { phone: data.phone }),
+      ...(data.email !== undefined && { email: data.email }),
+      ...(data.address !== undefined && { address: data.address }),
+      ...(data.crm !== undefined && { crm: data.crm }),
     },
   });
 

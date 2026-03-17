@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { appointmentSchema } from "@/lib/validations";
+import { tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(req: Request) {
@@ -32,7 +33,15 @@ export async function GET(req: Request) {
     orderBy: { time: "asc" },
   });
 
-  return NextResponse.json(appointments);
+  // Decrypt patient phone in response
+  const decrypted = appointments.map((a: typeof appointments[0]) => ({
+    ...a,
+    patient: a.patient
+      ? { ...a.patient, phone: tryDecrypt(a.patient.phone) }
+      : null,
+  }));
+
+  return NextResponse.json(decrypted);
 }
 
 export async function POST(req: Request) {

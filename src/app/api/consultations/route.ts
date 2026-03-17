@@ -50,9 +50,9 @@ export async function POST(req: Request) {
       anamnesis: data.anamnesis ? encrypt(data.anamnesis) : null,
       physicalExam: data.physicalExam ? encrypt(data.physicalExam) : null,
       diagnosis: data.diagnosis ? encrypt(data.diagnosis) : null,
-      repertorialSymptoms: data.repertorialSymptoms || null,
+      repertorialSymptoms: data.repertorialSymptoms ? encrypt(data.repertorialSymptoms) : null,
       prescription: data.prescription ? encrypt(data.prescription) : null,
-      evolution: data.evolution || null,
+      evolution: data.evolution ? encrypt(data.evolution) : null,
     },
   });
 

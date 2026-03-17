@@ -47,7 +47,9 @@ export async function GET(
       anamnesis: tryDecrypt(c.anamnesis),
       physicalExam: tryDecrypt(c.physicalExam),
       diagnosis: tryDecrypt(c.diagnosis),
+      repertorialSymptoms: tryDecrypt(c.repertorialSymptoms),
       prescription: tryDecrypt(c.prescription),
+      evolution: tryDecrypt(c.evolution),
     })),
   });
 }

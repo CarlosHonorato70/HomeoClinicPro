@@ -33,7 +33,9 @@ export async function GET(
     anamnesis: tryDecrypt(consultation.anamnesis),
     physicalExam: tryDecrypt(consultation.physicalExam),
     diagnosis: tryDecrypt(consultation.diagnosis),
+    repertorialSymptoms: tryDecrypt(consultation.repertorialSymptoms),
     prescription: tryDecrypt(consultation.prescription),
+    evolution: tryDecrypt(consultation.evolution),
   });
 }
 
@@ -71,9 +73,9 @@ export async function PUT(
       anamnesis: data.anamnesis !== undefined ? (data.anamnesis ? encrypt(data.anamnesis) : null) : existing.anamnesis,
       physicalExam: data.physicalExam !== undefined ? (data.physicalExam ? encrypt(data.physicalExam) : null) : existing.physicalExam,
       diagnosis: data.diagnosis !== undefined ? (data.diagnosis ? encrypt(data.diagnosis) : null) : existing.diagnosis,
-      repertorialSymptoms: data.repertorialSymptoms !== undefined ? data.repertorialSymptoms : existing.repertorialSymptoms,
+      repertorialSymptoms: data.repertorialSymptoms !== undefined ? (data.repertorialSymptoms ? encrypt(data.repertorialSymptoms) : null) : existing.repertorialSymptoms,
       prescription: data.prescription !== undefined ? (data.prescription ? encrypt(data.prescription) : null) : existing.prescription,
-      evolution: data.evolution !== undefined ? data.evolution : existing.evolution,
+      evolution: data.evolution !== undefined ? (data.evolution ? encrypt(data.evolution) : null) : existing.evolution,
     },
   });
 

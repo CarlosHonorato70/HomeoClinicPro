@@ -33,6 +33,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Email ou senha incorretos");
         }
 
+        if (!user.active) {
+          throw new Error(
+            "Conta desativada. Entre em contato com o administrador da clínica."
+          );
+        }
+
         if (!user.emailVerified) {
           throw new Error(
             "Email não verificado. Verifique sua caixa de entrada."

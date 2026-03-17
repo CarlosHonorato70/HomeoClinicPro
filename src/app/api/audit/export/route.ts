@@ -39,13 +39,22 @@ export async function GET(req: Request) {
     orderBy: { timestamp: "desc" },
   });
 
+  // Sanitize CSV values to prevent formula injection (=, +, -, @, \t, \r)
+  function csvSafe(value: string): string {
+    let sanitized = value.replace(/"/g, '""');
+    if (/^[=+\-@\t\r]/.test(sanitized)) {
+      sanitized = `'${sanitized}`;
+    }
+    return sanitized;
+  }
+
   const csvHeaders = "timestamp,action,user,details,ip";
   const csvRows = logs.map((log) => {
     const timestamp = log.timestamp.toISOString();
-    const actionField = log.action;
-    const user = log.user?.name || "";
-    const details = (log.details || "").replace(/"/g, '""');
-    const ip = log.ip || "";
+    const actionField = csvSafe(log.action);
+    const user = csvSafe(log.user?.name || "");
+    const details = csvSafe(log.details || "");
+    const ip = csvSafe(log.ip || "");
     return `"${timestamp}","${actionField}","${user}","${details}","${ip}"`;
   });
 

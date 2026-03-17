@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
+import { requirePermission } from "@/lib/rbac";
 
 export async function GET(
   req: Request,
@@ -11,6 +12,12 @@ export async function GET(
 ) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    requirePermission(session, "view_lgpd");
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const { patientId } = await params;
 
@@ -57,9 +64,9 @@ export async function GET(
       anamnesis: tryDecrypt(c.anamnesis),
       physicalExam: tryDecrypt(c.physicalExam),
       diagnosis: tryDecrypt(c.diagnosis),
-      repertorialSymptoms: c.repertorialSymptoms,
+      repertorialSymptoms: tryDecrypt(c.repertorialSymptoms),
       prescription: tryDecrypt(c.prescription),
-      evolution: c.evolution,
+      evolution: tryDecrypt(c.evolution),
       createdAt: c.createdAt,
     })),
     anamnesis: patient.anamnesis

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { appointmentSchema } from "@/lib/validations";
+import { tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(
@@ -25,7 +26,12 @@ export async function GET(
     return NextResponse.json({ error: "Agendamento não encontrado" }, { status: 404 });
   }
 
-  return NextResponse.json(appointment);
+  return NextResponse.json({
+    ...appointment,
+    patient: appointment.patient
+      ? { ...appointment.patient, phone: tryDecrypt(appointment.patient.phone) }
+      : null,
+  });
 }
 
 export async function PATCH(

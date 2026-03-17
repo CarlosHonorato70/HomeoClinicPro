@@ -75,17 +75,27 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    // Block data API routes for canceled/past_due subscriptions
-    // Allow: auth routes, billing, webhooks, repertory chapters (read-only)
+    // Public API routes that don't require authentication
     const isPublicApi =
       pathname.startsWith("/api/auth/") ||
-      pathname.startsWith("/api/billing/") ||
-      pathname.startsWith("/api/webhooks/") ||
+      pathname.startsWith("/api/billing/webhook") ||
       pathname.startsWith("/api/invites/");
 
     if (!isPublicApi) {
       const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-      if (token) {
+
+      // Block unauthenticated access to all non-public API routes
+      if (!token) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+
+      // Block data API routes for canceled/past_due subscriptions
+      // Allow: billing routes (so user can reactivate)
+      const isBillingApi = pathname.startsWith("/api/billing/");
+      if (!isBillingApi) {
         const subStatus = (token.subscriptionStatus as string) ?? "trialing";
         if (subStatus === "canceled" || subStatus === "past_due") {
           return NextResponse.json(
