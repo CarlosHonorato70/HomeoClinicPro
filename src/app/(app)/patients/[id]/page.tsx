@@ -25,6 +25,14 @@ import {
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
 import { AudioRecorder } from "@/components/audio-recorder";
+import { defaultTemplates, type AnamnesisTemplate } from "@/lib/anamnesis-templates";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PatientData {
   id: string;
@@ -199,6 +207,7 @@ export default function PatientDetailPage() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [anamnesis, setAnamnesis] = useState<Record<string, string>>({});
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("geral");
   const [savingAnamnesis, setSavingAnamnesis] = useState(false);
 
   const fetchPatient = useCallback(async () => {
@@ -398,13 +407,37 @@ export default function PatientDetailPage() {
         <TabsContent value="anamnese">
           <Card className="bg-[#111118] border-[#1e1e2e]">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-teal-400" />
-                Anamnese Homeopática
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-teal-400" />
+                  Anamnese Homeopática
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">Modelo:</span>
+                  <Select value={selectedTemplate} onValueChange={(v) => setSelectedTemplate(v ?? "geral")}>
+                    <SelectTrigger className="w-[220px] bg-[#0a0a0f] border-[#1e1e2e] text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#111118] border-[#1e1e2e]">
+                      {defaultTemplates.map((t) => (
+                        <SelectItem key={t.id} value={t.id}>
+                          {t.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {selectedTemplate !== "geral" && (
+                <p className="text-xs text-gray-500 mt-1">
+                  {defaultTemplates.find((t) => t.id === selectedTemplate)?.description}
+                </p>
+              )}
             </CardHeader>
             <CardContent className="space-y-4">
-              {anamnesisFields.map((field) => (
+              {(defaultTemplates.find((t) => t.id === selectedTemplate) || defaultTemplates[0]).sections
+                .filter((s) => s.enabled)
+                .map((field) => (
                 <div key={field.key} className="space-y-2 border border-[#1e1e2e] rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <Label className="flex items-center gap-2 text-base font-semibold">
@@ -426,20 +459,22 @@ export default function PatientDetailPage() {
                       disabled={savingAnamnesis}
                     />
                   </div>
-                  <div className="bg-[#0d0d14] rounded-md p-3 text-xs text-gray-400 space-y-1">
-                    <p className="text-teal-500 font-semibold mb-1">Perguntas orientadoras:</p>
-                    <ul className="list-disc list-inside space-y-0.5">
-                      {field.questions.map((q, i) => (
-                        <li key={i}>{q}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  {field.questions.length > 0 && (
+                    <div className="bg-[#0d0d14] rounded-md p-3 text-xs text-gray-400 space-y-1">
+                      <p className="text-teal-500 font-semibold mb-1">Perguntas orientadoras:</p>
+                      <ul className="list-disc list-inside space-y-0.5">
+                        {field.questions.map((q, i) => (
+                          <li key={i}>{q}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <Textarea
                     value={anamnesis[field.key] || ""}
                     onChange={(e) =>
                       setAnamnesis((prev) => ({ ...prev, [field.key]: e.target.value }))
                     }
-                    placeholder="Digite as respostas aqui ou use 🎙️ Gravar para transcrever..."
+                    placeholder="Digite as respostas aqui ou use Gravar para transcrever..."
                     rows={4}
                     className="bg-[#16161f] border-[#2a2a3a]"
                   />

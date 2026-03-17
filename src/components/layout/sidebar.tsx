@@ -145,10 +145,17 @@ export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarPro
         </div>
       )}
 
-      <div className="p-4 border-t border-[#1e1e2e]">
+      <div className="p-4 border-t border-[#1e1e2e] space-y-1">
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <Shield className="h-3 w-3 text-teal-500" />
           <span>LGPD Compliant</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <ShieldCheck className="h-3 w-3 text-teal-500" />
+          <span>CFM Compliant</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span className="ml-5 text-gray-600">AES-256-GCM</span>
         </div>
         <p className="text-xs text-gray-600 mt-1">v1.0.0</p>
       </div>

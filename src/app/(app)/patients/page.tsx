@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Users, Shield } from "lucide-react";
+import { Plus, Search, Users, Shield, Upload, Download } from "lucide-react";
 import { formatCPF, calculateAge } from "@/lib/utils";
 
 interface Patient {
@@ -56,12 +56,26 @@ export default function PatientsPage() {
           <Users className="h-6 w-6 text-teal-400" />
           Pacientes
         </h1>
-        <Link href="/patients/new">
-          <Button className="bg-teal-600 hover:bg-teal-700">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Paciente
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <a href="/api/patients/export" className="inline-flex">
+            <Button variant="outline" size="sm" className="border-[#1e1e2e] text-gray-400">
+              <Download className="h-4 w-4 mr-1" />
+              Exportar CSV
+            </Button>
+          </a>
+          <Link href="/patients/import">
+            <Button variant="outline" size="sm" className="border-[#1e1e2e] text-gray-400">
+              <Upload className="h-4 w-4 mr-1" />
+              Importar CSV
+            </Button>
+          </Link>
+          <Link href="/patients/new">
+            <Button className="bg-teal-600 hover:bg-teal-700">
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Paciente
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="relative">

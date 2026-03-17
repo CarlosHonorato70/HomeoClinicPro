@@ -85,6 +85,26 @@ export default function RootLayout({
                   navigator.serviceWorker.register('/sw.js');
                 });
               }
+              // PWA Install Prompt
+              var deferredPrompt = null;
+              window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (localStorage.getItem('pwa-install-dismissed')) return;
+                var banner = document.createElement('div');
+                banner.id = 'pwa-install-banner';
+                banner.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;background:#111118;border:1px solid rgba(20,184,166,0.3);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:420px;width:calc(100%-40px)';
+                banner.innerHTML = '<div style="flex:1"><p style="color:#e5e5e5;font-size:14px;font-weight:600;margin:0">Instalar HomeoClinic Pro</p><p style="color:#9ca3af;font-size:12px;margin:4px 0 0">Acesse mais rapido como app no seu dispositivo</p></div><button id="pwa-install-btn" style="background:#14b8a6;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">Instalar</button><button id="pwa-dismiss-btn" style="background:none;border:none;color:#6b7280;font-size:18px;cursor:pointer;padding:4px">x</button>';
+                document.body.appendChild(banner);
+                document.getElementById('pwa-install-btn').onclick = function() {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then(function() { banner.remove(); });
+                };
+                document.getElementById('pwa-dismiss-btn').onclick = function() {
+                  banner.remove();
+                  localStorage.setItem('pwa-install-dismissed', '1');
+                };
+              });
             `,
           }}
         />

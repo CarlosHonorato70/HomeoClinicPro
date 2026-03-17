@@ -422,6 +422,14 @@ export default function Home() {
                 ))}
               </div>
             </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/seguranca"
+                className="inline-flex items-center gap-2 text-teal-400 hover:text-teal-300 text-sm font-semibold transition-colors"
+              >
+                Ver detalhes completos de seguranca e conformidade →
+              </Link>
+            </div>
           </div>
         </section>
 
