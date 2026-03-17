@@ -75,6 +75,27 @@ export async function middleware(req: NextRequest) {
       }
     }
 
+    // Block data API routes for canceled/past_due subscriptions
+    // Allow: auth routes, billing, webhooks, repertory chapters (read-only)
+    const isPublicApi =
+      pathname.startsWith("/api/auth/") ||
+      pathname.startsWith("/api/billing/") ||
+      pathname.startsWith("/api/webhooks/") ||
+      pathname.startsWith("/api/invites/");
+
+    if (!isPublicApi) {
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      if (token) {
+        const subStatus = (token.subscriptionStatus as string) ?? "trialing";
+        if (subStatus === "canceled" || subStatus === "past_due") {
+          return NextResponse.json(
+            { error: "Assinatura inativa. Acesse configurações de faturamento para reativar." },
+            { status: 403 }
+          );
+        }
+      }
+    }
+
     return NextResponse.next();
   }
 

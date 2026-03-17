@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tryDecrypt, encrypt } from "@/lib/encryption";
+import { consultationSchema } from "@/lib/validations";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(
@@ -46,6 +47,14 @@ export async function PUT(
   const { id } = await params;
   const body = await req.json();
 
+  // Validate input with partial schema (all fields optional for update)
+  const updateSchema = consultationSchema.partial().omit({ patientId: true, date: true });
+  const parsed = updateSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
+
   const existing = await prisma.consultation.findFirst({
     where: { id },
     include: { patient: { select: { clinicId: true, name: true } } },
@@ -58,13 +67,13 @@ export async function PUT(
   const consultation = await prisma.consultation.update({
     where: { id },
     data: {
-      complaint: body.complaint ? encrypt(body.complaint) : existing.complaint,
-      anamnesis: body.anamnesis !== undefined ? (body.anamnesis ? encrypt(body.anamnesis) : null) : existing.anamnesis,
-      physicalExam: body.physicalExam !== undefined ? (body.physicalExam ? encrypt(body.physicalExam) : null) : existing.physicalExam,
-      diagnosis: body.diagnosis !== undefined ? (body.diagnosis ? encrypt(body.diagnosis) : null) : existing.diagnosis,
-      repertorialSymptoms: body.repertorialSymptoms !== undefined ? body.repertorialSymptoms : existing.repertorialSymptoms,
-      prescription: body.prescription !== undefined ? (body.prescription ? encrypt(body.prescription) : null) : existing.prescription,
-      evolution: body.evolution !== undefined ? body.evolution : existing.evolution,
+      complaint: data.complaint ? encrypt(data.complaint) : existing.complaint,
+      anamnesis: data.anamnesis !== undefined ? (data.anamnesis ? encrypt(data.anamnesis) : null) : existing.anamnesis,
+      physicalExam: data.physicalExam !== undefined ? (data.physicalExam ? encrypt(data.physicalExam) : null) : existing.physicalExam,
+      diagnosis: data.diagnosis !== undefined ? (data.diagnosis ? encrypt(data.diagnosis) : null) : existing.diagnosis,
+      repertorialSymptoms: data.repertorialSymptoms !== undefined ? data.repertorialSymptoms : existing.repertorialSymptoms,
+      prescription: data.prescription !== undefined ? (data.prescription ? encrypt(data.prescription) : null) : existing.prescription,
+      evolution: data.evolution !== undefined ? data.evolution : existing.evolution,
     },
   });
 

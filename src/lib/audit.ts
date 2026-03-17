@@ -1,4 +1,21 @@
 import { prisma } from "./prisma";
+import { headers } from "next/headers";
+
+/**
+ * Extract client IP from request headers (for use in API routes).
+ */
+export async function getClientIp(): Promise<string | undefined> {
+  try {
+    const hdrs = await headers();
+    return (
+      hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      hdrs.get("x-real-ip") ||
+      undefined
+    );
+  } catch {
+    return undefined;
+  }
+}
 
 export const AuditActions = {
   LOGIN: "LOGIN",
@@ -40,13 +57,16 @@ export async function logAudit(params: {
   details?: string;
   ip?: string;
 }) {
+  // Auto-capture IP if not provided
+  const ip = params.ip || (await getClientIp());
+
   await prisma.auditLog.create({
     data: {
       clinicId: params.clinicId,
       userId: params.userId,
       action: params.action,
       details: params.details,
-      ip: params.ip,
+      ip,
     },
   });
 }

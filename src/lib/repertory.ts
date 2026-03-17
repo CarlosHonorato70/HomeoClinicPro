@@ -241,12 +241,21 @@ export function repertorizeLegacy(
 // ========== Search utilities ==========
 
 /**
+ * Escape ILIKE special characters to prevent wildcard injection.
+ */
+function escapeILike(str: string): string {
+  return str.replace(/[%_\\]/g, (ch) => `\\${ch}`);
+}
+
+/**
  * Normalize search term for PostgreSQL ILIKE queries.
+ * Escapes wildcards from user input to prevent injection.
  */
 export function normalizeSearchTerm(term: string): string {
   const words = term
     .trim()
     .split(/\s+/)
-    .filter((w) => w.length > 0);
+    .filter((w) => w.length > 0)
+    .map(escapeILike);
   return `%${words.join("%")}%`;
 }

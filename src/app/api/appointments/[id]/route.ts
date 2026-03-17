@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { appointmentSchema } from "@/lib/validations";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(
@@ -37,6 +38,16 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
+  // Validate input (partial schema + status for PATCH)
+  const patchSchema = appointmentSchema.partial().extend({
+    status: appointmentSchema.shape.type.optional(),
+  });
+  const parsed = patchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
+
   const existing = await prisma.appointment.findFirst({
     where: { id, clinicId: session.user.clinicId },
   });
@@ -47,12 +58,12 @@ export async function PATCH(
   const appointment = await prisma.appointment.update({
     where: { id },
     data: {
-      ...(body.patientId !== undefined ? { patientId: body.patientId || null } : {}),
-      ...(body.date ? { date: new Date(body.date) } : {}),
-      ...(body.time ? { time: body.time } : {}),
-      ...(body.duration ? { duration: body.duration } : {}),
-      ...(body.type ? { type: body.type } : {}),
-      ...(body.notes !== undefined ? { notes: body.notes || null } : {}),
+      ...(data.patientId !== undefined ? { patientId: data.patientId || null } : {}),
+      ...(data.date ? { date: new Date(data.date) } : {}),
+      ...(data.time ? { time: data.time } : {}),
+      ...(data.duration ? { duration: data.duration } : {}),
+      ...(data.type ? { type: data.type } : {}),
+      ...(data.notes !== undefined ? { notes: data.notes || null } : {}),
       ...(body.status ? { status: body.status } : {}),
     },
     include: {

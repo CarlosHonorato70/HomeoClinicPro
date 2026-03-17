@@ -26,6 +26,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Paciente não encontrado" }, { status: 404 });
   }
 
+  // LGPD: verify patient consent before processing health data
+  if (!patient.lgpdConsent) {
+    return NextResponse.json(
+      { error: "Paciente não possui consentimento LGPD ativo. Obtenha o consentimento antes de registrar dados clínicos." },
+      { status: 403 }
+    );
+  }
+
   try {
     await checkConsultationLimit(session.user.clinicId);
   } catch (err) {

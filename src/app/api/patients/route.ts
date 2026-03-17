@@ -17,6 +17,7 @@ export async function GET(req: Request) {
   const patients = await prisma.patient.findMany({
     where: {
       clinicId: session.user.clinicId,
+      deletedAt: null,
       ...(search ? { name: { contains: search } } : {}),
     },
     include: { _count: { select: { consultations: true } } },
@@ -26,8 +27,13 @@ export async function GET(req: Request) {
   const decrypted = patients.map((p) => ({
     ...p,
     cpf: tryDecrypt(p.cpf),
+    rg: tryDecrypt(p.rg),
     phone: tryDecrypt(p.phone),
     email: tryDecrypt(p.email),
+    address: tryDecrypt(p.address),
+    profession: tryDecrypt(p.profession),
+    insurance: tryDecrypt(p.insurance),
+    notes: tryDecrypt(p.notes),
   }));
 
   return NextResponse.json(decrypted);
@@ -57,15 +63,15 @@ export async function POST(req: Request) {
       clinicId: session.user.clinicId,
       name: data.name,
       cpf: data.cpf ? encrypt(data.cpf) : null,
-      rg: data.rg || null,
+      rg: data.rg ? encrypt(data.rg) : null,
       birthDate: data.birthDate ? new Date(data.birthDate) : null,
       sex: data.sex || null,
       phone: data.phone ? encrypt(data.phone) : null,
       email: data.email ? encrypt(data.email) : null,
-      address: data.address || null,
-      profession: data.profession || null,
-      insurance: data.insurance || null,
-      notes: data.notes || null,
+      address: data.address ? encrypt(data.address) : null,
+      profession: data.profession ? encrypt(data.profession) : null,
+      insurance: data.insurance ? encrypt(data.insurance) : null,
+      notes: data.notes ? encrypt(data.notes) : null,
       lgpdConsent: data.lgpdConsent,
       lgpdConsentDate: data.lgpdConsent ? new Date() : null,
     },

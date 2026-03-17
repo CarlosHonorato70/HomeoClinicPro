@@ -78,6 +78,7 @@ model Patient {
   notes           String?
   lgpdConsent     Boolean   @default(false)
   lgpdConsentDate DateTime?
+  deletedAt       DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

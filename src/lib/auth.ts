@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("Email não cadastrado. Crie uma conta primeiro.");
+          throw new Error("Email ou senha incorretos");
         }
 
         const valid = await bcrypt.compare(
@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           user.passwordHash
         );
         if (!valid) {
-          throw new Error("Senha incorreta");
+          throw new Error("Email ou senha incorretos");
         }
 
         if (!user.emailVerified) {

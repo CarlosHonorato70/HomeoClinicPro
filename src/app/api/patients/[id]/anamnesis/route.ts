@@ -3,7 +3,28 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { anamnesisSchema } from "@/lib/validations";
+import { encrypt, tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function decryptAnamnesis(anamnesis: any) {
+  if (!anamnesis) return null;
+  return {
+    ...anamnesis,
+    mental: tryDecrypt(anamnesis.mental),
+    general: tryDecrypt(anamnesis.general),
+    desires: tryDecrypt(anamnesis.desires),
+    sleep: tryDecrypt(anamnesis.sleep),
+    perspiration: tryDecrypt(anamnesis.perspiration),
+    thermoregulation: tryDecrypt(anamnesis.thermoregulation),
+    gyneco: tryDecrypt(anamnesis.gyneco),
+    particular: tryDecrypt(anamnesis.particular),
+  };
+}
+
+function encryptField(value: string | undefined | null): string | null {
+  return value ? encrypt(value) : null;
+}
 
 export async function GET(
   req: Request,
@@ -23,7 +44,7 @@ export async function GET(
     return NextResponse.json({ error: "Paciente não encontrado" }, { status: 404 });
   }
 
-  return NextResponse.json(patient.anamnesis);
+  return NextResponse.json(decryptAnamnesis(patient.anamnesis));
 }
 
 export async function PATCH(
@@ -49,13 +70,24 @@ export async function PATCH(
 
   const data = parsed.data;
 
+  const encryptedData = {
+    mental: encryptField(data.mental),
+    general: encryptField(data.general),
+    desires: encryptField(data.desires),
+    sleep: encryptField(data.sleep),
+    perspiration: encryptField(data.perspiration),
+    thermoregulation: encryptField(data.thermoregulation),
+    gyneco: encryptField(data.gyneco),
+    particular: encryptField(data.particular),
+  };
+
   const anamnesis = await prisma.anamnesis.upsert({
     where: { patientId: id },
     create: {
       patientId: id,
-      ...data,
+      ...encryptedData,
     },
-    update: data,
+    update: encryptedData,
   });
 
   await logAudit({
@@ -65,5 +97,5 @@ export async function PATCH(
     details: `Anamnese salva para paciente: ${patient.name}`,
   });
 
-  return NextResponse.json(anamnesis);
+  return NextResponse.json(decryptAnamnesis(anamnesis));
 }

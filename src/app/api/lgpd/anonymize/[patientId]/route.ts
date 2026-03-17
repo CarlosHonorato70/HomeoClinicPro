@@ -29,8 +29,6 @@ export async function POST(
     return NextResponse.json({ error: "Patient not found" }, { status: 404 });
   }
 
-  const originalName = patient.name;
-
   // Anonymize PII but keep clinical data for 20-year retention (CFM requirement)
   await prisma.patient.update({
     where: { id: patientId },
@@ -52,7 +50,7 @@ export async function POST(
     clinicId: session.user.clinicId,
     userId: session.user.id,
     action: AuditActions.LGPD_ANONYMIZE,
-    details: `Dados do paciente anonimizados (nome original: ${originalName}). Dados clínicos mantidos conforme retenção CFM de 20 anos.`,
+    details: `Dados do paciente ID ${patientId} anonimizados. Dados clínicos mantidos conforme retenção CFM de 20 anos.`,
   });
 
   return NextResponse.json({

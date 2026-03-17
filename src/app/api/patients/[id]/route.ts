@@ -34,8 +34,13 @@ export async function GET(
   return NextResponse.json({
     ...patient,
     cpf: tryDecrypt(patient.cpf),
+    rg: tryDecrypt(patient.rg),
     phone: tryDecrypt(patient.phone),
     email: tryDecrypt(patient.email),
+    address: tryDecrypt(patient.address),
+    profession: tryDecrypt(patient.profession),
+    insurance: tryDecrypt(patient.insurance),
+    notes: tryDecrypt(patient.notes),
     consultations: patient.consultations.map((c) => ({
       ...c,
       complaint: tryDecrypt(c.complaint),
@@ -75,15 +80,15 @@ export async function PUT(
     data: {
       name: data.name,
       cpf: data.cpf ? encrypt(data.cpf) : null,
-      rg: data.rg || null,
+      rg: data.rg ? encrypt(data.rg) : null,
       birthDate: data.birthDate ? new Date(data.birthDate) : null,
       sex: data.sex || null,
       phone: data.phone ? encrypt(data.phone) : null,
       email: data.email ? encrypt(data.email) : null,
-      address: data.address || null,
-      profession: data.profession || null,
-      insurance: data.insurance || null,
-      notes: data.notes || null,
+      address: data.address ? encrypt(data.address) : null,
+      profession: data.profession ? encrypt(data.profession) : null,
+      insurance: data.insurance ? encrypt(data.insurance) : null,
+      notes: data.notes ? encrypt(data.notes) : null,
       lgpdConsent: data.lgpdConsent,
       lgpdConsentDate: data.lgpdConsent && !existing.lgpdConsent ? new Date() : existing.lgpdConsentDate,
     },
@@ -115,13 +120,17 @@ export async function DELETE(
     return NextResponse.json({ error: "Paciente não encontrado" }, { status: 404 });
   }
 
-  await prisma.patient.delete({ where: { id } });
+  // Soft delete: mark as deleted instead of permanent deletion (CFM 20-year retention)
+  await prisma.patient.update({
+    where: { id },
+    data: { deletedAt: new Date() },
+  });
 
   await logAudit({
     clinicId: session.user.clinicId,
     userId: session.user.id,
     action: AuditActions.PATIENT_DELETE,
-    details: `Paciente excluído: ${existing.name}`,
+    details: `Paciente desativado (soft delete): ${existing.name}`,
   });
 
   return NextResponse.json({ success: true });

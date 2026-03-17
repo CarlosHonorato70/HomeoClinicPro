@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { validatePassword } from "@/lib/validations";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: "A senha deve ter no mínimo 6 caracteres" },
-        { status: 400 }
-      );
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return NextResponse.json({ error: passwordError }, { status: 400 });
     }
 
     const invite = await prisma.clinicInvite.findUnique({
@@ -76,6 +75,7 @@ export async function POST(req: NextRequest) {
           email: invite.email,
           passwordHash,
           role: invite.role,
+          emailVerified: true,
         },
       }),
       prisma.clinicInvite.update({

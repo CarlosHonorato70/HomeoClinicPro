@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail, sendWelcomeEmail } from "@/lib/email";
+import { validatePassword } from "@/lib/validations";
 
 export const dynamic = "force-dynamic";
 
@@ -21,11 +22,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!password || typeof password !== "string" || password.length < 6) {
+    if (!password || typeof password !== "string") {
       return NextResponse.json(
-        { error: "Senha deve ter no mínimo 6 caracteres." },
+        { error: "Senha é obrigatória." },
         { status: 400 }
       );
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return NextResponse.json({ error: passwordError }, { status: 400 });
     }
 
     if (!clinicName || typeof clinicName !== "string" || clinicName.trim().length === 0) {

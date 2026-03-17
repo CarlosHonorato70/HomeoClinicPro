@@ -1,8 +1,23 @@
 import { z } from "zod";
 
+// Strong password: min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
+export const passwordSchema = z
+  .string()
+  .min(8, "Senha deve ter no mínimo 8 caracteres")
+  .regex(/[A-Z]/, "Senha deve conter pelo menos 1 letra maiúscula")
+  .regex(/[a-z]/, "Senha deve conter pelo menos 1 letra minúscula")
+  .regex(/[0-9]/, "Senha deve conter pelo menos 1 número")
+  .regex(/[^A-Za-z0-9]/, "Senha deve conter pelo menos 1 caractere especial (!@#$%...)");
+
+export function validatePassword(password: string): string | null {
+  const result = passwordSchema.safeParse(password);
+  if (result.success) return null;
+  return result.error.issues[0]?.message ?? "Senha inválida";
+}
+
 export const loginSchema = z.object({
   email: z.string().email("Email inválido"),
-  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  password: z.string().min(1, "Senha é obrigatória"),
   clinicName: z.string().optional(),
 });
 
