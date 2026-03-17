@@ -5,7 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { tryDecrypt } from "@/lib/encryption";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
+}
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -121,7 +123,7 @@ export async function POST(req: Request) {
         `- Sintomas: ${c.symptoms.slice(0, 150)}; Remédio: ${c.prescribedRemedy || "N/A"} ${c.potency || ""}; Resultado: ${c.outcomeRating}/5`
       )).join("\n");
 
-      const completion = await openai.chat.completions.create({
+      const completion = await getOpenAI().chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
           {
