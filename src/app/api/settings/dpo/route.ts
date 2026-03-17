@@ -3,10 +3,17 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logAudit, AuditActions } from "@/lib/audit";
+import { requirePermission } from "@/lib/rbac";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    requirePermission(session, "manage_clinic");
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const clinic = await prisma.clinic.findUnique({
     where: { id: session.user.clinicId },
@@ -32,6 +39,12 @@ export async function GET() {
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    requirePermission(session, "manage_clinic");
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const body = await req.json();
   const { dpoName, dpoEmail, name, cnpj, phone, email, address, crm } = body;

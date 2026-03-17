@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logAudit, AuditActions } from "@/lib/audit";
+import { requirePermission } from "@/lib/rbac";
 
 export async function POST(
   req: Request,
@@ -10,6 +11,12 @@ export async function POST(
 ) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    requirePermission(session, "view_lgpd");
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const { patientId } = await params;
 
