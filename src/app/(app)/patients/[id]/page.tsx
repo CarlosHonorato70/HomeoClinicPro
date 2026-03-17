@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
+import { AudioRecorder } from "@/components/audio-recorder";
 
 interface PatientData {
   id: string;
@@ -405,10 +406,26 @@ export default function PatientDetailPage() {
             <CardContent className="space-y-4">
               {anamnesisFields.map((field) => (
                 <div key={field.key} className="space-y-2 border border-[#1e1e2e] rounded-lg p-4">
-                  <Label className="flex items-center gap-2 text-base font-semibold">
-                    <span>{field.icon}</span>
-                    {field.label}
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label className="flex items-center gap-2 text-base font-semibold">
+                      <span>{field.icon}</span>
+                      {field.label}
+                    </Label>
+                    <AudioRecorder
+                      onTranscription={(text) => {
+                        setAnamnesis((prev) => {
+                          const current = prev[field.key] || "";
+                          return {
+                            ...prev,
+                            [field.key]: current
+                              ? `${current}\n\n${text}`
+                              : text,
+                          };
+                        });
+                      }}
+                      disabled={savingAnamnesis}
+                    />
+                  </div>
                   <div className="bg-[#0d0d14] rounded-md p-3 text-xs text-gray-400 space-y-1">
                     <p className="text-teal-500 font-semibold mb-1">Perguntas orientadoras:</p>
                     <ul className="list-disc list-inside space-y-0.5">
@@ -422,7 +439,7 @@ export default function PatientDetailPage() {
                     onChange={(e) =>
                       setAnamnesis((prev) => ({ ...prev, [field.key]: e.target.value }))
                     }
-                    placeholder="Digite as respostas aqui..."
+                    placeholder="Digite as respostas aqui ou use 🎙️ Gravar para transcrever..."
                     rows={4}
                     className="bg-[#16161f] border-[#2a2a3a]"
                   />
