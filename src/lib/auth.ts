@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const clinic = await prisma.clinic.findUnique({
             where: { id: token.clinicId as string },
-            select: { subscriptionStatus: true, trialEndsAt: true },
+            select: { subscriptionStatus: true, trialEndsAt: true, cnpj: true },
           });
           let status = clinic?.subscriptionStatus ?? "trialing";
           // Auto-expire trials
@@ -84,6 +84,7 @@ export const authOptions: NextAuthOptions = {
               .catch(() => {});
           }
           token.subscriptionStatus = status;
+          token.needsOnboarding = !clinic?.cnpj;
         } catch {
           token.subscriptionStatus = token.subscriptionStatus ?? "trialing";
         }

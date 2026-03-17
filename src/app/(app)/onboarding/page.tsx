@@ -42,6 +42,11 @@ export default function OnboardingPage() {
       return;
     }
 
+    if (!data.cnpj.trim()) {
+      toast.error("O CNPJ é obrigatório para completar o cadastro");
+      return;
+    }
+
     setSaving(true);
     try {
       const res = await fetch("/api/settings/dpo", {
@@ -102,11 +107,14 @@ export default function OnboardingPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-300">CNPJ</Label>
+                  <Label className="text-gray-300">
+                    CNPJ <span className="text-red-400">*</span>
+                  </Label>
                   <Input
                     value={data.cnpj}
                     onChange={(e) => handleChange("cnpj", e.target.value)}
                     placeholder="00.000.000/0000-00"
+                    required
                     className={inputClassName}
                   />
                 </div>

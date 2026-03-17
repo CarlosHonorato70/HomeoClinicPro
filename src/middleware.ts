@@ -39,9 +39,13 @@ export async function middleware(req: NextRequest) {
   if (pathname.startsWith("/api/")) {
     const ip = getClientIp(req);
 
-    // Stricter limit for auth endpoints (5 req/min)
-    if (pathname.startsWith("/api/auth/")) {
-      const result = rateLimit(`auth:${ip}`, 5, 60_000);
+    // Stricter limit for auth sign-in/callback (10 req/min)
+    // Internal NextAuth routes (session, csrf, providers) use the general API limit
+    const isAuthSignIn =
+      pathname.startsWith("/api/auth/signin") ||
+      pathname.startsWith("/api/auth/callback");
+    if (isAuthSignIn) {
+      const result = rateLimit(`auth:${ip}`, 10, 60_000);
       if (!result.success) {
         return NextResponse.json(
           { error: "Muitas tentativas. Tente novamente em 1 minuto." },
@@ -94,6 +98,12 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }
       return NextResponse.next();
+    }
+
+    // Redirect to onboarding if clinic not configured (first access)
+    const isOnboardingPage = pathname === "/onboarding";
+    if (!isOnboardingPage && token.needsOnboarding) {
+      return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
     // Allow access to billing page even with expired trial (so user can upgrade)

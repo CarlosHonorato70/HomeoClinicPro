@@ -60,7 +60,7 @@ const plans = [
     description: "Para conhecer a plataforma",
     features: [
       "10 pacientes",
-      "1 usuário",
+      "1 profissional (médico ou equipe)",
       "20 consultas/mês",
       "Repertório completo",
       "Suporte por e-mail",
@@ -75,7 +75,7 @@ const plans = [
     description: "Para consultórios em crescimento",
     features: [
       "500 pacientes",
-      "3 usuários",
+      "3 profissionais (médicos + equipe)",
       "Consultas ilimitadas",
       "Repertorização avançada",
       "Matéria médica completa",
@@ -92,7 +92,7 @@ const plans = [
     description: "Para clínicas e redes",
     features: [
       "Pacientes ilimitados",
-      "Até 12 usuários (extra: R$39/mês cada)",
+      "Até 12 profissionais (extra: R$39/mês cada)",
       "Consultas ilimitadas",
       "API de integração",
       "Multi-clínica",
