@@ -46,6 +46,7 @@ const navGroups: NavGroup[] = [
       { href: "/patients", icon: Users, label: "Pacientes" },
       { href: "/repertory", icon: BookOpen, label: "Repertório" },
       { href: "/repertory/remedies", icon: Pill, label: "Remédios" },
+      { href: "/repertory/materia-medica", icon: BookOpen, label: "Matéria Médica" },
       { href: "/agenda", icon: Calendar, label: "Agenda" },
       { href: "/ai", icon: Sparkles, label: "Assistente IA" },
     ],

@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://*.stripe.com",
-              "connect-src 'self' https://api.stripe.com https://*.ingest.sentry.io",
+              "media-src 'self' blob:",
+              "connect-src 'self' https://api.stripe.com https://*.ingest.sentry.io https://api.openai.com",
               "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
@@ -49,7 +50,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            value: "camera=(), microphone=(self), geolocation=()",
           },
         ],
       },

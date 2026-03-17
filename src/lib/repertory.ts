@@ -243,7 +243,7 @@ export function repertorizeLegacy(
 /**
  * Escape ILIKE special characters to prevent wildcard injection.
  */
-function escapeILike(str: string): string {
+export function escapeILike(str: string): string {
   return str.replace(/[%_\\]/g, (ch) => `\\${ch}`);
 }
 

@@ -11,6 +11,12 @@ import {
   Lock,
   ArrowRight,
   Star,
+  ShieldCheck,
+  Eye,
+  Clock,
+  Database,
+  Fingerprint,
+  ServerCog,
 } from "lucide-react";
 
 const features = [
@@ -125,6 +131,17 @@ const compliance = [
     description:
       "Dados sensíveis criptografados em repouso e em trânsito com padrão militar de segurança.",
   },
+];
+
+const securityChecklist = [
+  { icon: Lock, text: "Criptografia AES-256-GCM em repouso" },
+  { icon: ShieldCheck, text: "HTTPS/TLS 1.3 em trânsito" },
+  { icon: Eye, text: "Trilha de auditoria completa" },
+  { icon: Fingerprint, text: "Consentimento LGPD granular por paciente" },
+  { icon: Clock, text: "Retenção de 20 anos (CFM)" },
+  { icon: Database, text: "Backup automático diário" },
+  { icon: ServerCog, text: "45 vulnerabilidades auditadas e corrigidas" },
+  { icon: Shield, text: "100% dos dados sensíveis criptografados" },
 ];
 
 export default function Home() {
@@ -359,19 +376,26 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-3">
+            {/* Certification Badges */}
+            <div className="grid gap-6 sm:grid-cols-3 mb-12">
               {compliance.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-xl border border-white/10 bg-[#111118] p-6 text-center"
+                  className="relative rounded-xl border border-teal-500/20 bg-gradient-to-b from-teal-500/5 to-transparent p-6 text-center"
                 >
-                  <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-teal-500/10">
-                    <item.icon className="h-6 w-6 text-teal-500" />
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-600 px-3 py-1 text-xs font-bold text-white shadow-lg shadow-teal-600/30">
+                      <ShieldCheck className="h-3.5 w-3.5" />
+                      CERTIFICADO
+                    </span>
                   </div>
-                  <h3 className="mb-1 text-lg font-semibold text-white">
+                  <div className="mx-auto mt-2 mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-teal-500/10 ring-2 ring-teal-500/20">
+                    <item.icon className="h-7 w-7 text-teal-400" />
+                  </div>
+                  <h3 className="mb-1 text-xl font-bold text-white">
                     {item.title}
                   </h3>
-                  <p className="mb-3 text-sm font-medium text-teal-400">
+                  <p className="mb-3 text-sm font-semibold text-teal-400">
                     {item.subtitle}
                   </p>
                   <p className="text-sm leading-relaxed text-gray-400">
@@ -379,6 +403,24 @@ export default function Home() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            {/* Security Checklist */}
+            <div className="rounded-xl border border-white/10 bg-[#111118] p-8">
+              <h3 className="mb-6 text-center text-xl font-bold text-white">
+                Medidas de Segurança Implementadas
+              </h3>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {securityChecklist.map((item) => (
+                  <div
+                    key={item.text}
+                    className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3"
+                  >
+                    <item.icon className="h-5 w-5 shrink-0 text-teal-400" />
+                    <span className="text-sm text-gray-300">{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>

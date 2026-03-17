@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Save, Stethoscope } from "lucide-react";
 import { toast } from "sonner";
+import { AudioRecorder } from "@/components/audio-recorder";
 
 export default function NewConsultationPage() {
   const { id: patientId } = useParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [patientName, setPatientName] = useState("");
+  const anamnesisRef = useRef<HTMLTextAreaElement>(null);
+  const symptomsRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     fetch(`/api/patients/${patientId}`)
@@ -54,6 +57,30 @@ export default function NewConsultationPage() {
     } else {
       const err = await res.json();
       toast.error(err.error?.fieldErrors?.complaint?.[0] || "Erro ao registrar consulta");
+    }
+  }
+
+  function handleTranscription(text: string) {
+    if (anamnesisRef.current) {
+      const current = anamnesisRef.current.value;
+      anamnesisRef.current.value = current
+        ? `${current}\n\n--- Transcrição ---\n${text}`
+        : text;
+      // Trigger React's change detection
+      const event = new Event("input", { bubbles: true });
+      anamnesisRef.current.dispatchEvent(event);
+    }
+  }
+
+  function handleSymptomsExtracted(symptoms: string[]) {
+    if (symptomsRef.current) {
+      const current = symptomsRef.current.value;
+      const symptomsText = symptoms.join("\n");
+      symptomsRef.current.value = current
+        ? `${current}\n${symptomsText}`
+        : symptomsText;
+      const event = new Event("input", { bubbles: true });
+      symptomsRef.current.dispatchEvent(event);
     }
   }
 
@@ -110,16 +137,24 @@ export default function NewConsultationPage() {
 
         <Card className="bg-[#111118] border-[#1e1e2e]">
           <CardHeader>
-            <CardTitle className="text-lg">Anamnese & Exame</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Anamnese & Exame</CardTitle>
+              <AudioRecorder
+                onTranscription={handleTranscription}
+                onSymptomsExtracted={handleSymptomsExtracted}
+                disabled={loading}
+              />
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="anamnesis">Anamnese Homeopática</Label>
               <Textarea
+                ref={anamnesisRef}
                 name="anamnesis"
                 id="anamnesis"
-                rows={4}
-                placeholder="Sintomas mentais, gerais, particulares..."
+                rows={6}
+                placeholder="Sintomas mentais, gerais, particulares... ou use o botão 🎙️ Gravar para transcrever"
                 className="bg-[#16161f] border-[#2a2a3a]"
               />
             </div>
@@ -154,6 +189,7 @@ export default function NewConsultationPage() {
             <div className="space-y-2">
               <Label htmlFor="repertorialSymptoms">Sintomas Repertoriais</Label>
               <Textarea
+                ref={symptomsRef}
                 name="repertorialSymptoms"
                 id="repertorialSymptoms"
                 rows={3}
