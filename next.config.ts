@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: https://*.stripe.com",
               "media-src 'self' blob:",
               "connect-src 'self' https://api.stripe.com https://*.ingest.sentry.io https://api.openai.com",
-              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
+              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://meet.jit.si",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

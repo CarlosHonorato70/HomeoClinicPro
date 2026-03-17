@@ -32,10 +32,11 @@ model Clinic {
   maxPatients          Int       @default(10)
   maxUsersPerClinic    Int       @default(1)
 
-  users     User[]
-  patients  Patient[]
-  auditLogs AuditLog[]
-  invites   ClinicInvite[]
+  users         User[]
+  patients      Patient[]
+  auditLogs     AuditLog[]
+  invites       ClinicInvite[]
+  clinicalCases ClinicalCase[]
 }
 
 model User {
@@ -57,6 +58,7 @@ model User {
   consultations  Consultation[]
   auditLogs      AuditLog[]
   passwordResets PasswordReset[]
+  clinicalCases  ClinicalCase[]
 
   @@index([clinicId])
 }
@@ -266,19 +268,21 @@ model Document {
 // ========== Phase 5: Agenda + Financial ==========
 
 model Appointment {
-  id        String   @id @default(cuid())
-  clinicId  String
-  patientId String?
-  patient   Patient? @relation(fields: [patientId], references: [id])
-  userId    String
-  date      DateTime
-  time      String
-  duration  Int      @default(30)
-  type      String   @default("consultation")
-  notes     String?
-  status    String   @default("scheduled")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  clinicId      String
+  patientId     String?
+  patient       Patient? @relation(fields: [patientId], references: [id])
+  userId        String
+  date          DateTime
+  time          String
+  duration      Int      @default(30)
+  type          String   @default("consultation")
+  notes         String?
+  status        String   @default("scheduled")
+  meetingUrl    String?
+  meetingRoomId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([clinicId, date])
   @@index([patientId])
@@ -298,6 +302,34 @@ model Financial {
   createdAt   DateTime @default(now())
 
   @@index([clinicId, date])
+}
+
+// ========== Clinical Cases ==========
+
+model ClinicalCase {
+  id               String   @id @default(cuid())
+  clinicId         String
+  clinic           Clinic   @relation(fields: [clinicId], references: [id])
+  createdById      String
+  createdBy        User     @relation(fields: [createdById], references: [id])
+  title            String
+  summary          String   @db.Text
+  symptoms         String   @db.Text
+  rubrics          String?  @db.Text
+  repertorization  String?  @db.Text
+  prescribedRemedy String?
+  potency          String?
+  outcome          String?  @db.Text
+  outcomeRating    Int?
+  tags             String?
+  patientAge       Int?
+  patientSex       String?
+  isAnonymized     Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([clinicId])
+  @@index([prescribedRemedy])
 }
 
 // ========== Phase 6: Multi-Tenant Invites ==========

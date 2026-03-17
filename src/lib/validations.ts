@@ -77,7 +77,7 @@ export const appointmentSchema = z.object({
   date: z.string().min(1, "Data é obrigatória"),
   time: z.string().regex(/^\d{2}:\d{2}$/, "Horário inválido"),
   duration: z.number().min(15).max(120).default(30),
-  type: z.enum(["consultation", "follow-up", "first-visit"]),
+  type: z.enum(["consultation", "follow-up", "first-visit", "teleconsulta"]),
   notes: z.string().optional(),
 });
 export type AppointmentInput = z.infer<typeof appointmentSchema>;

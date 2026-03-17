@@ -20,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, ChevronLeft, ChevronRight, Clock, Plus } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Clock, Plus, Video } from "lucide-react";
+import Link from "next/link";
 
 interface Patient {
   id: string;
@@ -37,6 +38,8 @@ interface Appointment {
   type: string;
   notes: string | null;
   status: string;
+  meetingUrl: string | null;
+  meetingRoomId: string | null;
 }
 
 const TIME_SLOTS: string[] = [];
@@ -63,6 +66,7 @@ const TYPE_LABELS: Record<string, string> = {
   consultation: "Consulta",
   "follow-up": "Retorno",
   "first-visit": "Primeira Consulta",
+  teleconsulta: "Teleconsulta",
 };
 
 function formatDateBR(date: Date): string {
@@ -281,10 +285,24 @@ export default function AgendaPage() {
                       </span>
                       <Badge
                         variant="outline"
-                        className="text-xs shrink-0 border-teal-500/30 text-teal-400"
+                        className={`text-xs shrink-0 ${
+                          appt.type === "teleconsulta"
+                            ? "border-indigo-500/30 text-indigo-400"
+                            : "border-teal-500/30 text-teal-400"
+                        }`}
                       >
+                        {appt.type === "teleconsulta" && "📹 "}
                         {TYPE_LABELS[appt.type] || appt.type}
                       </Badge>
+                      {appt.meetingUrl && (
+                        <Link
+                          href={`/telemedicina/${appt.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-0.5 rounded shrink-0"
+                        >
+                          Entrar
+                        </Link>
+                      )}
                       <Badge
                         variant="outline"
                         className={`text-xs shrink-0 ${STATUS_COLORS[appt.status] || ""}`}
@@ -376,9 +394,32 @@ export default function AgendaPage() {
                   <SelectItem value="consultation">Consulta</SelectItem>
                   <SelectItem value="follow-up">Retorno</SelectItem>
                   <SelectItem value="first-visit">Primeira Consulta</SelectItem>
+                  <SelectItem value="teleconsulta">📹 Teleconsulta</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            {editingAppointment?.meetingUrl && (
+              <div className="p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-lg">
+                <p className="text-sm text-indigo-300 flex items-center gap-2 mb-2">
+                  <Video className="h-4 w-4" /> Link da Teleconsulta
+                </p>
+                <div className="flex gap-2">
+                  <Link
+                    href={`/telemedicina/${editingAppointment.id}`}
+                    className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md"
+                  >
+                    Entrar na Sala
+                  </Link>
+                  <button
+                    className="text-xs text-indigo-400 hover:text-indigo-300 px-2"
+                    onClick={() => navigator.clipboard.writeText(editingAppointment.meetingUrl!)}
+                  >
+                    Copiar Link
+                  </button>
+                </div>
+              </div>
+            )}
 
             {editingAppointment && (
               <div>

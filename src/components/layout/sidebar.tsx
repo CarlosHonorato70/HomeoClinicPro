@@ -18,6 +18,8 @@ import {
   Pill,
   Sparkles,
   ShieldCheck,
+  Video,
+  BookMarked,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -48,6 +50,8 @@ const navGroups: NavGroup[] = [
       { href: "/repertory/remedies", icon: Pill, label: "Remédios" },
       { href: "/repertory/materia-medica", icon: BookOpen, label: "Matéria Médica" },
       { href: "/agenda", icon: Calendar, label: "Agenda" },
+      { href: "/telemedicina", icon: Video, label: "Telemedicina" },
+      { href: "/clinical-cases", icon: BookMarked, label: "Casos Clinicos" },
       { href: "/ai", icon: Sparkles, label: "Assistente IA" },
     ],
   },

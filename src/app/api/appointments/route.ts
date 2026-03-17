@@ -13,24 +13,30 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const date = searchParams.get("date");
   const userId = searchParams.get("userId");
+  const type = searchParams.get("type");
 
-  if (!date) {
-    return NextResponse.json({ error: "Query param 'date' is required (YYYY-MM-DD)" }, { status: 400 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const where: any = { clinicId: session.user.clinicId };
+
+  if (date) {
+    const dayStart = new Date(`${date}T00:00:00`);
+    const dayEnd = new Date(`${date}T23:59:59`);
+    where.date = { gte: dayStart, lte: dayEnd };
+  }
+  if (userId) where.userId = userId;
+  if (type) where.type = type;
+
+  if (!date && !type) {
+    return NextResponse.json({ error: "Query param 'date' or 'type' is required" }, { status: 400 });
   }
 
-  const dayStart = new Date(`${date}T00:00:00`);
-  const dayEnd = new Date(`${date}T23:59:59`);
-
   const appointments = await prisma.appointment.findMany({
-    where: {
-      clinicId: session.user.clinicId,
-      date: { gte: dayStart, lte: dayEnd },
-      ...(userId ? { userId } : {}),
-    },
+    where,
     include: {
       patient: { select: { id: true, name: true, phone: true } },
     },
-    orderBy: { time: "asc" },
+    orderBy: [{ date: "desc" }, { time: "asc" }],
+    take: type && !date ? 50 : undefined,
   });
 
   // Decrypt patient phone in response
@@ -56,6 +62,16 @@ export async function POST(req: Request) {
 
   const data = parsed.data;
 
+  // Generate Jitsi meeting URL for teleconsulta type
+  const isTeleconsulta = data.type === "teleconsulta";
+  const tempId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const meetingRoomId = isTeleconsulta
+    ? `homeoclinic-${session.user.clinicId.slice(-6)}-${tempId}`
+    : null;
+  const meetingUrl = meetingRoomId
+    ? `https://meet.jit.si/${meetingRoomId}`
+    : null;
+
   const appointment = await prisma.appointment.create({
     data: {
       clinicId: session.user.clinicId,
@@ -67,6 +83,8 @@ export async function POST(req: Request) {
       type: data.type,
       notes: data.notes || null,
       status: "scheduled",
+      meetingUrl,
+      meetingRoomId,
     },
     include: {
       patient: { select: { id: true, name: true, phone: true } },
