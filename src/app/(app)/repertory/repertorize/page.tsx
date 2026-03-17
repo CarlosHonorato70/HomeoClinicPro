@@ -184,6 +184,9 @@ export default function RepertorizePage() {
     setLoading(true);
     setHasRun(false);
     try {
+      const needsWeight = methodToUse === "kent" || methodToUse === "algorithmic";
+      const needsCategory = methodToUse === "boenninghausen" || methodToUse === "algorithmic";
+
       const res = await fetch("/api/repertory/repertorize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -191,8 +194,8 @@ export default function RepertorizePage() {
           method: methodToUse,
           rubricConfigs: selectedRubrics.map((r) => ({
             id: r.id,
-            weight: r.weight,
-            category: r.category,
+            weight: needsWeight ? (r.weight ?? "general") : r.weight,
+            category: needsCategory ? (r.category ?? "location") : r.category,
             intensity: r.intensity ?? 1,
             eliminated: r.eliminated ?? false,
           })),
@@ -215,11 +218,27 @@ export default function RepertorizePage() {
     }
   }, [selectedRubrics, method]);
 
+  // When method changes, apply default weights/categories to rubrics that don't have them
+  useEffect(() => {
+    if (method === "kent" || method === "algorithmic") {
+      for (const r of selectedRubrics) {
+        if (!r.weight) setRubricWeight(r.id, "general");
+      }
+    }
+    if (method === "boenninghausen" || method === "algorithmic") {
+      for (const r of selectedRubrics) {
+        if (!r.category) setRubricCategory(r.id, "location");
+      }
+    }
+  }, [method]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Auto re-run when method changes and results already exist
   const hasRunRef = useRef(false);
   useEffect(() => {
     if (hasRunRef.current && selectedRubrics.length > 0) {
-      handleRepertorize(method);
+      // Small delay to let weight/category defaults apply first
+      const timer = setTimeout(() => handleRepertorize(method), 100);
+      return () => clearTimeout(timer);
     }
   }, [method]); // eslint-disable-line react-hooks/exhaustive-deps
 
