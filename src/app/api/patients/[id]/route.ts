@@ -51,6 +51,17 @@ export async function GET(
       prescription: tryDecrypt(c.prescription),
       evolution: tryDecrypt(c.evolution),
     })),
+    anamnesis: patient.anamnesis ? {
+      ...patient.anamnesis,
+      mental: tryDecrypt(patient.anamnesis.mental),
+      general: tryDecrypt(patient.anamnesis.general),
+      desires: tryDecrypt(patient.anamnesis.desires),
+      sleep: tryDecrypt(patient.anamnesis.sleep),
+      perspiration: tryDecrypt(patient.anamnesis.perspiration),
+      thermoregulation: tryDecrypt(patient.anamnesis.thermoregulation),
+      gyneco: tryDecrypt(patient.anamnesis.gyneco),
+      particular: tryDecrypt(patient.anamnesis.particular),
+    } : null,
   });
 }
 
