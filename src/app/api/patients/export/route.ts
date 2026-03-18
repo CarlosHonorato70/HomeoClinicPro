@@ -52,7 +52,7 @@ export async function GET() {
   await logAudit({
     clinicId: session.user.clinicId,
     userId: session.user.id,
-    action: AuditActions.PATIENT_EDIT,
+    action: AuditActions.PATIENT_EXPORT,
     details: `Exportacao CSV de ${patients.length} pacientes`,
   });
 

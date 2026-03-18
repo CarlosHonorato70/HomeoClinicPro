@@ -111,7 +111,7 @@ export async function POST(req: Request) {
   await logAudit({
     clinicId: session.user.clinicId,
     userId: session.user.id,
-    action: AuditActions.CONSULTATION_NEW,
+    action: AuditActions.CLINICAL_CASE_NEW,
     details: `Caso clinico criado: ${data.title}`,
   });
 

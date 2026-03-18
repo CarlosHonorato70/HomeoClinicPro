@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { consultationSchema } from "@/lib/validations";
-import { encrypt } from "@/lib/encryption";
+import { encrypt, tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
 import { checkConsultationLimit } from "@/lib/subscription";
 
@@ -63,5 +63,17 @@ export async function POST(req: Request) {
     details: `Consulta criada para paciente: ${patient.name}`,
   });
 
-  return NextResponse.json(consultation, { status: 201 });
+  // Decrypt fields before returning to client
+  const decrypted = {
+    ...consultation,
+    complaint: tryDecrypt(consultation.complaint),
+    anamnesis: tryDecrypt(consultation.anamnesis),
+    physicalExam: tryDecrypt(consultation.physicalExam),
+    diagnosis: tryDecrypt(consultation.diagnosis),
+    repertorialSymptoms: tryDecrypt(consultation.repertorialSymptoms),
+    prescription: tryDecrypt(consultation.prescription),
+    evolution: tryDecrypt(consultation.evolution),
+  };
+
+  return NextResponse.json(decrypted, { status: 201 });
 }

@@ -59,8 +59,8 @@ export async function middleware(req: NextRequest) {
         );
       }
     } else {
-      // General API limit (30 req/min)
-      const result = rateLimit(`api:${ip}`, 30, 60_000);
+      // General API limit (120 req/min)
+      const result = rateLimit(`api:${ip}`, 120, 60_000);
       if (!result.success) {
         return NextResponse.json(
           { error: "Limite de requisições excedido. Tente novamente em breve." },

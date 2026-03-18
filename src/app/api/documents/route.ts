@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { documentSchema } from "@/lib/validations";
-import { encrypt } from "@/lib/encryption";
+import { encrypt, tryDecrypt } from "@/lib/encryption";
 import { logAudit, AuditActions } from "@/lib/audit";
 
 export async function GET(req: Request) {
@@ -75,5 +75,5 @@ export async function POST(req: Request) {
     details: `Documento "${data.title}" (${data.type}) criado para paciente: ${patient.name}`,
   });
 
-  return NextResponse.json(document, { status: 201 });
+  return NextResponse.json({ ...document, content: tryDecrypt(document.content) }, { status: 201 });
 }

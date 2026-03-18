@@ -95,7 +95,7 @@ export async function PUT(
   await logAudit({
     clinicId: session.user.clinicId,
     userId: session.user.id,
-    action: AuditActions.CONSULTATION_EDIT,
+    action: AuditActions.CLINICAL_CASE_EDIT,
     details: `Caso clinico editado: ${updated.title}`,
   });
 
@@ -111,7 +111,7 @@ export async function DELETE(
 
   // Only admin can delete
   try {
-    requirePermission(session, "manage_settings");
+    requirePermission(session, "manage_clinic");
   } catch {
     return NextResponse.json({ error: "Sem permissao para excluir" }, { status: 403 });
   }
@@ -130,7 +130,7 @@ export async function DELETE(
   await logAudit({
     clinicId: session.user.clinicId,
     userId: session.user.id,
-    action: AuditActions.CONSULTATION_EDIT,
+    action: AuditActions.CLINICAL_CASE_DELETE,
     details: `Caso clinico excluido: ${existing.title}`,
   });
 

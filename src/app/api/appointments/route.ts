@@ -102,5 +102,13 @@ export async function POST(req: Request) {
     details: `Agendamento criado: ${data.date} ${data.time}`,
   });
 
-  return NextResponse.json(appointment, { status: 201 });
+  // Decrypt patient phone in response
+  const decrypted = {
+    ...appointment,
+    patient: appointment.patient
+      ? { ...appointment.patient, phone: tryDecrypt(appointment.patient.phone) }
+      : null,
+  };
+
+  return NextResponse.json(decrypted, { status: 201 });
 }

@@ -157,9 +157,9 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Mínimo 8 caracteres (maiúscula, número, especial)"
               required
-              minLength={6}
+              minLength={8}
               className="bg-[#16161f] border-[#2a2a3a]"
             />
           </div>

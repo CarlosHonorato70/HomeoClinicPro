@@ -84,5 +84,18 @@ export async function POST(req: Request) {
     details: `Paciente cadastrado: ${data.name}`,
   });
 
-  return NextResponse.json(patient, { status: 201 });
+  // Decrypt fields before returning to client
+  const decrypted = {
+    ...patient,
+    cpf: tryDecrypt(patient.cpf),
+    rg: tryDecrypt(patient.rg),
+    phone: tryDecrypt(patient.phone),
+    email: tryDecrypt(patient.email),
+    address: tryDecrypt(patient.address),
+    profession: tryDecrypt(patient.profession),
+    insurance: tryDecrypt(patient.insurance),
+    notes: tryDecrypt(patient.notes),
+  };
+
+  return NextResponse.json(decrypted, { status: 201 });
 }
