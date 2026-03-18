@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -136,7 +136,7 @@ function getMonthGrid(d: Date): Date[] {
 /* ───── Main component ───── */
 
 export default function AgendaPage() {
-  const today = new Date();
+  const [today] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>("day");
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -155,29 +155,36 @@ export default function AgendaPage() {
   const [formNotes, setFormNotes] = useState("");
   const [formStatus, setFormStatus] = useState("scheduled");
 
-  /* ── Computed date ranges ── */
-  const weekDays = getWeekDays(selectedDate);
-  const weekFrom = fmtISO(weekDays[0]);
-  const weekTo = fmtISO(weekDays[6]);
-  const monthFirst = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-  const monthLast = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-  const monthGrid = getMonthGrid(selectedDate);
+  /* ── Computed date ranges (memoized to avoid infinite re-renders) ── */
+  const dateISO = fmtISO(selectedDate);
+  const weekDays = useMemo(() => getWeekDays(selectedDate), [dateISO]);
+  const weekFrom = useMemo(() => fmtISO(weekDays[0]), [weekDays]);
+  const weekTo = useMemo(() => fmtISO(weekDays[6]), [weekDays]);
+  const monthFromISO = useMemo(() => {
+    const first = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    return fmtISO(first);
+  }, [dateISO]);
+  const monthToISO = useMemo(() => {
+    const last = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    return fmtISO(last);
+  }, [dateISO]);
+  const monthGrid = useMemo(() => getMonthGrid(selectedDate), [dateISO]);
 
   /* ── Fetch ── */
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
     let url = "/api/appointments";
     if (viewMode === "day") {
-      url += `?date=${fmtISO(selectedDate)}`;
+      url += `?date=${dateISO}`;
     } else if (viewMode === "week") {
       url += `?from=${weekFrom}&to=${weekTo}`;
     } else {
-      url += `?from=${fmtISO(monthFirst)}&to=${fmtISO(monthLast)}`;
+      url += `?from=${monthFromISO}&to=${monthToISO}`;
     }
     const res = await fetch(url);
     if (res.ok) setAppointments(await res.json());
     setLoading(false);
-  }, [viewMode, selectedDate, weekFrom, weekTo, monthFirst, monthLast]);
+  }, [viewMode, dateISO, weekFrom, weekTo, monthFromISO, monthToISO]);
 
   const fetchPatients = useCallback(async () => {
     const res = await fetch("/api/patients");
