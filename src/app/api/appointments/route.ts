@@ -12,13 +12,17 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const date = searchParams.get("date");
+  const from = searchParams.get("from");
+  const to = searchParams.get("to");
   const userId = searchParams.get("userId");
   const type = searchParams.get("type");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = { clinicId: session.user.clinicId };
 
-  if (date) {
+  if (from && to) {
+    where.date = { gte: new Date(`${from}T00:00:00`), lte: new Date(`${to}T23:59:59`) };
+  } else if (date) {
     const dayStart = new Date(`${date}T00:00:00`);
     const dayEnd = new Date(`${date}T23:59:59`);
     where.date = { gte: dayStart, lte: dayEnd };
@@ -26,8 +30,8 @@ export async function GET(req: Request) {
   if (userId) where.userId = userId;
   if (type) where.type = type;
 
-  if (!date && !type) {
-    return NextResponse.json({ error: "Query param 'date' or 'type' is required" }, { status: 400 });
+  if (!date && !from && !type) {
+    return NextResponse.json({ error: "Query param 'date', 'from'+'to', or 'type' is required" }, { status: 400 });
   }
 
   const appointments = await prisma.appointment.findMany({
