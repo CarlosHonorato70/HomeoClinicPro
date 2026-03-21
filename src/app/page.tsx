@@ -17,6 +17,14 @@ import {
   Database,
   Fingerprint,
   ServerCog,
+  Mic,
+  Sparkles,
+  Video,
+  Smartphone,
+  BarChart3,
+  Upload,
+  Leaf,
+  BookMarked,
 } from "lucide-react";
 
 const features = [
@@ -28,33 +36,69 @@ const features = [
   },
   {
     icon: FlaskConical,
-    title: "Repertorização Avançada",
+    title: "6 Métodos de Repertorização",
     description:
-      "4 métodos: Soma de Graus, Cobertura, Kent e Boenninghausen. Grid visual interativo com ranking.",
+      "Soma de Graus, Cobertura, Kent, Boenninghausen, Hahnemann e Algorítmico. Grid visual interativo com ranking.",
   },
   {
     icon: Pill,
-    title: "Matéria Médica",
+    title: "Matéria Médica Completa",
     description:
-      "1.942 textos de matéria médica com seções organizadas por remédio e navegação intuitiva.",
+      "3.327 textos de matéria médica com busca semântica, filtragem por fonte e navegação intuitiva.",
   },
   {
     icon: FileText,
     title: "Prontuário Eletrônico",
     description:
-      "Consultas, anamnese homeopática completa, prescrições e documentos clínicos padronizados.",
+      "Consultas, anamnese com 5 templates especializados (homeopatia, pediatria, dermatologia, ginecologia, psiquiatria), prescrições e documentos.",
+  },
+  {
+    icon: Mic,
+    title: "Transcrição por IA",
+    description:
+      "Grave a consulta por voz e a IA transcreve automaticamente. Funciona na anamnese e na consulta.",
+  },
+  {
+    icon: Sparkles,
+    title: "Assistente de IA",
+    description:
+      "Análise inteligente de sintomas em 4 etapas: identificação, seleção de rubricas, repertorização e prescrição assistida.",
+  },
+  {
+    icon: Video,
+    title: "Telemedicina Integrada",
+    description:
+      "Videochamada embutida via Jitsi Meet com prontuário lado a lado. CFM Resolução 2.314/2022.",
+  },
+  {
+    icon: BookMarked,
+    title: "Casos Clínicos",
+    description:
+      "Banco de casos com análise de padrões por IA. Registre desfechos e a IA aprende com os resultados.",
   },
   {
     icon: Shield,
-    title: "Conformidade LGPD",
+    title: "Conformidade LGPD + CFM",
     description:
-      "Criptografia AES-256, trilha de auditoria, consentimento granular e direitos do titular de dados.",
+      "Criptografia AES-256-GCM, trilha de auditoria completa, consentimento granular e retenção de 20 anos.",
   },
   {
     icon: LayoutDashboard,
-    title: "Gestão Completa",
+    title: "Dashboard Analítico",
     description:
-      "Agenda, financeiro, equipe multi-usuário e assinatura com planos flexíveis para sua clínica.",
+      "Gráficos de consultas/mês, novos pacientes, taxa de retorno e agenda do dia. Visão completa da prática.",
+  },
+  {
+    icon: Leaf,
+    title: "Fitoterapia",
+    description:
+      "310 plantas medicinais com nome científico, indicações, posologia e 243 termos no dicionário médico.",
+  },
+  {
+    icon: Smartphone,
+    title: "App Mobile (PWA)",
+    description:
+      "Instale no celular como aplicativo. Acesso rápido ao repertório, agenda e pacientes em qualquer lugar.",
   },
 ];
 
@@ -68,7 +112,8 @@ const plans = [
       "10 pacientes",
       "1 profissional (médico ou equipe)",
       "20 consultas/mês",
-      "Repertório completo",
+      "Repertório completo (188K rubricas)",
+      "Agenda diária, semanal e mensal",
       "Suporte por e-mail",
     ],
     cta: "Começar Grátis",
@@ -83,8 +128,13 @@ const plans = [
       "500 pacientes",
       "3 profissionais (médicos + equipe)",
       "Consultas ilimitadas",
-      "Repertorização avançada",
-      "Matéria médica completa",
+      "6 métodos de repertorização",
+      "Transcrição por IA (voz para texto)",
+      "Assistente de IA com prescrição",
+      "Telemedicina integrada",
+      "5 templates de anamnese",
+      "Casos clínicos + fitoterapia",
+      "Importação CSV de pacientes",
       "Suporte prioritário",
     ],
     cta: "Assinar Agora",
@@ -100,6 +150,8 @@ const plans = [
       "Pacientes ilimitados",
       "Até 12 profissionais (extra: R$39/mês cada)",
       "Consultas ilimitadas",
+      "Todas as funcionalidades Pro",
+      "Dashboard analítico avançado",
       "API de integração",
       "Multi-clínica",
       "Suporte dedicado 24/7",
@@ -136,11 +188,11 @@ const compliance = [
 const securityChecklist = [
   { icon: Lock, text: "Criptografia AES-256-GCM em repouso" },
   { icon: ShieldCheck, text: "HTTPS/TLS 1.3 em trânsito" },
-  { icon: Eye, text: "Trilha de auditoria completa" },
-  { icon: Fingerprint, text: "Consentimento LGPD granular por paciente" },
+  { icon: Eye, text: "Trilha de auditoria com IP" },
+  { icon: Fingerprint, text: "Consentimento LGPD granular" },
   { icon: Clock, text: "Retenção de 20 anos (CFM)" },
   { icon: Database, text: "Backup automático diário" },
-  { icon: ServerCog, text: "45 vulnerabilidades auditadas e corrigidas" },
+  { icon: ServerCog, text: "48 vulnerabilidades auditadas e corrigidas" },
   { icon: Shield, text: "100% dos dados sensíveis criptografados" },
 ];
 
@@ -201,9 +253,9 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl">
-              188.669 rubricas, 3.943 remédios, matéria médica completa.
-              Repertorização avançada com 4 métodos. Tudo em conformidade com a
-              LGPD.
+              188.669 rubricas, 3.943 remédios, 3.327 textos de matéria médica,
+              310 plantas medicinais. 6 métodos de repertorização, IA com
+              transcrição por voz, telemedicina integrada e muito mais.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -227,8 +279,8 @@ export default function Home() {
               {[
                 { value: "188.669", label: "Rubricas" },
                 { value: "3.943", label: "Remédios" },
-                { value: "55", label: "Capítulos" },
-                { value: "1.942", label: "Textos de MM" },
+                { value: "3.327", label: "Textos de MM" },
+                { value: "310", label: "Plantas Medicinais" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-2xl font-bold text-teal-400 sm:text-3xl">
@@ -253,12 +305,12 @@ export default function Home() {
                 <span className="text-teal-400">única plataforma</span>
               </h2>
               <p className="mx-auto max-w-2xl text-lg text-gray-400">
-                Ferramentas profissionais para homeopatia, integradas e
-                otimizadas para o seu dia a dia clínico.
+                A plataforma clínica de homeopatia mais completa do Brasil.
+                IA, telemedicina, repertorização avançada e muito mais.
               </p>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {features.map((feature) => (
                 <div
                   key={feature.title}
@@ -437,11 +489,12 @@ export default function Home() {
         <section className="border-t border-white/5 px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              Pronto para modernizar sua prática homeopática?
+              Pronto para transformar sua prática homeopática?
             </h2>
             <p className="mb-8 text-lg text-gray-400">
-              Junte-se a homeopatas que já utilizam a plataforma mais completa do
-              Brasil. Comece gratuitamente, sem cartão de crédito.
+              A plataforma clínica de homeopatia mais completa do Brasil.
+              Repertório, IA, telemedicina, prontuário e muito mais.
+              Comece gratuitamente, sem cartão de crédito.
             </p>
             <Link
               href="/login"
