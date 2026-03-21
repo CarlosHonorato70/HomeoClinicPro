@@ -248,6 +248,73 @@ model MiasmClassification {
   @@index([miasm])
 }
 
+// ========== Phytotherapy & Medical Dictionary ==========
+
+model PhytotherapyPlant {
+  id                Int     @id @default(autoincrement())
+  name              String
+  scientificName    String?
+  commonNames       String?
+  indications       String? @db.Text
+  contraindications String? @db.Text
+  preparation       String? @db.Text
+  dosage            String? @db.Text
+  interactions      String? @db.Text
+  notes             String? @db.Text
+
+  @@index([name])
+}
+
+model MedicalDictionary {
+  id         Int    @id @default(autoincrement())
+  term       String
+  definition String @db.Text
+
+  @@index([term])
+}
+
+// ========== Notifications & Reminders ==========
+
+model Notification {
+  id        String   @id @default(cuid())
+  clinicId  String
+  userId    String?
+  type      String   // appointment_reminder, appointment_confirmed, new_patient, system, etc.
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([clinicId, userId, read])
+  @@index([clinicId, createdAt])
+}
+
+model ReminderConfig {
+  id              String  @id @default(cuid())
+  clinicId        String  @unique
+  emailEnabled    Boolean @default(true)
+  whatsappEnabled Boolean @default(false)
+  smsEnabled      Boolean @default(false)
+  reminderHours   String  @default("[24,2]") // JSON array of hours before appointment
+  whatsappToken   String? // encrypted WhatsApp Business API token
+  whatsappPhoneId String? // WhatsApp phone number ID
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SentReminder {
+  id            String   @id @default(cuid())
+  appointmentId String
+  channel       String   // email, whatsapp, sms
+  hoursBeforeAppt Int
+  sentAt        DateTime @default(now())
+  status        String   @default("sent") // sent, delivered, failed
+
+  @@unique([appointmentId, channel, hoursBeforeAppt])
+  @@index([appointmentId])
+}
+
 // ========== Phase 4: Documents ==========
 
 model Document {
@@ -263,6 +330,35 @@ model Document {
 
   @@index([patientId])
   @@index([clinicId])
+}
+
+// ========== Patient Portal Access ==========
+
+model PatientAccess {
+  id           String    @id @default(cuid())
+  patientId    String    @unique
+  email        String
+  passwordHash String
+  active       Boolean   @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([email])
+}
+
+// ========== Document Signatures ==========
+
+model DocumentSignature {
+  id          String   @id @default(cuid())
+  documentId  String
+  signerId    String
+  signerName  String
+  signerCrm   String?
+  hash        String   // SHA-256 of document content
+  signedAt    DateTime @default(now())
+  certificate String?  // ICP-Brasil certificate info (future)
+
+  @@index([documentId])
 }
 
 // ========== Phase 5: Agenda + Financial ==========
@@ -302,6 +398,38 @@ model Financial {
   createdAt   DateTime @default(now())
 
   @@index([clinicId, date])
+}
+
+// ========== Invoices ==========
+
+model Invoice {
+  id        String    @id @default(cuid())
+  clinicId  String
+  patientId String
+  number    String    // Sequential invoice number
+  items     String    @db.Text // JSON array of line items
+  subtotal  Float
+  tax       Float     @default(0)
+  total     Float
+  status    String    @default("draft") // draft, sent, paid, overdue, cancelled
+  dueDate   DateTime
+  paidAt    DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([clinicId])
+  @@index([patientId])
+  @@index([status])
+}
+
+model PaymentMethod {
+  id       String  @id @default(cuid())
+  clinicId String
+  name     String  // PIX, Credit Card, Boleto, Cash, etc.
+  active   Boolean @default(true)
+
+  @@index([clinicId])
 }
 
 // ========== Clinical Cases ==========

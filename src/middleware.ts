@@ -17,6 +17,9 @@ const AUTH_ROUTES = [
   "/ai",
   "/onboarding",
   "/admin",
+  "/analytics",
+  "/telemedicina",
+  "/clinical-cases",
 ];
 
 function getClientIp(req: NextRequest): string {

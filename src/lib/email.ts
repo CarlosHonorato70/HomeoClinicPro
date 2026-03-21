@@ -182,6 +182,90 @@ export async function sendTrialExpiringEmail(
   );
 }
 
+export async function sendAppointmentReminderEmail(
+  email: string,
+  patientName: string,
+  date: string,
+  time: string,
+  clinicName: string,
+  clinicPhone: string
+) {
+  await sendEmail(
+    email,
+    `Lembrete de Consulta - ${escapeHtml(clinicName)}`,
+    `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
+        <p>Olá, ${escapeHtml(patientName)}!</p>
+        <p>Este é um lembrete da sua consulta agendada:</p>
+        <div style="background: #f0fdfa; border-left: 4px solid #0d9488; padding: 16px; margin: 20px 0; border-radius: 4px;">
+          <p style="margin: 0;"><strong>📅 Data:</strong> ${escapeHtml(date)}</p>
+          <p style="margin: 8px 0 0;"><strong>🕐 Horário:</strong> ${escapeHtml(time)}</p>
+          <p style="margin: 8px 0 0;"><strong>🏥 Clínica:</strong> ${escapeHtml(clinicName)}</p>
+        </div>
+        <p>Para reagendar ou cancelar, entre em contato: ${escapeHtml(clinicPhone || "")}</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
+      </div>
+    `
+  );
+}
+
+export async function sendAppointmentConfirmationEmail(
+  email: string,
+  patientName: string,
+  date: string,
+  time: string,
+  clinicName: string
+) {
+  await sendEmail(
+    email,
+    `Consulta Confirmada - ${escapeHtml(clinicName)}`,
+    `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
+        <p>Olá, ${escapeHtml(patientName)}!</p>
+        <p>Sua consulta foi agendada com sucesso:</p>
+        <div style="background: #f0fdfa; border-left: 4px solid #0d9488; padding: 16px; margin: 20px 0; border-radius: 4px;">
+          <p style="margin: 0;"><strong>📅 Data:</strong> ${escapeHtml(date)}</p>
+          <p style="margin: 8px 0 0;"><strong>🕐 Horário:</strong> ${escapeHtml(time)}</p>
+          <p style="margin: 8px 0 0;"><strong>🏥 Clínica:</strong> ${escapeHtml(clinicName)}</p>
+        </div>
+        <p>Aguardamos você!</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
+      </div>
+    `
+  );
+}
+
+export async function sendAppointmentCancellationEmail(
+  email: string,
+  patientName: string,
+  date: string,
+  time: string,
+  clinicName: string
+) {
+  await sendEmail(
+    email,
+    `Consulta Cancelada - ${escapeHtml(clinicName)}`,
+    `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
+        <p>Olá, ${escapeHtml(patientName)}!</p>
+        <p>Sua consulta foi cancelada:</p>
+        <div style="background: #fef2f2; border-left: 4px solid #f43f5e; padding: 16px; margin: 20px 0; border-radius: 4px;">
+          <p style="margin: 0;"><strong>📅 Data:</strong> ${escapeHtml(date)}</p>
+          <p style="margin: 8px 0 0;"><strong>🕐 Horário:</strong> ${escapeHtml(time)}</p>
+        </div>
+        <p>Para reagendar, entre em contato com a clínica ${escapeHtml(clinicName)}.</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
+      </div>
+    `
+  );
+}
+
 export async function sendWelcomeEmail(email: string, userName: string) {
   await sendEmail(
     email,

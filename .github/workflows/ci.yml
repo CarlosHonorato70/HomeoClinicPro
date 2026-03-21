@@ -31,6 +31,11 @@ jobs:
       - name: Type Check
         run: npx tsc --noEmit
 
+      - name: Unit Tests
+        run: npm run test
+        env:
+          ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+
       - name: Build
         run: npm run build
         env:

@@ -28,6 +28,15 @@ const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     "manage_agenda",
     "manage_documents",
   ],
+  secretary: [
+    "view_patients",
+    "manage_agenda",
+    "view_financial",
+  ],
+  intern: [
+    "view_patients",
+    "view_repertory",
+  ],
 };
 
 export function hasPermission(role: string, permission: string): boolean {
