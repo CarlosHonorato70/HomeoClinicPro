@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Bell, Check, CheckCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bell, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Notification {
@@ -28,25 +27,29 @@ export function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const fetchNotifications = useCallback(async () => {
-    try {
-      const res = await fetch("/api/notifications?limit=10");
-      if (res.ok) {
-        const data = await res.json();
-        setNotifications(data.notifications);
-        setUnreadCount(data.unreadCount);
-      }
-    } catch {
-      // Silent fail — notifications are non-critical
-    }
-  }, []);
-
   useEffect(() => {
-    fetchNotifications();
-    // Poll every 60 seconds
-    const interval = setInterval(fetchNotifications, 60000);
-    return () => clearInterval(interval);
-  }, [fetchNotifications]);
+    let active = true;
+
+    async function load() {
+      try {
+        const res = await fetch("/api/notifications?limit=10");
+        if (res.ok && active) {
+          const data = await res.json();
+          setNotifications(data.notifications);
+          setUnreadCount(data.unreadCount);
+        }
+      } catch {
+        // Silent fail — notifications are non-critical
+      }
+    }
+
+    load();
+    const interval = setInterval(load, 60000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const markAllRead = async () => {
     try {
@@ -91,18 +94,15 @@ export function NotificationBell() {
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]"
-            >
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </Badge>
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        className="relative inline-flex items-center justify-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground"
+      >
+        <Bell className="h-5 w-5" />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-medium">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
         <div className="flex items-center justify-between px-3 py-2">

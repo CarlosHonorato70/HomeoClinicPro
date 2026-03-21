@@ -81,7 +81,7 @@ export function DictionarySearch() {
 
       {!loading && query.length >= 2 && entries.length === 0 && (
         <p className="text-xs text-muted-foreground">
-          Nenhum resultado para "{query}"
+          Nenhum resultado para &ldquo;{query}&rdquo;
         </p>
       )}
     </div>

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/rbac";
-import { encrypt, tryDecrypt } from "@/lib/encryption";
+import { encrypt } from "@/lib/encryption";
 
 export async function GET() {
   const session = await getServerSession(authOptions);

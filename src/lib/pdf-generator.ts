@@ -12,7 +12,8 @@ export async function generatePDF(
   type: DocumentType,
   data: Record<string, unknown>
 ): Promise<Buffer> {
-  let component: React.ReactElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let component: React.ReactElement<any>;
 
   switch (type) {
     case "prescription":
