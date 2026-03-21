@@ -49,12 +49,21 @@ export const metadata: Metadata = {
     title: "HomeoClinic Pro — Prontuário Eletrônico Homeopático",
     description:
       "O maior repertório homeopático em português com 188 mil rubricas. Repertorização avançada, matéria médica completa e gestão de clínica — LGPD compliant.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "HomeoClinic Pro — A plataforma clínica de homeopatia mais completa do Brasil",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HomeoClinic Pro",
     description:
       "Plataforma profissional para clínicas homeopáticas com repertório de 188 mil rubricas.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
