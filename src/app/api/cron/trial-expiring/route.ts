@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Cron endpoint for sending trial expiration warnings.
- * Should be called once daily.
+ * Should be called once daily (e.g., 9 AM).
  * Sends emails to clinics whose trial expires in 3 days or 1 day.
  */
 export async function GET(req: NextRequest) {
@@ -19,41 +19,15 @@ export async function GET(req: NextRequest) {
 
   try {
     const now = new Date();
-    const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-    const oneDayFromNow = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
 
-    // Find clinics with trial expiring in ~3 days (between 2.5 and 3.5 days)
-    const threeDayMin = new Date(threeDaysFromNow.getTime() - 12 * 60 * 60 * 1000);
-    const threeDayMax = new Date(threeDaysFromNow.getTime() + 12 * 60 * 60 * 1000);
+    // Window: trials expiring between 0.5 and 3.5 days from now
+    const minDate = new Date(now.getTime() + 0.5 * 24 * 60 * 60 * 1000);
+    const maxDate = new Date(now.getTime() + 3.5 * 24 * 60 * 60 * 1000);
 
-    // Find clinics with trial expiring in ~1 day (between 0.5 and 1.5 days)
-    const oneDayMin = new Date(oneDayFromNow.getTime() - 12 * 60 * 60 * 1000);
-    const oneDayMax = new Date(oneDayFromNow.getTime() + 12 * 60 * 60 * 1000);
-
-    const expiringClinics = await prisma.clinic.findMany({
+    const trialingClinics = await prisma.clinic.findMany({
       where: {
         subscriptionStatus: "trialing",
-        trialEndsAt: {
-          OR: [
-            { gte: threeDayMin, lte: threeDayMax },
-            { gte: oneDayMin, lte: oneDayMax },
-          ],
-        } as unknown as { gte: Date; lte: Date },
-      },
-      include: {
-        users: {
-          where: { role: "admin" },
-          select: { email: true, name: true },
-          take: 1,
-        },
-      },
-    });
-
-    // Fallback: query without complex OR on dates
-    const allTrialing = await prisma.clinic.findMany({
-      where: {
-        subscriptionStatus: "trialing",
-        trialEndsAt: { gte: oneDayMin, lte: threeDayMax },
+        trialEndsAt: { gte: minDate, lte: maxDate },
       },
       include: {
         users: {
@@ -67,13 +41,14 @@ export async function GET(req: NextRequest) {
     let sent = 0;
     const errors: string[] = [];
 
-    for (const clinic of allTrialing) {
+    for (const clinic of trialingClinics) {
       const admin = clinic.users[0];
       if (!admin?.email || !clinic.trialEndsAt) continue;
 
       const msLeft = clinic.trialEndsAt.getTime() - now.getTime();
       const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
 
+      // Only send on day 3 and day 1
       if (daysLeft !== 3 && daysLeft !== 1) continue;
 
       try {
@@ -92,7 +67,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       sent,
-      checked: allTrialing.length,
+      checked: trialingClinics.length,
       errors,
       timestamp: new Date().toISOString(),
     });
