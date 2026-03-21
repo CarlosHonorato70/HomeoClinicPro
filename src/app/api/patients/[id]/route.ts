@@ -102,7 +102,7 @@ export async function PUT(
       profession: data.profession ? encrypt(data.profession) : null,
       insurance: data.insurance ? encrypt(data.insurance) : null,
       notes: data.notes ? encrypt(data.notes) : null,
-      lgpdConsent: data.lgpdConsent,
+      lgpdConsent: data.lgpdConsent ?? existing.lgpdConsent,
       lgpdConsentDate: data.lgpdConsent && !existing.lgpdConsent ? new Date() : existing.lgpdConsentDate,
     },
   });
