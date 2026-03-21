@@ -21,7 +21,6 @@ jobs:
           host: ${{ secrets.DO_SSH_HOST }}
           username: ${{ secrets.DO_SSH_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
-          script_stop: true
           command_timeout: 10m
           script: |
             cd /opt/homeoclinic/app
