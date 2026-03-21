@@ -82,7 +82,9 @@ export async function middleware(req: NextRequest) {
     const isPublicApi =
       pathname.startsWith("/api/auth/") ||
       pathname.startsWith("/api/billing/webhook") ||
-      pathname.startsWith("/api/invites/");
+      pathname.startsWith("/api/invites/") ||
+      pathname.startsWith("/api/portal/") ||
+      pathname.startsWith("/api/cron/");
 
     if (!isPublicApi) {
       const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -167,5 +169,8 @@ export const config = {
     "/ai/:path*",
     "/onboarding/:path*",
     "/admin/:path*",
+    "/analytics/:path*",
+    "/telemedicina/:path*",
+    "/clinical-cases/:path*",
   ],
 };
