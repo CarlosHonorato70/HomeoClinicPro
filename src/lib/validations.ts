@@ -33,7 +33,7 @@ export const patientSchema = z.object({
   profession: z.string().optional(),
   insurance: z.string().optional(),
   notes: z.string().optional(),
-  lgpdConsent: z.boolean().default(false),
+  lgpdConsent: z.boolean().optional(),
 });
 
 export const consultationSchema = z.object({
