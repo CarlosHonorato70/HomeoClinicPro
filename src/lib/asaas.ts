@@ -16,13 +16,12 @@ function getAsaasApiKey(): string {
   return process.env.ASAAS_API_KEY ?? "";
 }
 
-const ASAAS_API_KEY = getAsaasApiKey();
-
 async function asaasRequest(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  if (!ASAAS_API_KEY) {
+  const apiKey = getAsaasApiKey();
+  if (!apiKey) {
     throw new Error("ASAAS_API_KEY is not configured");
   }
 
@@ -31,7 +30,7 @@ async function asaasRequest(
     ...options,
     headers: {
       "Content-Type": "application/json",
-      access_token: ASAAS_API_KEY,
+      access_token: apiKey,
       ...(options.headers ?? {}),
     },
   });
