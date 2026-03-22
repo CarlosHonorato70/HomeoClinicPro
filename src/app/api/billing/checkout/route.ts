@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
-import { createCheckoutSession } from "@/lib/stripe";
+import { createAsaasSubscription } from "@/lib/asaas";
 import { requirePermission } from "@/lib/rbac";
 
 export const dynamic = "force-dynamic";
@@ -18,29 +18,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { priceId } = await req.json();
+  const { priceId, plan } = await req.json();
 
-  if (!priceId || typeof priceId !== "string") {
+  // Accept either plan name or priceId for backwards compatibility
+  const planKey = plan ?? priceId;
+
+  if (!planKey || (planKey !== "professional" && planKey !== "enterprise")) {
     return NextResponse.json(
-      { error: "priceId é obrigatório" },
+      { error: "Plano deve ser 'professional' ou 'enterprise'" },
       { status: 400 }
     );
   }
 
   try {
     const origin = new URL(req.url).origin;
-    const checkoutSession = await createCheckoutSession(
+    const { paymentUrl } = await createAsaasSubscription(
       session.user.clinicId,
-      priceId,
-      `${origin}/settings/billing?success=true`,
-      `${origin}/settings/billing?canceled=true`
+      planKey as "professional" | "enterprise",
+      `${origin}/settings/billing?success=true`
     );
 
-    return NextResponse.json({ url: checkoutSession.url });
+    return NextResponse.json({ url: paymentUrl });
   } catch (err) {
-    console.error("Error creating checkout session:", err);
+    console.error("Error creating Asaas subscription:", err);
     const message =
-      err instanceof Error ? err.message : "Erro ao criar sessão de checkout";
+      err instanceof Error ? err.message : "Erro ao criar assinatura";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

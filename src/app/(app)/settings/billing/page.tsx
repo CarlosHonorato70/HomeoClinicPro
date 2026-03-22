@@ -105,7 +105,7 @@ export default function BillingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PROFESSIONAL,
+          plan: "professional",
         }),
       });
 

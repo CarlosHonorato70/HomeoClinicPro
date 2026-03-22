@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { createBillingPortalSession } from "@/lib/stripe";
+import { getAsaasPaymentUrl } from "@/lib/asaas";
 
 export const dynamic = "force-dynamic";
 
@@ -25,15 +25,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const origin = new URL(req.url).origin;
-    const portalSession = await createBillingPortalSession(
-      clinic.stripeCustomerId,
-      `${origin}/settings/billing`
-    );
+    const url = await getAsaasPaymentUrl(clinic.stripeCustomerId);
 
-    return NextResponse.json({ url: portalSession.url });
+    return NextResponse.json({ url });
   } catch (err) {
-    console.error("Error creating portal session:", err);
+    console.error("Error fetching Asaas portal:", err);
     const message =
       err instanceof Error ? err.message : "Erro ao abrir portal de cobrança";
     return NextResponse.json({ error: message }, { status: 500 });

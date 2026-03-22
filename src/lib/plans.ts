@@ -24,7 +24,7 @@ export const PLANS: Record<PlanKey, PlanDefinition> = {
     maxPatients: 500,
     maxUsers: 3,
     maxConsultationsPerMonth: -1,
-    priceId: process.env.STRIPE_PRICE_PROFESSIONAL ?? null,
+    priceId: process.env.STRIPE_PRICE_PROFESSIONAL ?? "professional",
   },
   enterprise: {
     key: "enterprise",
@@ -32,7 +32,7 @@ export const PLANS: Record<PlanKey, PlanDefinition> = {
     maxPatients: -1,
     maxUsers: 12,
     maxConsultationsPerMonth: -1,
-    priceId: process.env.STRIPE_PRICE_ENTERPRISE ?? null,
+    priceId: process.env.STRIPE_PRICE_ENTERPRISE ?? "enterprise",
   },
 };
 
