@@ -132,10 +132,6 @@ export async function createAsaasSubscription(
       cycle: "MONTHLY",
       description,
       externalReference: `${clinicId}:${plan}`,
-      callback: {
-        successUrl,
-        autoRedirect: true,
-      },
     }),
   });
 
