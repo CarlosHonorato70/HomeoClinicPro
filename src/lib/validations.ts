@@ -1,3 +1,8 @@
+/**
+ * HomeoClinic Pro — Propriedade de Carlos Honorato
+ * Protegido pela Lei 9.609/1998 (Lei do Software)
+ * Todos os direitos reservados. Copia e distribuicao proibidas.
+ */
 import { z } from "zod";
 
 // Strong password: min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char

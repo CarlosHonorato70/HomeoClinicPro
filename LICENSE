@@ -1,0 +1,82 @@
+LICENCA DE SOFTWARE PROPRIETARIO — HomeoClinic Pro
+
+Copyright (c) 2024-2026 Carlos Honorato. Todos os direitos reservados.
+
+ESTE SOFTWARE E SUA DOCUMENTACAO SAO PROPRIEDADE EXCLUSIVA DE CARLOS HONORATO
+("TITULAR") E ESTAO PROTEGIDOS PELAS LEIS DE DIREITOS AUTORAIS DO BRASIL
+(Lei 9.609/1998 — Lei do Software, Lei 9.610/1998 — Lei de Direitos Autorais)
+E TRATADOS INTERNACIONAIS DE PROPRIEDADE INTELECTUAL.
+
+1. RESTRICOES
+
+   E EXPRESSAMENTE PROIBIDO, sem autorizacao previa e por escrito do Titular:
+
+   a) Copiar, reproduzir, distribuir ou transmitir este software, no todo ou
+      em parte, por qualquer meio ou forma;
+   b) Modificar, adaptar, traduzir, descompilar, desmontar ou realizar
+      engenharia reversa do software;
+   c) Sublicenciar, alugar, emprestar ou transferir o software a terceiros;
+   d) Utilizar o software, seu codigo-fonte, algoritmos, estrutura de dados,
+      interfaces ou qualquer componente para criar produtos derivados ou
+      concorrentes;
+   e) Remover, alterar ou ocultar avisos de direitos autorais, marcas
+      registradas ou outras indicacoes de propriedade;
+   f) Utilizar o software para fins comerciais sem contrato de licenciamento
+      vigente com o Titular.
+
+2. PROPRIEDADE INTELECTUAL
+
+   O software HomeoClinic Pro, incluindo mas nao se limitando a:
+   - Codigo-fonte (frontend, backend, API, banco de dados)
+   - Algoritmos de repertorizacao homeopatica
+   - Modelos de dados e esquemas de banco de dados
+   - Interfaces de usuario e design visual
+   - Documentacao tecnica e manuais
+   - Dados extraidos e curados (repertorio, materia medica, fitoterapia)
+   - Logica de integracao com servicos de IA
+
+   Sao obras intelectuais protegidas e de titularidade exclusiva do Titular.
+
+3. DADOS E BANCOS DE DADOS
+
+   Os bancos de dados contidos neste software, incluindo o repertorio
+   homeopatico (188.669 rubricas), a base de fitoterapia (330 plantas),
+   o dicionario medico (243 termos) e a materia medica (3.327 textos),
+   foram compilados, extraidos, curados e organizados pelo Titular,
+   constituindo obra intelectual protegida nos termos do Art. 7, XIII
+   da Lei 9.610/1998.
+
+4. CONFIDENCIALIDADE
+
+   Este software contem informacoes confidenciais e segredos de negocio.
+   Qualquer pessoa que tenha acesso a este codigo esta obrigada a manter
+   sigilo absoluto sobre seu conteudo, sob pena das sancoes civis e
+   penais cabiveis.
+
+5. SANCOES
+
+   A violacao dos termos desta licenca sujeita o infrator a:
+   a) Indenizacao por danos materiais e morais;
+   b) Multa contratual;
+   c) Sancoes penais previstas no Art. 12 da Lei 9.609/1998
+      (detencao de 6 meses a 2 anos ou multa);
+   d) Busca e apreensao das copias nao autorizadas;
+   e) Demais medidas judiciais cabiveis.
+
+6. JURISDICAO
+
+   Este contrato e regido pelas leis da Republica Federativa do Brasil.
+   Fica eleito o foro da comarca de domicilio do Titular para dirimir
+   quaisquer controversias.
+
+7. CONTATO
+
+   Para licenciamento comercial, parcerias ou autorizacoes:
+   Carlos Honorato
+   Email: psicarloshonorato@gmail.com
+   Website: https://homeoclinic-ia.com
+
+---
+HomeoClinic Pro — Software registrado
+Protegido pela Lei 9.609/1998 (Lei do Software)
+Protegido pela Lei 9.610/1998 (Direitos Autorais)

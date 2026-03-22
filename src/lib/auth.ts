@@ -1,3 +1,8 @@
+/**
+ * HomeoClinic Pro — Propriedade de Carlos Honorato
+ * Protegido pela Lei 9.609/1998 (Lei do Software)
+ * Todos os direitos reservados. Copia e distribuicao proibidas.
+ */
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";

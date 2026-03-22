@@ -1,0 +1,102 @@
+================================================================
+REGISTRO DE PROGRAMA DE COMPUTADOR — INPI
+Instituto Nacional de Propriedade Industrial
+================================================================
+
+DADOS DO PROGRAMA
+
+Nome: HomeoClinic Pro
+Versao: 2.1.0
+Data de criacao: 2024
+Data desta versao: 22/03/2026
+Linguagem: TypeScript / JavaScript
+Framework: Next.js 14 (React)
+Banco de dados: PostgreSQL 16
+
+TITULAR
+
+Nome: Carlos Honorato
+Email: psicarloshonorato@gmail.com
+Website: https://homeoclinic-ia.com
+
+DESCRICAO DO PROGRAMA
+
+HomeoClinic Pro e uma plataforma SaaS (Software as a Service) para
+clinicas de homeopatia, que integra prontuario eletronico, repertorio
+homeopatico com 188.669 rubricas em portugues, engine de repertorizacao
+com 6 metodos, inteligencia artificial para analise de sintomas e
+prescricao assistida, telemedicina, gestao financeira, agenda,
+fitoterapia, dicionario medico, portal do paciente, integracao com
+WhatsApp e conformidade total com LGPD e CFM.
+
+FUNCIONALIDADES PRINCIPAIS
+
+01. Autenticacao com JWT e criptografia PBKDF2/bcrypt
+02. Prontuario eletronico com criptografia AES-256-GCM
+03. Repertorio homeopatico (188.669 rubricas, 3.943 remedios)
+04. Engine de repertorizacao (Soma, Cobertura, Kent, Boenninghausen, Hahnemann, Algoritmico)
+05. Materia medica (3.327 textos indexados)
+06. Fitoterapia (330 plantas medicinais)
+07. Dicionario medico (243 termos)
+08. Assistente de IA (GPT-4o) para analise de sintomas e prescricao
+09. Transcricao de consulta por voz (Whisper)
+10. Telemedicina integrada (Jitsi Meet)
+11. Agenda com vistas diaria, semanal e mensal
+12. Gestao financeira (receitas, despesas, balanco)
+13. Emissao de documentos (receituario, atestado, TCLE, relatorio)
+14. Portal do paciente
+15. Integracao WhatsApp (Evolution API)
+16. Conformidade LGPD (consentimento granular, auditoria, anonimizacao, portabilidade)
+17. Conformidade CFM (trilha de auditoria, retencao 20 anos, soft delete)
+18. Multi-tenant com RBAC (admin, medico, secretario, estagiario)
+19. Importacao/exportacao CSV de pacientes
+20. Dashboard analitico com graficos
+21. PWA (Progressive Web App) para mobile
+22. Integracao de pagamentos (Asaas — PIX, boleto, cartao)
+
+HASH DE INTEGRIDADE DO CODIGO-FONTE
+
+Algoritmo: SHA-512
+Data do hash: 22/03/2026 17:34:04 BRT
+Hash: 96cbb6af91f50b99c6d38285c9a9e6d9f5a15e09088df3047e5b38c4fc379087122680eb211c8a2dfa874210853aafca28122d156646ccf65f71d1a88ec72dad
+
+Commit Git: 86ed29f7ad7a625909c27b2e92c75f5068eb3fad
+Repositorio: https://github.com/CarlosHonorato70/HomeoClinicPro (privado)
+
+ESTATISTICAS DO CODIGO
+
+Arquivos TypeScript/TSX: 248
+Linhas de codigo: 79.370
+Tabelas no banco: 20+
+Endpoints API: 40+
+
+TECNOLOGIAS UTILIZADAS
+
+- Next.js 14 (App Router)
+- TypeScript 5
+- React 19
+- Tailwind CSS
+- Prisma ORM
+- PostgreSQL 16
+- Redis 7
+- OpenAI API (GPT-4o, Whisper)
+- NextAuth.js
+- Recharts
+- Jitsi Meet
+- Evolution API (WhatsApp)
+- Asaas (pagamentos)
+- Brevo (email transacional)
+- Docker / Docker Compose
+- Nginx (proxy reverso)
+
+PROTECAO LEGAL
+
+Este software e protegido por:
+- Lei 9.609/1998 (Lei do Software)
+- Lei 9.610/1998 (Lei de Direitos Autorais)
+- Lei 13.709/2018 (LGPD — dados dos pacientes)
+
+================================================================
+Documento gerado automaticamente em 22/03/2026
+Para registro no INPI — https://www.gov.br/inpi/
+================================================================

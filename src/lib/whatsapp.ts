@@ -1,4 +1,9 @@
 /**
+ * HomeoClinic Pro — Propriedade de Carlos Honorato
+ * Protegido pela Lei 9.609/1998 (Lei do Software)
+ * Todos os direitos reservados. Copia e distribuicao proibidas.
+ */
+/**
  * WhatsApp integration via Evolution API (self-hosted).
  * Manages instances, sends messages, and handles connection status.
  *

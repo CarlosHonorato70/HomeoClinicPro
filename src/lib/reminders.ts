@@ -1,4 +1,9 @@
 /**
+ * HomeoClinic Pro — Propriedade de Carlos Honorato
+ * Protegido pela Lei 9.609/1998 (Lei do Software)
+ * Todos os direitos reservados. Copia e distribuicao proibidas.
+ */
+/**
  * Appointment reminder scheduler.
  * Called periodically (every 15 minutes) via a cron endpoint.
  * Checks for upcoming appointments and sends reminders via configured channels.
