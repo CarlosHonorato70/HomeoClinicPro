@@ -341,12 +341,6 @@ export default function PatientDetailPage() {
                 Documentos
               </Button>
             </Link>
-            <Link href={`/patients/${id}/edit`}>
-              <Button variant="outline" size="sm" className="border-white/10 text-gray-300 hover:bg-white/5">
-                <Pencil className="h-4 w-4 mr-1" />
-                Editar
-              </Button>
-            </Link>
             <Button
               variant="outline"
               size="sm"

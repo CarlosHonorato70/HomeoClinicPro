@@ -19,6 +19,15 @@ export async function GET(
 
   const { id } = await params;
 
+  // Verify patient belongs to caller's clinic
+  const patient = await prisma.patient.findFirst({
+    where: { id, clinicId: session.user.clinicId, deletedAt: null },
+    select: { id: true },
+  });
+  if (!patient) {
+    return NextResponse.json({ error: "Paciente nao encontrado" }, { status: 404 });
+  }
+
   const access = await prisma.patientAccess.findFirst({
     where: { patientId: id },
     select: { id: true, email: true, active: true, lastLogin: true, createdAt: true },
@@ -103,6 +112,15 @@ export async function DELETE(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
+
+  // Verify patient belongs to caller's clinic
+  const patient = await prisma.patient.findFirst({
+    where: { id, clinicId: session.user.clinicId, deletedAt: null },
+    select: { id: true },
+  });
+  if (!patient) {
+    return NextResponse.json({ error: "Paciente nao encontrado" }, { status: 404 });
+  }
 
   await prisma.patientAccess.deleteMany({
     where: { patientId: id },

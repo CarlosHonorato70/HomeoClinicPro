@@ -9,11 +9,13 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const apiKey = req.headers.get("apikey") || req.headers.get("x-api-key");
-    const expectedKey =
-      process.env.EVOLUTION_API_KEY || "homeoclinic-evo-key-2026";
+    const expectedKey = process.env.EVOLUTION_API_KEY;
 
-    // Simple validation — Evolution sends the API key in headers
-    if (apiKey && apiKey !== expectedKey) {
+    if (!expectedKey) {
+      console.error("[Evolution Webhook] EVOLUTION_API_KEY not configured");
+      return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
+    }
+    if (!apiKey || apiKey !== expectedKey) {
       return NextResponse.json({ error: "Invalid key" }, { status: 401 });
     }
 

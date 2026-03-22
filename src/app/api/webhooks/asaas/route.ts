@@ -12,13 +12,15 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const body = await req.json();
 
-  // Validate webhook token if configured
+  // Validate webhook token (required)
   const webhookToken = process.env.ASAAS_WEBHOOK_TOKEN;
-  if (webhookToken) {
-    const authHeader = req.headers.get("asaas-access-token");
-    if (authHeader !== webhookToken) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-    }
+  if (!webhookToken) {
+    console.error("[Asaas Webhook] ASAAS_WEBHOOK_TOKEN not configured");
+    return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
+  }
+  const authHeader = req.headers.get("asaas-access-token");
+  if (authHeader !== webhookToken) {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
   const event = body.event;
