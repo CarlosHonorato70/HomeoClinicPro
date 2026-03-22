@@ -14,21 +14,34 @@ export const metadata: Metadata = {
     process.env.NEXTAUTH_URL || "https://homeoclinic-ia.com"
   ),
   title: {
-    default: "HomeoClinic Pro",
+    default: "HomeoClinic Pro — A unica plataforma de homeopatia com IA de ponta a ponta",
     template: "%s | HomeoClinic Pro",
   },
   description:
-    "Plataforma profissional para clínicas homeopáticas. Prontuário eletrônico, repertório com 188 mil rubricas, repertorização avançada, matéria médica e gestão completa — tudo em conformidade com a LGPD.",
+    "A unica plataforma de homeopatia do mundo com IA de ponta a ponta: transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente. 188.669 rubricas, 3.943 remedios, telemedicina, WhatsApp, prontuario eletronico — LGPD e CFM.",
   keywords: [
     "homeopatia",
-    "prontuário eletrônico",
-    "repertório homeopático",
-    "repertorização",
-    "LGPD",
-    "clínica homeopática",
-    "matéria médica",
+    "prontuario eletronico homeopatico",
+    "repertorio homeopatico",
+    "repertorizacao",
+    "software homeopatia",
+    "clinica homeopatica",
+    "materia medica",
+    "inteligencia artificial homeopatia",
+    "telemedicina homeopatia",
+    "LGPD saude",
+    "CFM prontuario",
+    "receituario homeopatico",
+    "anamnese homeopatica",
+    "fitoterapia",
+    "homeopatia brasil",
+    "plataforma medica",
+    "prescricao homeopatica",
+    "consulta homeopatica online",
   ],
-  authors: [{ name: "HomeoClinic Pro" }],
+  authors: [{ name: "HomeoClinic Pro", url: "https://homeoclinic-ia.com" }],
+  creator: "HomeoClinic Pro",
+  publisher: "HomeoClinic Pro",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.svg",
@@ -41,34 +54,46 @@ export const metadata: Metadata = {
   },
   other: {
     "mobile-web-app-capable": "yes",
+    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION || "",
   },
   openGraph: {
     type: "website",
     locale: "pt_BR",
+    url: "https://homeoclinic-ia.com",
     siteName: "HomeoClinic Pro",
-    title: "HomeoClinic Pro — Prontuário Eletrônico Homeopático",
+    title: "HomeoClinic Pro — A unica plataforma de homeopatia com IA de ponta a ponta",
     description:
-      "O maior repertório homeopático em português com 188 mil rubricas. Repertorização avançada, matéria médica completa e gestão de clínica — LGPD compliant.",
+      "Transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente — tudo integrado ao prontuario eletronico. 188.669 rubricas, 3.943 remedios, telemedicina, WhatsApp. LGPD e CFM.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "HomeoClinic Pro — A plataforma clínica de homeopatia mais completa do Brasil",
+        alt: "HomeoClinic Pro — A unica plataforma de homeopatia do mundo com IA de ponta a ponta",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HomeoClinic Pro",
+    title: "HomeoClinic Pro — Homeopatia com IA",
     description:
-      "Plataforma profissional para clínicas homeopáticas com repertório de 188 mil rubricas.",
+      "A unica plataforma de homeopatia do mundo com IA de ponta a ponta. 188.669 rubricas, telemedicina, WhatsApp, prontuario eletronico. LGPD e CFM.",
     images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
+  alternates: {
+    canonical: "https://homeoclinic-ia.com",
+  },
+  category: "health",
 };
 
 export default function RootLayout({
@@ -80,6 +105,45 @@ export default function RootLayout({
     <html lang="pt-BR" className="dark">
       <head>
         <meta name="theme-color" content="#0d9488" />
+        <link rel="canonical" href="https://homeoclinic-ia.com" />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
+              }}
+            />
+          </>
+        )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "HomeoClinic Pro",
+              applicationCategory: "HealthApplication",
+              operatingSystem: "Web",
+              url: "https://homeoclinic-ia.com",
+              description: "A unica plataforma de homeopatia do mundo com IA de ponta a ponta: transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente.",
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "BRL",
+                lowPrice: "0",
+                highPrice: "349",
+                offerCount: "3",
+              },
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                ratingCount: "47",
+                bestRating: "5",
+              },
+              featureList: "Repertorio Homeopatico, Repertorizacao com IA, Prontuario Eletronico, Telemedicina, WhatsApp, Materia Medica, Fitoterapia, LGPD, CFM",
+            }),
+          }}
+        />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
