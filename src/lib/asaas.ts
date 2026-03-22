@@ -1,7 +1,23 @@
 import { prisma } from "@/lib/prisma";
+import { readFileSync } from "fs";
 
 const ASAAS_API_URL = process.env.ASAAS_API_URL ?? "https://api.asaas.com/v3";
-const ASAAS_API_KEY = process.env.ASAAS_API_KEY ?? "";
+
+function getAsaasApiKey(): string {
+  if (process.env.ASAAS_API_KEY) return process.env.ASAAS_API_KEY;
+  // Fallback: read from mounted file (avoids Docker $ escaping issues)
+  const keyFile = process.env.ASAAS_KEY_FILE;
+  if (keyFile) {
+    try {
+      return readFileSync(keyFile, "utf-8").trim();
+    } catch {
+      // File not found
+    }
+  }
+  return "";
+}
+
+const ASAAS_API_KEY = getAsaasApiKey();
 
 async function asaasRequest(
   path: string,
