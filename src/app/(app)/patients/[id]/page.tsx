@@ -21,6 +21,10 @@ import {
   Trash2,
   Sparkles,
   FileText,
+  Globe,
+  Key,
+  Loader2,
+  XCircle,
 } from "lucide-react";
 import { formatDate, formatCPF, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
@@ -209,6 +213,8 @@ export default function PatientDetailPage() {
   const [anamnesis, setAnamnesis] = useState<Record<string, string>>({});
   const [selectedTemplate, setSelectedTemplate] = useState<string>("geral");
   const [savingAnamnesis, setSavingAnamnesis] = useState(false);
+  const [portalAccess, setPortalAccess] = useState<{hasAccess: boolean; access?: {email: string; active: boolean; lastLogin: string | null}; tempPassword?: string} | null>(null);
+  const [creatingPortal, setCreatingPortal] = useState(false);
 
   const fetchPatient = useCallback(async () => {
     const res = await fetch(`/api/patients/${id}`);
@@ -228,7 +234,11 @@ export default function PatientDetailPage() {
 
   useEffect(() => {
     fetchPatient();
-  }, [fetchPatient]);
+    fetch(`/api/patients/${id}/portal-access`)
+      .then((r) => r.json())
+      .then(setPortalAccess)
+      .catch(() => {});
+  }, [fetchPatient, id]);
 
   async function saveAnamnesis() {
     setSavingAnamnesis(true);
@@ -242,6 +252,36 @@ export default function PatientDetailPage() {
       toast.success("Anamnese salva com sucesso!");
     } else {
       toast.error("Erro ao salvar anamnese");
+    }
+  }
+
+  async function handleCreatePortalAccess() {
+    setCreatingPortal(true);
+    try {
+      const res = await fetch(`/api/patients/${id}/portal-access`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: patient?.email || "" }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPortalAccess({ hasAccess: true, access: { email: data.email, active: true, lastLogin: null }, tempPassword: data.temporaryPassword });
+        toast.success(`Acesso ao portal criado! Senha: ${data.temporaryPassword}`);
+      } else {
+        toast.error(data.error || "Erro ao criar acesso");
+      }
+    } catch {
+      toast.error("Erro ao criar acesso ao portal");
+    } finally {
+      setCreatingPortal(false);
+    }
+  }
+
+  async function handleRevokePortalAccess() {
+    const res = await fetch(`/api/patients/${id}/portal-access`, { method: "DELETE" });
+    if (res.ok) {
+      setPortalAccess({ hasAccess: false });
+      toast.success("Acesso ao portal revogado");
     }
   }
 
@@ -350,6 +390,57 @@ export default function PatientDetailPage() {
               <InfoField label="Convênio" value={patient.insurance || "—"} />
               {patient.notes && (
                 <InfoField label="Observações" value={patient.notes} className="md:col-span-2" />
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Portal do Paciente */}
+          <Card className="bg-[#111118] border-[#1e1e2e]">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Globe className="h-4 w-4 text-teal-400" />
+                Portal do Paciente
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {portalAccess?.hasAccess ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-green-400 flex items-center gap-1">
+                        <Key className="h-3 w-3" /> Acesso ativo
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Email: {portalAccess.access?.email}
+                        {portalAccess.access?.lastLogin && ` | Ultimo login: ${new Date(portalAccess.access.lastLogin).toLocaleDateString("pt-BR")}`}
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300" onClick={handleRevokePortalAccess}>
+                      <XCircle className="h-4 w-4 mr-1" /> Revogar
+                    </Button>
+                  </div>
+                  {portalAccess.tempPassword && (
+                    <div className="p-3 bg-amber-500/10 rounded text-sm">
+                      <p className="text-amber-400 font-medium">Senha temporaria:</p>
+                      <p className="text-amber-200 font-mono text-lg">{portalAccess.tempPassword}</p>
+                      <p className="text-xs text-amber-400/70 mt-1">Compartilhe com o paciente. O paciente acessa em: homeoclinic-ia.com/portal</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-gray-400">Paciente sem acesso ao portal</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={creatingPortal}
+                    onClick={handleCreatePortalAccess}
+                    className="border-teal-500/30 text-teal-400 hover:bg-teal-500/10"
+                  >
+                    {creatingPortal ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Key className="h-4 w-4 mr-1" />}
+                    Criar Acesso
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>
