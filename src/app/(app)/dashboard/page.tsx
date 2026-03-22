@@ -110,12 +110,12 @@ export default function DashboardPage() {
 
   const statCards = [
     { label: "Pacientes", value: stats.cards.totalPatients, icon: Users, color: "text-teal-400", bg: "bg-teal-400/10" },
-    { label: "Consultas este mes", value: stats.cards.consultationsThisMonth, icon: Stethoscope, color: "text-indigo-400", bg: "bg-indigo-400/10" },
+    { label: "Consultas este mês", value: stats.cards.consultationsThisMonth, icon: Stethoscope, color: "text-indigo-400", bg: "bg-indigo-400/10" },
     { label: "Agendamentos hoje", value: stats.cards.appointmentsToday, icon: CalendarDays, color: "text-amber-400", bg: "bg-amber-400/10" },
     { label: "Taxa de retorno", value: `${stats.cards.returnRate}%`, icon: Percent, color: "text-emerald-400", bg: "bg-emerald-400/10" },
-    { label: "Agendamentos concluidos", value: `${stats.cards.completionRate}%`, icon: CheckCircle, color: "text-blue-400", bg: "bg-blue-400/10" },
-    { label: "Media consultas/paciente", value: stats.cards.avgConsPerPatient, icon: BarChart3, color: "text-purple-400", bg: "bg-purple-400/10" },
-    { label: "Casos clinicos", value: stats.cards.totalClinicalCases, icon: BookMarked, color: "text-rose-400", bg: "bg-rose-400/10" },
+    { label: "Agendamentos concluídos", value: `${stats.cards.completionRate}%`, icon: CheckCircle, color: "text-blue-400", bg: "bg-blue-400/10" },
+    { label: "Média consultas/paciente", value: stats.cards.avgConsPerPatient, icon: BarChart3, color: "text-purple-400", bg: "bg-purple-400/10" },
+    { label: "Casos clínicos", value: stats.cards.totalClinicalCases, icon: BookMarked, color: "text-rose-400", bg: "bg-rose-400/10" },
     { label: "Taxa de melhora", value: `${stats.cards.improvementRate}%`, icon: Heart, color: stats.cards.improvementRate >= 70 ? "text-green-400" : stats.cards.improvementRate >= 40 ? "text-amber-400" : "text-red-400", bg: stats.cards.improvementRate >= 70 ? "bg-green-400/10" : stats.cards.improvementRate >= 40 ? "bg-amber-400/10" : "bg-red-400/10" },
     { label: "Pacientes ativos", value: stats.cards.activePatients, icon: Activity, color: "text-cyan-400", bg: "bg-cyan-400/10" },
   ];
@@ -150,7 +150,7 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <TrendingUp className="h-5 w-5 text-indigo-400" />
-              Consultas por Mes
+              Consultas por Mês
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <UserPlus className="h-5 w-5 text-teal-400" />
-              Novos Pacientes por Mes
+              Novos Pacientes por Mês
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -200,7 +200,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Pill className="h-5 w-5 text-teal-400" />
-                Top 10 Remedios Prescritos
+                Top 10 Remédios Prescritos
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -268,7 +268,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Stethoscope className="h-5 w-5 text-purple-400" />
-                Consultas por Medico (6 meses)
+                Consultas por Médico (6 meses)
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -296,7 +296,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Star className="h-5 w-5 text-amber-400" />
-                Resultados dos Casos Clinicos
+                Resultados dos Casos Clínicos
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -343,7 +343,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <CalendarRange className="h-5 w-5 text-indigo-400" />
-                Proximos 7 Dias
+                Próximos 7 Dias
               </CardTitle>
             </CardHeader>
             <CardContent>

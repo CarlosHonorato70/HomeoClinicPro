@@ -14,29 +14,29 @@ export const metadata: Metadata = {
     process.env.NEXTAUTH_URL || "https://homeoclinic-ia.com"
   ),
   title: {
-    default: "HomeoClinic Pro — A unica plataforma de homeopatia com IA de ponta a ponta",
+    default: "HomeoClinic Pro — A única plataforma de homeopatia com IA de ponta a ponta",
     template: "%s | HomeoClinic Pro",
   },
   description:
-    "A unica plataforma de homeopatia do mundo com IA de ponta a ponta: transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente. 188.669 rubricas, 3.943 remedios, telemedicina, WhatsApp, prontuario eletronico — LGPD e CFM.",
+    "A única plataforma de homeopatia do mundo com IA de ponta a ponta: transcrição de consulta, análise de sintomas, repertorização assistida e prescrição inteligente. 188.669 rubricas, 3.943 remédios, telemedicina, WhatsApp, prontuário eletrônico — LGPD e CFM.",
   keywords: [
     "homeopatia",
-    "prontuario eletronico homeopatico",
+    "prontuário eletrônico homeopatico",
     "repertorio homeopatico",
-    "repertorizacao",
+    "repertorização",
     "software homeopatia",
-    "clinica homeopatica",
-    "materia medica",
-    "inteligencia artificial homeopatia",
+    "clínica homeopática",
+    "matéria médica",
+    "inteligência artificial homeopatia",
     "telemedicina homeopatia",
     "LGPD saude",
     "CFM prontuario",
-    "receituario homeopatico",
+    "receituário homeopático",
     "anamnese homeopatica",
     "fitoterapia",
     "homeopatia brasil",
     "plataforma medica",
-    "prescricao homeopatica",
+    "prescrição homeopática",
     "consulta homeopatica online",
   ],
   authors: [{ name: "HomeoClinic Pro", url: "https://homeoclinic-ia.com" }],
@@ -61,15 +61,15 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: "https://homeoclinic-ia.com",
     siteName: "HomeoClinic Pro",
-    title: "HomeoClinic Pro — A unica plataforma de homeopatia com IA de ponta a ponta",
+    title: "HomeoClinic Pro — A única plataforma de homeopatia com IA de ponta a ponta",
     description:
-      "Transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente — tudo integrado ao prontuario eletronico. 188.669 rubricas, 3.943 remedios, telemedicina, WhatsApp. LGPD e CFM.",
+      "Transcrição de consulta, análise de sintomas, repertorização assistida e prescrição inteligente — tudo integrado ao prontuário eletrônico. 188.669 rubricas, 3.943 remédios, telemedicina, WhatsApp. LGPD e CFM.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "HomeoClinic Pro — A unica plataforma de homeopatia do mundo com IA de ponta a ponta",
+        alt: "HomeoClinic Pro — A única plataforma de homeopatia do mundo com IA de ponta a ponta",
       },
     ],
   },
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "HomeoClinic Pro — Homeopatia com IA",
     description:
-      "A unica plataforma de homeopatia do mundo com IA de ponta a ponta. 188.669 rubricas, telemedicina, WhatsApp, prontuario eletronico. LGPD e CFM.",
+      "A única plataforma de homeopatia do mundo com IA de ponta a ponta. 188.669 rubricas, telemedicina, WhatsApp, prontuário eletrônico. LGPD e CFM.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -126,7 +126,7 @@ export default function RootLayout({
               applicationCategory: "HealthApplication",
               operatingSystem: "Web",
               url: "https://homeoclinic-ia.com",
-              description: "A unica plataforma de homeopatia do mundo com IA de ponta a ponta: transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente.",
+              description: "A única plataforma de homeopatia do mundo com IA de ponta a ponta: transcrição de consulta, análise de sintomas, repertorização assistida e prescrição inteligente.",
               offers: {
                 "@type": "AggregateOffer",
                 priceCurrency: "BRL",
@@ -140,7 +140,7 @@ export default function RootLayout({
                 ratingCount: "47",
                 bestRating: "5",
               },
-              featureList: "Repertorio Homeopatico, Repertorizacao com IA, Prontuario Eletronico, Telemedicina, WhatsApp, Materia Medica, Fitoterapia, LGPD, CFM",
+              featureList: "Repertório Homeopático, Repertorização com IA, Prontuário Eletrônico, Telemedicina, WhatsApp, Matéria Médica, Fitoterapia, LGPD, CFM",
             }),
           }}
         />

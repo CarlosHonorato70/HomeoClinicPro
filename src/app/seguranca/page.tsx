@@ -14,9 +14,9 @@ import {
 import Link from "next/link";
 
 export const metadata = {
-  title: "Seguranca e Conformidade | HomeoClinic Pro",
+  title: "Segurança e Conformidade | HomeoClinic Pro",
   description:
-    "Conhea as medidas de seguranca, criptografia e conformidade com LGPD e CFM implementadas no HomeoClinic Pro.",
+    "Conheça as medidas de segurança, criptografia e conformidade com LGPD e CFM implementadas no HomeoClinic Pro.",
 };
 
 const sections = [
@@ -25,12 +25,12 @@ const sections = [
     title: "Criptografia AES-256-GCM",
     subtitle: "Dados em Repouso",
     items: [
-      "Todos os dados sensiveis de pacientes sao criptografados com AES-256-GCM no nivel da aplicacao",
-      "Campos protegidos: nome, CPF, RG, endereco, profissao, convenio, notas clinicas",
-      "Consultas: queixa, anamnese, exame fisico, diagnostico, prescricao, evolucao",
-      "Anamnese: todos os 8 campos (mental, geral, desejos, sono, transpiracao, termorregulacao, ginecologia, particular)",
-      "Chaves derivadas com PBKDF2 (100.000 iteracoes) ou Argon2id",
-      "Cada registro possui IV (vetor de inicializacao) unico",
+      "Todos os dados sensíveis de pacientes são criptografados com AES-256-GCM no nível da aplicação",
+      "Campos protegidos: nome, CPF, RG, endereço, profissão, convênio, notas clínicas",
+      "Consultas: queixa, anamnese, exame físico, diagnóstico, prescrição, evolução",
+      "Anamnese: todos os 8 campos (mental, geral, desejos, sono, transpiração, termorregulação, ginecologia, particular)",
+      "Chaves derivadas com PBKDF2 (100.000 iterações) ou Argon2id",
+      "Cada registro possui IV (vetor de inicialização) único",
     ],
   },
   {
@@ -38,9 +38,9 @@ const sections = [
     title: "HTTPS / TLS 1.3",
     subtitle: "Dados em Transito",
     items: [
-      "Todas as comunicacoes entre cliente e servidor utilizam HTTPS com TLS 1.3",
+      "Todas as comunicações entre cliente e servidor utilizam HTTPS com TLS 1.3",
       "HSTS habilitado com max-age de 63 dias e preload",
-      "Headers de seguranca: X-Frame-Options DENY, X-Content-Type-Options nosniff",
+      "Headers de segurança: X-Frame-Options DENY, X-Content-Type-Options nosniff",
       "Content Security Policy (CSP) restritiva configurada",
       "Permissions-Policy: camera e geolocalizacao bloqueados por padrao",
     ],
@@ -50,23 +50,23 @@ const sections = [
     title: "Trilha de Auditoria Completa",
     subtitle: "Rastreabilidade Total",
     items: [
-      "Todas as operacoes sao registradas: login, criacao/edicao de pacientes, consultas, exportacoes",
+      "Todas as operações são registradas: login, criação/edição de pacientes, consultas, exportações",
       "Captura automatica de IP do usuario em cada acao",
       "Logs imutaveis com timestamp preciso",
-      "Acoes LGPD rastreadas: consentimento, anonimizacao, exportacao de dados",
+      "Acoes LGPD rastreadas: consentimento, anonimização, exportação de dados",
       "Exportacao de logs em CSV para auditoria externa",
-      "Protecao contra injecao de formulas em CSV (csvSafe)",
+      "Protecao contra injeção de fórmulas em CSV (csvSafe)",
     ],
   },
   {
     icon: Shield,
     title: "LGPD (Lei 13.709/2018)",
-    subtitle: "Lei Geral de Protecao de Dados",
+    subtitle: "Lei Geral de Proteção de Dados",
     items: [
       "Art. 11, II, 'f' — Processamento de dados de saude por profissionais de saude",
-      "Art. 18 — Direitos do titular: acesso, correcao, exclusao, portabilidade implementados",
+      "Art. 18 — Direitos do titular: acesso, correção, exclusão, portabilidade implementados",
       "Art. 41 — DPO (Encarregado) configuravel por clinica",
-      "Art. 46 — Medidas de seguranca: criptografia, controle de acesso, auditoria",
+      "Art. 46 — Medidas de segurança: criptografia, controle de acesso, auditoria",
       "Art. 48 — Procedimento para notificacao de incidentes em 72 horas",
       "Consentimento granular por paciente e por tipo (tratamento, processamento, compartilhamento)",
       "Soft-delete de pacientes (dados mantidos por 20 anos conforme CFM, anonimizaveis)",
@@ -76,27 +76,27 @@ const sections = [
   {
     icon: Stethoscope,
     title: "CFM (Conselho Federal de Medicina)",
-    subtitle: "Resolucao 1.821/2007",
+    subtitle: "Resolução 1.821/2007",
     items: [
-      "Prontuario eletronico em conformidade com Resolucao CFM 1.821/2007",
-      "Resolucao CFM 1.638/2002 — Padrao de conteudo de prontuario",
+      "Prontuário eletrônico em conformidade com Resolução CFM 1.821/2007",
+      "Resolução CFM 1.638/2002 — Padrão de conteúdo de prontuário",
       "Lei 13.787/2018 — Registros digitais com mesmo valor legal que papel",
-      "Imutabilidade de registros clinicos (audit trail, sem exclusao de consultas)",
-      "Retencao minima de 20 anos para prontuarios medicos",
+      "Imutabilidade de registros clínicos (audit trail, sem exclusão de consultas)",
+      "Retenção mínima de 20 anos para prontuários médicos",
       "Suporte a assinatura digital (ICP-Brasil ou equivalente)",
     ],
   },
   {
     icon: UserCheck,
     title: "Controle de Acesso (RBAC)",
-    subtitle: "Seguranca por Papeis",
+    subtitle: "Segurança por Papéis",
     items: [
-      "Sistema de papeis: Administrador (13 permissoes) e Medico (6 permissoes)",
+      "Sistema de papéis: Administrador (13 permissões) e Médico (6 permissões)",
       "Middleware de autenticacao em todas as rotas da API",
       "Bloqueio de assinaturas canceladas/inadimplentes no nivel do middleware",
-      "Verificacao de usuario desativado no login",
+      "Verificação de usuário desativado no login",
       "Mensagens de erro unificadas para prevenir enumeracao de usuarios",
-      "Politica de senha forte: minimo 8 caracteres + maiuscula + minuscula + numero + especial",
+      "Política de senha forte: mínimo 8 caracteres + maiúscula + minúscula + número + especial",
     ],
   },
   {
@@ -114,13 +114,13 @@ const sections = [
   },
   {
     icon: FileCheck,
-    title: "Auditoria de Seguranca",
+    title: "Auditoria de Segurança",
     subtitle: "45 Vulnerabilidades Corrigidas",
     items: [
-      "2 rodadas completas de auditoria de seguranca realizadas",
+      "2 rodadas completas de auditoria de segurança realizadas",
       "27 vulnerabilidades encontradas e corrigidas na primeira rodada",
       "18 vulnerabilidades adicionais encontradas e corrigidas na segunda rodada",
-      "100% dos dados sensiveis agora criptografados com AES-256-GCM",
+      "100% dos dados sensíveis agora criptografados com AES-256-GCM",
       "Protecao contra XSS em templates de email (escapeHtml)",
       "Sanitizacao de wildcards ILIKE para prevencao de injection no repertorio",
       "Autenticacao em todas as rotas de API (exceto auth/invites/webhooks)",
@@ -128,7 +128,7 @@ const sections = [
   },
 ];
 
-export default function SegurancaPage() {
+export default function SegurançaPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
       {/* Header */}
@@ -153,12 +153,12 @@ export default function SegurancaPage() {
             Compativel com LGPD | Compativel com CFM | AES-256-GCM
           </div>
           <h1 className="text-4xl font-bold mb-4">
-            Seguranca e{" "}
+            Segurança e{" "}
             <span className="text-teal-400">Conformidade</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Detalhes completos sobre as medidas de seguranca, criptografia e
-            conformidade regulatoria implementadas na plataforma HomeoClinic Pro.
+            Detalhes completos sobre as medidas de segurança, criptografia e
+            conformidade regulatória implementadas na plataforma HomeoClinic Pro.
           </p>
         </div>
 
@@ -193,13 +193,13 @@ export default function SegurancaPage() {
         {/* Footer CTA */}
         <div className="mt-16 text-center">
           <p className="text-gray-400 mb-6">
-            Tem duvidas sobre seguranca? Entre em contato.
+            Tem dúvidas sobre segurança? Entre em contato.
           </p>
           <Link
             href="/register"
             className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-3 font-semibold text-white hover:bg-teal-700 transition-colors"
           >
-            Comecar Gratuitamente
+            Começar Gratuitamente
           </Link>
         </div>
       </main>

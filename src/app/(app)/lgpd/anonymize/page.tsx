@@ -46,7 +46,7 @@ export default function AnonymizePage() {
         method: "POST",
       });
       if (res.ok) {
-        toast.success("Dados anonimizados com sucesso. Dados clinicos mantidos (CFM 20 anos).");
+        toast.success("Dados anonimizados com sucesso. Dados clínicos mantidos (CFM 20 anos).");
         setPatients((prev) => prev.filter((p) => p.id !== patientId));
         setConfirmId(null);
       } else {
@@ -89,8 +89,8 @@ export default function AnonymizePage() {
               </p>
               <p className="text-sm text-amber-300/70">
                 A anonimizacao substitui permanentemente nome, CPF, RG, telefone, email,
-                endereco, profissao, convenio e observacoes por dados anonimos.
-                Os dados clinicos (consultas, anamnese, prescricoes) sao mantidos
+                endereço, profissão, convênio e observações por dados anônimos.
+                Os dados clínicos (consultas, anamnese, prescrições) são mantidos
                 conforme exigencia de retencao de 20 anos do CFM.
               </p>
             </div>

@@ -54,10 +54,10 @@ export default function DictionaryPage() {
           <BookA className="h-6 w-6 text-teal-400" />
           <div>
             <h1 className="text-2xl font-bold text-gray-100">
-              Dicionario Medico
+              Dicionário Médico
             </h1>
             <p className="text-sm text-gray-400">
-              {total} termos disponiveis
+              {total} termos disponíveis
             </p>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function DictionaryPage() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
         <Input
-          placeholder="Buscar termo ou definicao... (minimo 2 caracteres)"
+          placeholder="Buscar termo ou definição... (minimo 2 caracteres)"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pl-10 bg-[#111118] border-white/10 text-gray-200"
@@ -112,7 +112,7 @@ export default function DictionaryPage() {
             <ChevronLeft className="h-4 w-4 mr-1" /> Anterior
           </Button>
           <span className="text-sm text-gray-400">
-            Pagina {page} de {totalPages}
+            Página {page} de {totalPages}
           </span>
           <Button
             variant="outline"
@@ -121,7 +121,7 @@ export default function DictionaryPage() {
             onClick={() => setPage((p) => p + 1)}
             className="border-white/10 text-gray-300"
           >
-            Proxima <ChevronRight className="h-4 w-4 ml-1" />
+            Próxima <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         </div>
       )}

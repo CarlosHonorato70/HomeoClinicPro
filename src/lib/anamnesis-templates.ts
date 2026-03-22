@@ -16,7 +16,7 @@ export const defaultTemplates: AnamnesisTemplate[] = [
   {
     id: "geral",
     name: "Geral (Padrao)",
-    description: "Anamnese homeopatica completa com todas as 8 secoes",
+    description: "Anamnese homeopática completa com todas as 8 seções",
     specialty: "Homeopatia Geral",
     sections: [
       {
@@ -251,7 +251,7 @@ export const defaultTemplates: AnamnesisTemplate[] = [
   },
   {
     id: "ginecologia",
-    name: "Ginecologia Homeopatica",
+    name: "Ginecologia Homeopática",
     description: "Anamnese focada em saude da mulher",
     specialty: "Ginecologia",
     sections: [
@@ -372,7 +372,7 @@ export const defaultTemplates: AnamnesisTemplate[] = [
           "Ha uso de drogas ilicitas ou automediacacao? Quais?",
           "Ha dependencia ou abuso de substancias?",
           "Historico familiar: depressao, bipolaridade, esquizofrenia, suicidio, alcoolismo na familia?",
-          "Ha doencas clinicas associadas? (tireoide, diabetes, dor cronica)",
+          "Ha doenças clínicas associadas? (tireoide, diabetes, dor crônica)",
           "Ha relacao entre sintomas fisicos e estado emocional?",
         ],
       },

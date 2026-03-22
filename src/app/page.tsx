@@ -284,20 +284,20 @@ export default function Home() {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              A unica plataforma de homeopatia do mundo com{" "}
+              A única plataforma de homeopatia do mundo com{" "}
               <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
                 IA de ponta a ponta
               </span>
             </h1>
 
             <p className="mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-gray-300 sm:text-xl">
-              Transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente
+              Transcrição de consulta, análise de sintomas, repertorização assistida e prescrição inteligente
               — tudo integrado ao prontuario eletronico.
             </p>
 
             <p className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-gray-500">
-              188.669 rubricas, 3.943 remedios, 3.327 textos de materia medica,
-              310 plantas medicinais, 243 termos no dicionario medico. 6 metodos de repertorizacao,
+              188.669 rubricas, 3.943 remédios, 3.327 textos de matéria médica,
+              310 plantas medicinais, 243 termos no dicionário médico. 6 métodos de repertorização,
               telemedicina, WhatsApp, portal do paciente e muito mais.
             </p>
 
@@ -537,10 +537,10 @@ export default function Home() {
               Pronto para transformar sua prática homeopática?
             </h2>
             <p className="mb-4 text-lg text-gray-300">
-              A unica plataforma de homeopatia do mundo com IA de ponta a ponta.
+              A única plataforma de homeopatia do mundo com IA de ponta a ponta.
             </p>
             <p className="mb-8 text-base text-gray-500">
-              Transcricao, analise de sintomas, repertorizacao assistida, prescricao inteligente,
+              Transcricao, análise de sintomas, repertorização assistida, prescrição inteligente,
               telemedicina, WhatsApp e portal do paciente. Comece gratuitamente.
             </p>
             <Link

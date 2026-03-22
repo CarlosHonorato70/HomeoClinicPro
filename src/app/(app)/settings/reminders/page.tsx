@@ -134,12 +134,12 @@ export default function RemindersSettingsPage() {
       if (res.ok) {
         const data = await res.json();
         setConfig(data);
-        toast.success("Configuracoes de lembretes salvas!");
+        toast.success("Configurações de lembretes salvas!");
       } else {
-        toast.error("Erro ao salvar configuracoes");
+        toast.error("Erro ao salvar configurações");
       }
     } catch {
-      toast.error("Erro ao salvar configuracoes");
+      toast.error("Erro ao salvar configurações");
     } finally {
       setSaving(false);
     }
@@ -173,7 +173,7 @@ export default function RemindersSettingsPage() {
           Lembretes de Consulta
         </h1>
         <p className="text-muted-foreground mt-1">
-          Configure lembretes automaticos para seus pacientes
+          Configure lembretes automáticos para seus pacientes
         </p>
       </div>
 
@@ -185,7 +185,7 @@ export default function RemindersSettingsPage() {
             Quando enviar
           </CardTitle>
           <CardDescription>
-            Selecione com quantas horas de antecedencia enviar lembretes
+            Selecione com quantas horas de antecedência enviar lembretes
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -250,7 +250,7 @@ export default function RemindersSettingsPage() {
             )}
           </CardTitle>
           <CardDescription>
-            Conecte seu WhatsApp para enviar lembretes automaticos aos pacientes
+            Conecte seu WhatsApp para enviar lembretes automáticos aos pacientes
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -332,7 +332,7 @@ export default function RemindersSettingsPage() {
                         WhatsApp conectado
                       </p>
                       <p className="text-xs text-gray-400">
-                        Lembretes serao enviados automaticamente
+                        Lembretes serão enviados automaticamente
                       </p>
                     </div>
                   </div>
@@ -354,7 +354,7 @@ export default function RemindersSettingsPage() {
 
       <Button onClick={handleSave} disabled={saving} className="w-full">
         <Save className="h-4 w-4 mr-2" />
-        {saving ? "Salvando..." : "Salvar Configuracoes"}
+        {saving ? "Salvando..." : "Salvar Configurações"}
       </Button>
     </div>
   );

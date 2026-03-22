@@ -11,19 +11,19 @@ const sections = [
     icon: Shield,
     title: "1. Dados Coletados",
     content:
-      "Coletamos dados pessoais (nome, CPF, RG, telefone, email, endereco) e dados de saude (consultas, anamnese, prescricoes, exames) estritamente necessarios para a prestacao de servicos de atendimento medico homeopatico.",
+      "Coletamos dados pessoais (nome, CPF, RG, telefone, email, endereço) e dados de saúde (consultas, anamnese, prescrições, exames) estritamente necessários para a prestação de serviços de atendimento médico homeopático.",
   },
   {
     icon: Lock,
     title: "2. Seguranca dos Dados",
     content:
-      "Todos os dados pessoais e de saude sao criptografados com AES-256-GCM (padrao militar). O acesso e controlado por autenticacao, RBAC (controle de acesso baseado em funcao) e todas as operacoes sao registradas em trilha de auditoria inalteravel.",
+      "Todos os dados pessoais e de saúde sao criptografados com AES-256-GCM (padrao militar). O acesso e controlado por autenticacao, RBAC (controle de acesso baseado em funcao) e todas as operacoes sao registradas em trilha de auditoria inalteravel.",
   },
   {
     icon: FileText,
     title: "3. Base Legal",
     content:
-      "O tratamento de dados de saude e realizado com base no Art. 11, II, \"f\" da LGPD (tutela da saude, em procedimento realizado por profissionais da area da saude). O consentimento granular e obtido conforme Art. 7 e Art. 8.",
+      "O tratamento de dados de saúde e realizado com base no Art. 11, II, \"f\" da LGPD (tutela da saúde, em procedimento realizado por profissionais da area da saúde). O consentimento granular e obtido conforme Art. 7 e Art. 8.",
   },
   {
     icon: UserCheck,
@@ -35,7 +35,7 @@ const sections = [
     icon: Eye,
     title: "5. Compartilhamento",
     content:
-      "Os dados nao sao compartilhados com terceiros, exceto quando exigido por lei ou por determinacao judicial. O processamento de pagamentos e feito via Asaas com dados minimos necessarios.",
+      "Os dados nao sao compartilhados com terceiros, exceto quando exigido por lei ou por determinacao judicial. O processamento de pagamentos e feito via Asaas com dados minimos necessários.",
   },
   {
     icon: Clock,

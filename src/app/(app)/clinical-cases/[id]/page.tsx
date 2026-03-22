@@ -482,7 +482,7 @@ export default function ClinicalCaseDetailPage() {
 
               {analysis.totalSimilar === 0 && (
                 <p className="text-sm text-gray-500 py-2">
-                  Nenhum caso similar encontrado na base. A analise sera mais rica conforme mais casos forem registrados.
+                  Nenhum caso similar encontrado na base. A análise será mais rica conforme mais casos forem registrados.
                 </p>
               )}
             </>

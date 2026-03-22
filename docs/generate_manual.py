@@ -248,7 +248,7 @@ def add_cover(story, s):
     story.append(guide_table)
 
     version_data = [[
-        Paragraph("Versao 1.0  |  Marco 2026", s['CoverVersion']),
+        Paragraph("Versao 2.0  |  Marco 2026", s['CoverVersion']),
     ]]
     version_table = Table(version_data, colWidths=[WIDTH - 2 * MARGIN])
     version_table.setStyle(TableStyle([
@@ -319,7 +319,11 @@ def add_intro(story, s):
         "HomeoClinic Pro e uma plataforma SaaS profissional para clinicas homeopaticas, "
         "oferecendo prontuario eletronico, repertorio homeopatico com 188.669 rubricas em "
         "portugues, motor de repertorizacao com 6 metodos classicos, assistente de IA para "
-        "analise de sintomas, e gestao completa da pratica \u2014 tudo em conformidade com a "
+        "analise de sintomas e prescricao, transcricao por voz (Whisper), telemedicina "
+        "integrada (Jitsi Meet), 5 templates de anamnese (homeopatia, pediatria, dermatologia, "
+        "ginecologia, psiquiatria), banco de casos clinicos com analise por IA, fitoterapia "
+        "com 310 plantas medicinais, dicionario medico com 243 termos, dashboard analitico, "
+        "importacao/exportacao CSV, e app mobile (PWA) \u2014 tudo em conformidade com a "
         "LGPD e regulamentacoes do CFM.",
         s['Body']
     ))
@@ -529,24 +533,64 @@ def add_doctor_features(story, s):
     story.append(PageBreak())
 
     # 3.8 Agenda
-    story.append(Paragraph("3.8 Agenda", s['H2']))
-    bullet(story, s, "Visualizacao diaria do calendario")
-    bullet(story, s, "Navegacao entre dias (anterior/proximo)")
-    bullet(story, s, "Slots de 30 minutos (07:00 as 20:00)")
-    bullet(story, s, "Clique no slot vazio para criar agendamento")
-    bullet(story, s, "Clique no agendamento existente para editar")
-    bullet(story, s, "Dados do agendamento: paciente, tipo (consulta/retorno/primeira vez), status (agendado/confirmado/realizado/cancelado), duracao")
+    story.append(Paragraph("3.8 Agenda (Dia, Semana, Mes)", s['H2']))
+    story.append(Paragraph("Tres modos de visualizacao:", s['Body']))
+    bullet(story, s, "<b>Vista Diaria:</b> Grade de slots de 30 min (07:00 as 20:30)")
+    bullet(story, s, "<b>Vista Semanal:</b> Grid de 7 colunas (segunda a domingo) com horarios")
+    bullet(story, s, "<b>Vista Mensal:</b> Calendario com mini-cards de agendamentos por dia")
+    bullet(story, s, "Navegacao: anterior/proximo + botao 'Hoje'")
+    bullet(story, s, "Tipos: Consulta, Retorno, Primeira Consulta, Teleconsulta")
+    bullet(story, s, "Status: Agendado, Confirmado, Concluido, Cancelado")
+    bullet(story, s, "Teleconsulta: gera link Jitsi Meet automaticamente")
 
-    # 3.9 Documentos
-    story.append(Paragraph("3.9 Documentos", s['H2']))
+    # 3.9 Telemedicina
+    story.append(Paragraph("3.9 Telemedicina Integrada", s['H2']))
+    story.append(Paragraph("Videochamada embutida na plataforma (CFM Resolucao 2.314/2022):", s['Body']))
+    bullet(story, s, "Lista de teleconsultas proximas e anteriores")
+    bullet(story, s, "Botao 'Entrar' abre sala Jitsi Meet com prontuario lado a lado")
+    bullet(story, s, "Compartilhe o link com o paciente para acesso")
+
+    # 3.10 Transcricao por IA
+    story.append(Paragraph("3.10 Transcricao por Voz (IA)", s['H2']))
+    story.append(Paragraph("Grave a consulta e a IA transcreve automaticamente:", s['Body']))
+    bullet(story, s, "Disponivel na consulta e em cada secao da anamnese")
+    bullet(story, s, "Clique no microfone, fale e pare a gravacao")
+    bullet(story, s, "A IA (Whisper/OpenAI) transcreve o audio para texto")
+    bullet(story, s, "O texto e inserido automaticamente no campo correspondente")
+
+    # 3.11 Casos Clinicos
+    story.append(Paragraph("3.11 Banco de Casos Clinicos", s['H2']))
+    story.append(Paragraph("Registre e consulte casos clinicos anonimos:", s['Body']))
+    bullet(story, s, "Titulo, resumo, sintomas, rubricas, repertorizacao")
+    bullet(story, s, "Remedio prescrito, potencia e desfecho")
+    bullet(story, s, "Avaliacao por estrelas (1-5) e tags para busca")
+    bullet(story, s, "A IA analisa padroes entre os casos registrados")
+
+    # 3.12 Fitoterapia e Dicionario
+    story.append(Paragraph("3.12 Fitoterapia e Dicionario Medico", s['H2']))
+    bullet(story, s, "<b>310 plantas medicinais</b> com nome cientifico, indicacoes, posologia")
+    bullet(story, s, "<b>243 termos</b> no dicionario medico (termos homeopaticos + tratamentos)")
+    bullet(story, s, "Busca por nome ou indicacao")
+
+    # 3.13 Templates de Anamnese
+    story.append(Paragraph("3.13 Templates de Anamnese", s['H2']))
+    story.append(Paragraph("5 modelos especializados com perguntas-guia:", s['Body']))
+    bullet(story, s, "<b>Homeopatia Classica</b> \u2014 8 secoes completas")
+    bullet(story, s, "<b>Pediatria Homeopatica</b> \u2014 adaptado para criancas")
+    bullet(story, s, "<b>Dermatologia</b> \u2014 foco em sintomas de pele")
+    bullet(story, s, "<b>Ginecologia/Obstetricia</b> \u2014 ciclo menstrual, hormonal")
+    bullet(story, s, "<b>Psiquiatria</b> \u2014 humor, afeto, pensamento, percepcao")
+
+    # 3.14 Documentos
+    story.append(Paragraph("3.14 Documentos", s['H2']))
     story.append(Paragraph("Geracao de documentos clinicos vinculados ao paciente:", s['Body']))
     bullet(story, s, "<b>TCLE</b> \u2014 Termo de Consentimento Livre e Esclarecido")
     bullet(story, s, "<b>Prescricao</b> \u2014 Receituario homeopatico formatado")
     bullet(story, s, "<b>Atestado</b> \u2014 Atestado medico")
     bullet(story, s, "<b>Relatorio Clinico</b> \u2014 Relatorio medico detalhado")
 
-    # 3.10 Assistente IA
-    story.append(Paragraph("3.10 Assistente de IA", s['H2']))
+    # 3.15 Assistente IA
+    story.append(Paragraph("3.15 Assistente de IA", s['H2']))
     story.append(Paragraph("Processo guiado em 4 etapas:", s['Body']))
     numbered(story, s, 1, "<b>Descrever Sintomas</b> \u2014 Cole ou digite a descricao dos sintomas (preenchimento automatico a partir da anamnese)")
     numbered(story, s, 2, "<b>Revisar Sintomas</b> \u2014 A IA identifica sintomas e sugere rubricas do repertorio para selecao")
@@ -626,6 +670,30 @@ def add_admin_features(story, s):
     bullet(story, s, "Visualizar membros da equipe")
     bullet(story, s, "Convidar novos membros (e-mail + papel)")
     bullet(story, s, "Gerenciar papeis (Medico/Administrador)")
+
+    # 4.7 Importacao/Exportacao
+    story.append(Paragraph("4.7 Importacao e Exportacao de Dados", s['H2']))
+    bullet(story, s, "<b>Importar CSV:</b> Arraste ou selecione arquivo CSV com dados de pacientes")
+    bullet(story, s, "Modelo CSV disponivel para download")
+    bullet(story, s, "Colunas: Nome (obrigatorio), CPF, RG, Data Nascimento, Sexo, Telefone, Email, Endereco")
+    bullet(story, s, "Preview dos dados antes da importacao")
+    bullet(story, s, "Dados importados sao automaticamente criptografados (AES-256-GCM)")
+    bullet(story, s, "<b>Exportar CSV:</b> Exporte todos os pacientes em formato CSV")
+    bullet(story, s, "<b>Exportar Auditoria:</b> Exporte o log de auditoria completo")
+
+    # 4.8 Dashboard Analitico
+    story.append(Paragraph("4.8 Dashboard Analitico", s['H2']))
+    bullet(story, s, "Graficos de consultas por mes e novos pacientes por mes")
+    bullet(story, s, "Cards: total de pacientes, consultas do mes, consultas de hoje, agendamentos de hoje")
+    bullet(story, s, "Taxa de retorno e taxa de conclusao")
+    bullet(story, s, "Lista de proximos agendamentos do dia")
+
+    # 4.9 App Mobile (PWA)
+    story.append(Paragraph("4.9 App Mobile (PWA)", s['H2']))
+    bullet(story, s, "Instale no celular ou tablet como aplicativo nativo")
+    bullet(story, s, "Acesso rapido ao repertorio, agenda e pacientes")
+    bullet(story, s, "Funciona offline para dados ja carregados")
+    bullet(story, s, "Notificacoes de agendamentos proximos")
 
     story.append(PageBreak())
 
@@ -841,7 +909,7 @@ def add_faq(story, s):
 
     story.append(Spacer(1, 2 * cm))
     story.append(HRFlowable(width="100%", thickness=1, color=BORDER_GRAY, spaceAfter=12))
-    story.append(Paragraph("HomeoClinic Pro v1.0 \u2014 Marco 2026", s['Footer']))
+    story.append(Paragraph("HomeoClinic Pro v2.0 \u2014 Marco 2026", s['Footer']))
     story.append(Paragraph("homeoclinic-ia.com", s['Footer']))
 
 

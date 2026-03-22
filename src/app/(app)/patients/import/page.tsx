@@ -70,7 +70,7 @@ export default function PatientImportPage() {
         setResult({ imported: 0, errors: [{ row: 0, error: data.error || "Erro desconhecido" }] });
       }
     } catch {
-      setResult({ imported: 0, errors: [{ row: 0, error: "Erro de conexao" }] });
+      setResult({ imported: 0, errors: [{ row: 0, error: "Erro de conexão" }] });
     }
 
     setImporting(false);
@@ -115,7 +115,7 @@ export default function PatientImportPage() {
       {/* Instructions */}
       <Card className="bg-[#111118] border-[#1e1e2e]">
         <CardHeader className="py-3">
-          <CardTitle className="text-sm text-gray-300">Instrucoes</CardTitle>
+          <CardTitle className="text-sm text-gray-300">Instruções</CardTitle>
         </CardHeader>
         <CardContent className="pt-0 text-sm text-gray-400 space-y-2">
           <p>Prepare um arquivo CSV com as colunas: <strong className="text-gray-300">Nome</strong> (obrigatorio), CPF, RG, Data Nascimento (DD/MM/AAAA), Sexo (M/F), Telefone, Email, Endereco, Profissao, Convenio, Notas.</p>
@@ -157,13 +157,13 @@ export default function PatientImportPage() {
         </CardContent>
       </Card>
 
-      {/* Preview */}
+      {/* Pré-visualização */}
       {preview.length > 0 && (
         <Card className="bg-[#111118] border-[#1e1e2e]">
           <CardHeader className="py-3">
             <CardTitle className="text-sm flex items-center gap-2">
               <FileSpreadsheet className="h-4 w-4 text-indigo-400" />
-              Preview (primeiras {preview.length} linhas)
+              Pré-visualização (primeiras {preview.length} linhas)
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0 overflow-x-auto">
@@ -220,7 +220,7 @@ export default function PatientImportPage() {
       {result && (
         <Card className="bg-[#111118] border-[#1e1e2e]">
           <CardHeader className="py-3">
-            <CardTitle className="text-sm">Resultado da Importacao</CardTitle>
+            <CardTitle className="text-sm">Resultado da Importação</CardTitle>
           </CardHeader>
           <CardContent className="pt-0 space-y-4">
             {result.imported > 0 && (

@@ -82,7 +82,7 @@ export default function ClinicalCasesPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <BookMarked className="h-6 w-6 text-teal-400" />
-          Casos Clinicos
+          Casos Clínicos
         </h1>
         <Link href="/clinical-cases/new">
           <Button className="bg-teal-600 hover:bg-teal-700">
@@ -98,7 +98,7 @@ export default function ClinicalCasesPage() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por titulo, remedio, tags..."
+            placeholder="Buscar por título, remédio, tags..."
             className="pl-10 bg-[#111118] border-[#1e1e2e]"
           />
         </div>
