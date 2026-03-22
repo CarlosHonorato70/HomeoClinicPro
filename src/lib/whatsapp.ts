@@ -1,15 +1,20 @@
 /**
- * WhatsApp Business API (Cloud API) integration.
- * Uses the official Meta Graph API for sending messages.
+ * WhatsApp integration via Evolution API (self-hosted).
+ * Manages instances, sends messages, and handles connection status.
  *
- * Requires:
- * - WHATSAPP_ACCESS_TOKEN (permanent system user token)
- * - WhatsApp phone number ID (stored per clinic in ReminderConfig)
- *
- * Docs: https://developers.facebook.com/docs/whatsapp/cloud-api
+ * Docs: https://doc.evolution-api.com
  */
 
-const GRAPH_API_URL = "https://graph.facebook.com/v21.0";
+const EVOLUTION_URL =
+  process.env.EVOLUTION_API_URL || "http://evolution-api:8080";
+const EVOLUTION_KEY =
+  process.env.EVOLUTION_API_KEY || "homeoclinic-evo-key-2026";
+
+interface EvolutionResult {
+  success: boolean;
+  data?: Record<string, unknown>;
+  error?: string;
+}
 
 interface WhatsAppMessageResult {
   success: boolean;
@@ -17,47 +22,181 @@ interface WhatsAppMessageResult {
   error?: string;
 }
 
+// ─── Instance Management ────────────────────────────────────────
+
 /**
- * Send a text message via WhatsApp Business API.
+ * Create a new Evolution instance for a clinic.
+ */
+export async function createInstance(
+  instanceName: string
+): Promise<EvolutionResult> {
+  try {
+    const res = await fetch(`${EVOLUTION_URL}/instance/create`, {
+      method: "POST",
+      headers: {
+        apikey: EVOLUTION_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        instanceName,
+        integration: "WHATSAPP-BAILEYS",
+        qrcode: true,
+        rejectCall: false,
+        alwaysOnline: false,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      // Instance already exists — just return success
+      if (res.status === 403 || String(err?.message).includes("already")) {
+        return { success: true, data: { alreadyExists: true } };
+      }
+      return { success: false, error: err?.message || `HTTP ${res.status}` };
+    }
+
+    const data = await res.json();
+    return { success: true, data };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Connection failed",
+    };
+  }
+}
+
+/**
+ * Get QR code for connecting WhatsApp.
+ */
+export async function getQRCode(
+  instanceName: string
+): Promise<EvolutionResult> {
+  try {
+    const res = await fetch(
+      `${EVOLUTION_URL}/instance/connect/${instanceName}`,
+      {
+        method: "GET",
+        headers: { apikey: EVOLUTION_KEY },
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { success: false, error: err?.message || `HTTP ${res.status}` };
+    }
+
+    const data = await res.json();
+    return { success: true, data };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Connection failed",
+    };
+  }
+}
+
+/**
+ * Get connection status of an instance.
+ */
+export async function getConnectionStatus(
+  instanceName: string
+): Promise<{ connected: boolean; state: string; error?: string }> {
+  try {
+    const res = await fetch(
+      `${EVOLUTION_URL}/instance/connectionState/${instanceName}`,
+      {
+        method: "GET",
+        headers: { apikey: EVOLUTION_KEY },
+      }
+    );
+
+    if (!res.ok) {
+      return { connected: false, state: "error", error: `HTTP ${res.status}` };
+    }
+
+    const data = await res.json();
+    const state = data?.instance?.state || data?.state || "close";
+    return { connected: state === "open", state };
+  } catch {
+    return { connected: false, state: "error", error: "Connection failed" };
+  }
+}
+
+/**
+ * Disconnect and remove an instance.
+ */
+export async function deleteInstance(
+  instanceName: string
+): Promise<EvolutionResult> {
+  try {
+    // First logout
+    await fetch(`${EVOLUTION_URL}/instance/logout/${instanceName}`, {
+      method: "DELETE",
+      headers: { apikey: EVOLUTION_KEY },
+    });
+
+    // Then delete
+    const res = await fetch(
+      `${EVOLUTION_URL}/instance/delete/${instanceName}`,
+      {
+        method: "DELETE",
+        headers: { apikey: EVOLUTION_KEY },
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { success: false, error: err?.message || `HTTP ${res.status}` };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed",
+    };
+  }
+}
+
+// ─── Message Sending ────────────────────────────────────────────
+
+/**
+ * Send a text message via Evolution API.
  */
 export async function sendWhatsAppMessage(
-  phoneNumberId: string,
-  accessToken: string,
+  instanceName: string,
   to: string,
   text: string
 ): Promise<WhatsAppMessageResult> {
   try {
-    const response = await fetch(
-      `${GRAPH_API_URL}/${phoneNumberId}/messages`,
+    const res = await fetch(
+      `${EVOLUTION_URL}/message/sendText/${instanceName}`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          apikey: EVOLUTION_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messaging_product: "whatsapp",
-          recipient_type: "individual",
-          to: normalizePhone(to),
-          type: "text",
-          text: { preview_url: false, body: text },
+          number: normalizePhone(to),
+          text,
         }),
       }
     );
 
-    if (!response.ok) {
-      const err = await response.json();
-      console.error("[WhatsApp] API error:", err);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error("[WhatsApp] Evolution API error:", err);
       return {
         success: false,
-        error: err?.error?.message || `HTTP ${response.status}`,
+        error: err?.message || `HTTP ${res.status}`,
       };
     }
 
-    const data = await response.json();
+    const data = await res.json();
     return {
       success: true,
-      messageId: data?.messages?.[0]?.id,
+      messageId: data?.key?.id || data?.messageId,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -70,8 +209,8 @@ export async function sendWhatsAppMessage(
  * Send an appointment reminder via WhatsApp.
  */
 export async function sendAppointmentReminder(
-  phoneNumberId: string,
-  accessToken: string,
+  instanceName: string,
+  _accessToken: string, // kept for backwards compat, ignored
   patientPhone: string,
   patientName: string,
   appointmentDate: string,
@@ -79,23 +218,23 @@ export async function sendAppointmentReminder(
   clinicName: string
 ): Promise<WhatsAppMessageResult> {
   const text =
-    `Olá ${patientName}! 👋\n\n` +
-    `Lembrete: você tem uma consulta agendada:\n\n` +
-    `📅 Data: ${appointmentDate}\n` +
-    `🕐 Horário: ${appointmentTime}\n` +
-    `🏥 Clínica: ${clinicName}\n\n` +
-    `Para reagendar ou cancelar, entre em contato com a clínica.\n\n` +
+    `Ola ${patientName}! \n\n` +
+    `Lembrete: voce tem uma consulta agendada:\n\n` +
+    `Data: ${appointmentDate}\n` +
+    `Horario: ${appointmentTime}\n` +
+    `Clinica: ${clinicName}\n\n` +
+    `Para reagendar ou cancelar, entre em contato com a clinica.\n\n` +
     `HomeoClinic Pro`;
 
-  return sendWhatsAppMessage(phoneNumberId, accessToken, patientPhone, text);
+  return sendWhatsAppMessage(instanceName, patientPhone, text);
 }
 
 /**
  * Send appointment confirmation via WhatsApp.
  */
 export async function sendAppointmentConfirmation(
-  phoneNumberId: string,
-  accessToken: string,
+  instanceName: string,
+  _accessToken: string, // kept for backwards compat, ignored
   patientPhone: string,
   patientName: string,
   appointmentDate: string,
@@ -103,19 +242,19 @@ export async function sendAppointmentConfirmation(
   clinicName: string
 ): Promise<WhatsAppMessageResult> {
   const text =
-    `Olá ${patientName}! ✅\n\n` +
+    `Ola ${patientName}!\n\n` +
     `Sua consulta foi agendada com sucesso:\n\n` +
-    `📅 Data: ${appointmentDate}\n` +
-    `🕐 Horário: ${appointmentTime}\n` +
-    `🏥 Clínica: ${clinicName}\n\n` +
-    `Aguardamos você!\n\n` +
+    `Data: ${appointmentDate}\n` +
+    `Horario: ${appointmentTime}\n` +
+    `Clinica: ${clinicName}\n\n` +
+    `Aguardamos voce!\n\n` +
     `HomeoClinic Pro`;
 
-  return sendWhatsAppMessage(phoneNumberId, accessToken, patientPhone, text);
+  return sendWhatsAppMessage(instanceName, patientPhone, text);
 }
 
 /**
- * Normalize Brazilian phone number to WhatsApp format.
+ * Normalize Brazilian phone number.
  * Input: "(11) 99999-9999" or "11999999999" or "+5511999999999"
  * Output: "5511999999999"
  */

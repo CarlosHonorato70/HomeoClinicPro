@@ -83,6 +83,7 @@ export async function middleware(req: NextRequest) {
       pathname.startsWith("/api/auth/") ||
       pathname.startsWith("/api/billing/webhook") ||
       pathname.startsWith("/api/webhooks/asaas") ||
+      pathname.startsWith("/api/webhooks/evolution") ||
       pathname.startsWith("/api/invites/") ||
       pathname.startsWith("/api/portal/") ||
       pathname.startsWith("/api/cron/");

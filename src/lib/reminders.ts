@@ -106,39 +106,34 @@ export async function processReminders(): Promise<ReminderResult> {
           }
         }
 
-        // Send WhatsApp reminder
-        if (config.whatsappEnabled && patientPhone && config.whatsappPhoneId) {
-          const token =
-            tryDecrypt(config.whatsappToken) ||
-            process.env.WHATSAPP_ACCESS_TOKEN;
+        // Send WhatsApp reminder via Evolution API
+        if (config.whatsappEnabled && patientPhone) {
+          const instance = `homeoclinic-${config.clinicId}`;
+          try {
+            const result = await sendWhatsAppReminder(
+              instance,
+              "", // accessToken not needed for Evolution API
+              patientPhone,
+              patient.name,
+              dateStr,
+              timeStr,
+              clinic?.name || "HomeoClinic"
+            );
 
-          if (token) {
-            try {
-              const result = await sendWhatsAppReminder(
-                config.whatsappPhoneId,
-                token,
-                patientPhone,
-                patient.name,
-                dateStr,
-                timeStr,
-                clinic?.name || "HomeoClinic"
-              );
+            await prisma.sentReminder.create({
+              data: {
+                appointmentId: appt.id,
+                channel: "whatsapp",
+                hoursBeforeAppt: hours,
+                status: result.success ? "sent" : "failed",
+              },
+            });
 
-              await prisma.sentReminder.create({
-                data: {
-                  appointmentId: appt.id,
-                  channel: "whatsapp",
-                  hoursBeforeAppt: hours,
-                  status: result.success ? "sent" : "failed",
-                },
-              });
-
-              if (result.success) sent++;
-              else errors++;
-            } catch (err) {
-              console.error("[Reminders] WhatsApp failed:", err);
-              errors++;
-            }
+            if (result.success) sent++;
+            else errors++;
+          } catch (err) {
+            console.error("[Reminders] WhatsApp failed:", err);
+            errors++;
           }
         }
 

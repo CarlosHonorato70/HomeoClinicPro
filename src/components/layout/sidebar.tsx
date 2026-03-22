@@ -22,6 +22,7 @@ import {
   BookMarked,
   Leaf,
   BookA,
+  MessageCircle,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -68,6 +69,7 @@ const navGroups: NavGroup[] = [
       { href: "/lgpd", icon: Shield, label: "LGPD", adminOnly: true },
       { href: "/settings", icon: Settings, label: "Configurações", adminOnly: true },
       { href: "/settings/billing", icon: CreditCard, label: "Assinatura", adminOnly: true },
+      { href: "/settings/reminders", icon: MessageCircle, label: "WhatsApp", adminOnly: true },
       { href: "/settings/team", icon: UsersRound, label: "Equipe", adminOnly: true },
     ],
   },
