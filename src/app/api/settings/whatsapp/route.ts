@@ -20,7 +20,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    requirePermission(session, "manage_billing");
+    try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);
     const status = await getConnectionStatus(name);
@@ -43,7 +43,7 @@ export async function POST() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    requirePermission(session, "manage_billing");
+    try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);
 
@@ -95,7 +95,7 @@ export async function DELETE() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    requirePermission(session, "manage_billing");
+    try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);
     const result = await deleteInstance(name);

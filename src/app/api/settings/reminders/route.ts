@@ -14,7 +14,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    requirePermission(session, "manage_clinic");
+    try { requirePermission(session, "manage_clinic"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const config = await prisma.reminderConfig.findUnique({
       where: { clinicId: session.user.clinicId },
@@ -49,7 +49,7 @@ export async function PUT(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    requirePermission(session, "manage_clinic");
+    try { requirePermission(session, "manage_clinic"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const body = await req.json();
 
