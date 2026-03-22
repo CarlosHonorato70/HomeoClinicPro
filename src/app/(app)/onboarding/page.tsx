@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ interface ClinicData {
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { update } = useSession();
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<ClinicData>({
     name: "",
@@ -60,6 +62,7 @@ export default function OnboardingPage() {
       }
 
       toast.success("Dados da clínica salvos com sucesso!");
+      await update(); // Refresh JWT token → needsOnboarding = false
       router.push("/dashboard");
     } catch {
       toast.error("Erro ao salvar dados. Tente novamente.");
