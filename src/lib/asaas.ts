@@ -4,17 +4,16 @@ import { readFileSync } from "fs";
 const ASAAS_API_URL = process.env.ASAAS_API_URL ?? "https://api.asaas.com/v3";
 
 function getAsaasApiKey(): string {
-  if (process.env.ASAAS_API_KEY) return process.env.ASAAS_API_KEY;
-  // Fallback: read from mounted file (avoids Docker $ escaping issues)
+  // Prefer mounted file (avoids Docker $ escaping issues with env vars)
   const keyFile = process.env.ASAAS_KEY_FILE;
   if (keyFile) {
     try {
       return readFileSync(keyFile, "utf-8").trim();
     } catch {
-      // File not found
+      // File not found — fall through
     }
   }
-  return "";
+  return process.env.ASAAS_API_KEY ?? "";
 }
 
 const ASAAS_API_KEY = getAsaasApiKey();
