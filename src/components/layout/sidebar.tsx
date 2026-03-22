@@ -20,6 +20,8 @@ import {
   ShieldCheck,
   Video,
   BookMarked,
+  Leaf,
+  BookA,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -28,6 +30,7 @@ interface NavItem {
   icon: LucideIcon;
   label: string;
   adminOnly?: boolean;
+  badge?: string;
 }
 
 interface NavGroup {
@@ -49,6 +52,8 @@ const navGroups: NavGroup[] = [
       { href: "/repertory", icon: BookOpen, label: "Repertório" },
       { href: "/repertory/remedies", icon: Pill, label: "Remédios" },
       { href: "/repertory/materia-medica", icon: BookOpen, label: "Matéria Médica" },
+      { href: "/repertory/phytotherapy", icon: Leaf, label: "Fitoterapia" },
+      { href: "/repertory/dictionary", icon: BookA, label: "Dicionário" },
       { href: "/agenda", icon: Calendar, label: "Agenda" },
       { href: "/telemedicina", icon: Video, label: "Telemedicina" },
       { href: "/clinical-cases", icon: BookMarked, label: "Casos Clinicos" },
@@ -116,6 +121,11 @@ export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarPro
                   >
                     <item.icon className="h-4 w-4" />
                     {item.label}
+                    {item.badge && (
+                      <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
