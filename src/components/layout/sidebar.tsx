@@ -152,7 +152,7 @@ export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarPro
             )}
           >
             <ShieldCheck className="h-4 w-4" />
-            Admin
+            Administrador
           </Link>
         </div>
       )}
@@ -160,11 +160,11 @@ export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarPro
       <div className="p-4 border-t border-[#1e1e2e] space-y-1">
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <Shield className="h-3 w-3 text-teal-500" />
-          <span>LGPD Compliant</span>
+          <span>Compativel com LGPD</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <ShieldCheck className="h-3 w-3 text-teal-500" />
-          <span>CFM Compliant</span>
+          <span>Compativel com CFM</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <span className="ml-5 text-gray-600">AES-256-GCM</span>

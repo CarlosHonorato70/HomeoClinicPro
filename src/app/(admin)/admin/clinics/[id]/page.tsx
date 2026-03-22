@@ -523,7 +523,7 @@ export default function AdminClinicDetailPage() {
                           : "bg-blue-600"
                       }
                     >
-                      {user.role === "admin" ? "Admin" : "Médico"}
+                      {user.role === "admin" ? "Administrador" : "Médico"}
                     </Badge>
                   </TableCell>
                   <TableCell>

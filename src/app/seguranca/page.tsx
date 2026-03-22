@@ -150,7 +150,7 @@ export default function SegurancaPage() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-teal-500/10 px-4 py-2 text-sm font-semibold text-teal-400 mb-6">
             <ShieldCheck className="h-4 w-4" />
-            LGPD Compliant | CFM Compliant | AES-256-GCM
+            Compativel com LGPD | Compativel com CFM | AES-256-GCM
           </div>
           <h1 className="text-4xl font-bold mb-4">
             Seguranca e{" "}

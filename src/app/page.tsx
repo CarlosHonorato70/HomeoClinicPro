@@ -238,7 +238,7 @@ export default function Home() {
           <div className="relative mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-4 py-1.5 text-sm text-teal-400">
               <Shield className="h-4 w-4" />
-              <span>LGPD Compliant</span>
+              <span>Compativel com LGPD</span>
               <span className="text-teal-600">|</span>
               <span>CFM</span>
               <span className="text-teal-600">|</span>
