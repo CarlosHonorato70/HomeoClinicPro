@@ -25,6 +25,11 @@ import {
   Upload,
   Leaf,
   BookMarked,
+  MessageCircle,
+  Globe,
+  PenLine,
+  BookA,
+  Calendar,
 } from "lucide-react";
 
 const features = [
@@ -95,10 +100,40 @@ const features = [
       "310 plantas medicinais com nome científico, indicações, posologia e 243 termos no dicionário médico.",
   },
   {
+    icon: MessageCircle,
+    title: "WhatsApp Integrado",
+    description:
+      "Lembretes automaticos de consulta via WhatsApp. Conecte seu numero escaneando um QR code e pronto.",
+  },
+  {
+    icon: Globe,
+    title: "Portal do Paciente",
+    description:
+      "Seus pacientes acessam consultas e documentos pelo portal. Crie credenciais com um clique na ficha do paciente.",
+  },
+  {
+    icon: PenLine,
+    title: "Assinatura Digital",
+    description:
+      "Assine receitas, atestados e TCLE digitalmente com hash criptografico e rastreabilidade completa.",
+  },
+  {
+    icon: BookA,
+    title: "Dicionario Medico",
+    description:
+      "243 termos medicos e homeopaticos com definicoes completas. Busca instantanea por termo ou conceito.",
+  },
+  {
+    icon: Calendar,
+    title: "Agenda Completa",
+    description:
+      "Vista diaria, semanal e mensal. Agendamento por clique, tipos de consulta, duracao e status.",
+  },
+  {
     icon: Smartphone,
     title: "App Mobile (PWA)",
     description:
-      "Instale no celular como aplicativo. Acesso rápido ao repertório, agenda e pacientes em qualquer lugar.",
+      "Instale no celular como aplicativo. Acesso rapido ao repertorio, agenda e pacientes em qualquer lugar.",
   },
 ];
 
@@ -133,9 +168,12 @@ const plans = [
       "Assistente de IA com prescrição",
       "Telemedicina integrada",
       "5 templates de anamnese",
-      "Casos clínicos + fitoterapia",
-      "Importação CSV de pacientes",
-      "Suporte prioritário",
+      "Casos clinicos + fitoterapia",
+      "WhatsApp com lembretes automaticos",
+      "Portal do paciente",
+      "Assinatura digital de documentos",
+      "Importacao CSV de pacientes",
+      "Suporte prioritario",
     ],
     cta: "Assinar Agora",
     highlighted: true,
@@ -246,16 +284,21 @@ export default function Home() {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              O Prontuário Eletrônico mais completo para{" "}
+              A unica plataforma de homeopatia do mundo com{" "}
               <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-                Homeopatia
+                IA de ponta a ponta
               </span>
             </h1>
 
-            <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl">
-              188.669 rubricas, 3.943 remédios, 3.327 textos de matéria médica,
-              310 plantas medicinais. 6 métodos de repertorização, IA com
-              transcrição por voz, telemedicina integrada e muito mais.
+            <p className="mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-gray-300 sm:text-xl">
+              Transcricao de consulta, analise de sintomas, repertorizacao assistida e prescricao inteligente
+              — tudo integrado ao prontuario eletronico.
+            </p>
+
+            <p className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-gray-500">
+              188.669 rubricas, 3.943 remedios, 3.327 textos de materia medica,
+              310 plantas medicinais, 243 termos no dicionario medico. 6 metodos de repertorizacao,
+              telemedicina, WhatsApp, portal do paciente e muito mais.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -275,12 +318,13 @@ export default function Home() {
             </div>
 
             {/* Stats row */}
-            <div className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-4">
+            <div className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-5">
               {[
                 { value: "188.669", label: "Rubricas" },
-                { value: "3.943", label: "Remédios" },
+                { value: "3.943", label: "Remedios" },
                 { value: "3.327", label: "Textos de MM" },
                 { value: "310", label: "Plantas Medicinais" },
+                { value: "17+", label: "Funcionalidades IA" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-2xl font-bold text-teal-400 sm:text-3xl">
@@ -304,9 +348,10 @@ export default function Home() {
                 Tudo que você precisa em uma{" "}
                 <span className="text-teal-400">única plataforma</span>
               </h2>
-              <p className="mx-auto max-w-2xl text-lg text-gray-400">
-                A plataforma clínica de homeopatia mais completa do Brasil.
-                IA, telemedicina, repertorização avançada e muito mais.
+              <p className="mx-auto max-w-3xl text-lg text-gray-400">
+                A plataforma clinica de homeopatia mais completa do Brasil.
+                IA de ponta a ponta, telemedicina, WhatsApp, portal do paciente,
+                assinatura digital e muito mais.
               </p>
             </div>
 
@@ -491,10 +536,12 @@ export default function Home() {
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
               Pronto para transformar sua prática homeopática?
             </h2>
-            <p className="mb-8 text-lg text-gray-400">
-              A plataforma clínica de homeopatia mais completa do Brasil.
-              Repertório, IA, telemedicina, prontuário e muito mais.
-              Comece gratuitamente, sem cartão de crédito.
+            <p className="mb-4 text-lg text-gray-300">
+              A unica plataforma de homeopatia do mundo com IA de ponta a ponta.
+            </p>
+            <p className="mb-8 text-base text-gray-500">
+              Transcricao, analise de sintomas, repertorizacao assistida, prescricao inteligente,
+              telemedicina, WhatsApp e portal do paciente. Comece gratuitamente.
             </p>
             <Link
               href="/login"
