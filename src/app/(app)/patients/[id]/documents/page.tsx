@@ -25,7 +25,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Plus, FileText, Eye, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Eye, Trash2, PenLine, CheckCircle2, Loader2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -48,6 +48,8 @@ export default function DocumentsListPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [patientName, setPatientName] = useState("");
+  const [signing, setSigning] = useState<string | null>(null);
+  const [signedDocs, setSignedDocs] = useState<Set<string>>(new Set());
 
   const fetchDocuments = useCallback(async () => {
     const res = await fetch(`/api/documents?patientId=${patientId}`);
@@ -64,6 +66,28 @@ export default function DocumentsListPage() {
       .then((r) => r.json())
       .then((d) => setPatientName(d.name || ""));
   }, [fetchDocuments, patientId]);
+
+  async function handleSign(docId: string) {
+    setSigning(docId);
+    try {
+      const res = await fetch("/api/documents/sign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ documentId: docId }),
+      });
+      if (res.ok) {
+        toast.success("Documento assinado digitalmente!");
+        setSignedDocs((prev) => new Set([...prev, docId]));
+      } else {
+        const err = await res.json();
+        toast.error(err.error || "Erro ao assinar");
+      }
+    } catch {
+      toast.error("Erro ao assinar documento");
+    } finally {
+      setSigning(null);
+    }
+  }
 
   async function handleDelete(docId: string) {
     const res = await fetch(`/api/documents/${docId}`, { method: "DELETE" });
@@ -132,7 +156,14 @@ export default function DocumentsListPage() {
                 return (
                   <TableRow key={doc.id} className="border-[#1e1e2e]">
                     <TableCell>
-                      <Badge className={config.className}>{config.label}</Badge>
+                      <div className="flex items-center gap-1">
+                        <Badge className={config.className}>{config.label}</Badge>
+                        {signedDocs.has(doc.id) && (
+                          <Badge className="bg-green-600/20 text-green-400 text-[10px]">
+                            <CheckCircle2 className="h-3 w-3 mr-0.5" /> Assinado
+                          </Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="font-medium">{doc.title}</TableCell>
                     <TableCell className="text-gray-400">
@@ -145,6 +176,22 @@ export default function DocumentsListPage() {
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
+                        {!signedDocs.has(doc.id) && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-teal-400 hover:text-teal-300"
+                            disabled={signing === doc.id}
+                            onClick={() => handleSign(doc.id)}
+                            title="Assinar digitalmente"
+                          >
+                            {signing === doc.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <PenLine className="h-4 w-4" />
+                            )}
+                          </Button>
+                        )}
                         <AlertDialog>
                           <AlertDialogTrigger>
                             <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300">

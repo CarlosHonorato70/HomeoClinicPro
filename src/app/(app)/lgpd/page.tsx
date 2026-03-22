@@ -32,7 +32,7 @@ const lgpdCards = [
     description:
       "Visualize e gerencie a política de privacidade da clínica, termos de uso e avisos de proteção de dados exibidos aos pacientes.",
     icon: FileText,
-    href: "#",
+    href: "/lgpd/privacy-policy",
   },
 ];
 
