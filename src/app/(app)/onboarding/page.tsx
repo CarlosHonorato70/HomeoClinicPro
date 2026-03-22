@@ -61,9 +61,13 @@ export default function OnboardingPage() {
         throw new Error("Erro ao salvar dados da clínica");
       }
 
-      toast.success("Dados da clínica salvos com sucesso!");
-      await update(); // Refresh JWT token → needsOnboarding = false
-      router.push("/dashboard");
+      toast.success("Dados da clínica salvos com sucesso! Redirecionando...");
+      // Trigger NextAuth session update which refreshes JWT (needsOnboarding → false)
+      await update();
+      // Fetch session endpoint to force server-side cookie rewrite
+      await fetch("/api/auth/session");
+      // Navigate — the middleware will now see the updated token
+      window.location.replace("/dashboard");
     } catch {
       toast.error("Erro ao salvar dados. Tente novamente.");
     } finally {

@@ -78,9 +78,10 @@ const navGroups: NavGroup[] = [
 interface SidebarProps {
   isSuperAdmin?: boolean;
   userRole?: string;
+  onNavigate?: () => void;
 }
 
-export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarProps) {
+export function Sidebar({ isSuperAdmin = false, userRole = "admin", onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -114,6 +115,7 @@ export function Sidebar({ isSuperAdmin = false, userRole = "admin" }: SidebarPro
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={onNavigate}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                       isActive
