@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { AppShell } from "@/components/layout/app-shell";
 import { isSuperAdmin } from "@/lib/superadmin";
+import { SupportChat } from "@/components/support-chat";
 
 export default async function AppLayout({
   children,
@@ -22,6 +23,7 @@ export default async function AppLayout({
       userRole={session.user.role}
     >
       {children}
+      <SupportChat />
     </AppShell>
   );
 }

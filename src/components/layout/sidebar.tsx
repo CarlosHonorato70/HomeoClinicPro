@@ -23,6 +23,7 @@ import {
   Leaf,
   BookA,
   MessageCircle,
+  Headphones,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -71,6 +72,12 @@ const navGroups: NavGroup[] = [
       { href: "/settings/billing", icon: CreditCard, label: "Assinatura", adminOnly: true },
       { href: "/settings/reminders", icon: MessageCircle, label: "WhatsApp", adminOnly: true },
       { href: "/settings/team", icon: UsersRound, label: "Equipe", adminOnly: true },
+    ],
+  },
+  {
+    label: "AJUDA",
+    items: [
+      { href: "/suporte", icon: Headphones, label: "Suporte" },
     ],
   },
 ];

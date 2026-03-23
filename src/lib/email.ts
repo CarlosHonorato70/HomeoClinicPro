@@ -274,12 +274,14 @@ export async function sendWelcomeEmail(email: string, userName: string) {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #0d9488;">HomeoClinic Pro</h2>
         <p>Olá, ${escapeHtml(userName)}!</p>
-        <p>Sua conta foi criada com sucesso. Agora você tem acesso ao sistema completo de prontuário eletrônico homeopático.</p>
+        <p>Sua conta foi criada com sucesso. Agora você tem acesso ao sistema completo de prontuário eletrônico homeopático com IA.</p>
         <p>Recursos disponíveis:</p>
         <ul>
-          <li>Repertório com 188.669 rubricas</li>
-          <li>Motor de repertorização inteligente</li>
-          <li>Prontuário eletrônico completo</li>
+          <li>Repertório com 188.669 rubricas em português</li>
+          <li>IA de ponta a ponta: transcrição, análise, repertorização e prescrição</li>
+          <li>Prontuário eletrônico completo com criptografia AES-256</li>
+          <li>Telemedicina integrada com Jitsi Meet</li>
+          <li>Lembretes por WhatsApp</li>
           <li>Conformidade LGPD e CFM</li>
         </ul>
         <div style="text-align: center; margin: 30px 0;">
@@ -288,6 +290,13 @@ export async function sendWelcomeEmail(email: string, userName: string) {
             Acessar Plataforma
           </a>
         </div>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${process.env.NEXTAUTH_URL}/docs/guia-de-uso-homeoclinic-pro.pdf"
+             style="color: #0d9488; font-size: 14px; text-decoration: underline;">
+            📖 Baixar Guia de Uso da Plataforma (PDF)
+          </a>
+        </div>
+        <p style="font-size: 13px; color: #666;">Dúvidas? Acesse a Central de Suporte dentro da plataforma — nossa assistente virtual Clara está disponível 24/7.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #999; font-size: 12px;">HomeoClinic Pro — Sistema de Prontuário Eletrônico Homeopático</p>
       </div>
