@@ -7,7 +7,7 @@ import { requirePermission } from "@/lib/rbac";
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     requirePermission(session, "view_financial");
 
     const params = req.nextUrl.searchParams;
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     requirePermission(session, "manage_financial");
 
     const body = await req.json();

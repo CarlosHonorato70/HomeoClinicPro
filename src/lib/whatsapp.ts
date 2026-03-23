@@ -65,7 +65,7 @@ export async function createInstance(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Connection failed",
+      error: error instanceof Error ? error.message : "Falha na conexão",
     };
   }
 }
@@ -95,7 +95,7 @@ export async function getQRCode(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Connection failed",
+      error: error instanceof Error ? error.message : "Falha na conexão",
     };
   }
 }
@@ -123,7 +123,7 @@ export async function getConnectionStatus(
     const state = data?.instance?.state || data?.state || "close";
     return { connected: state === "open", state };
   } catch {
-    return { connected: false, state: "error", error: "Connection failed" };
+    return { connected: false, state: "error", error: "Falha na conexão" };
   }
 }
 

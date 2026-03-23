@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   }
   const authHeader = req.headers.get("asaas-access-token");
   if (authHeader !== webhookToken) {
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    return NextResponse.json({ error: "Token inválido" }, { status: 401 });
   }
 
   const event = body.event;

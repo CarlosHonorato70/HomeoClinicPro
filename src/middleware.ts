@@ -99,7 +99,7 @@ export async function middleware(req: NextRequest) {
       // Block unauthenticated access to all non-public API routes
       if (!token) {
         return NextResponse.json(
-          { error: "Unauthorized" },
+          { error: "Não autorizado" },
           { status: 401 }
         );
       }

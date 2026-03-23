@@ -19,7 +19,7 @@ function instanceName(clinicId: string): string {
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);
@@ -42,7 +42,7 @@ export async function GET() {
 export async function POST() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);
@@ -94,7 +94,7 @@ export async function POST() {
 export async function DELETE() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     try { requirePermission(session, "manage_billing"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const name = instanceName(session.user.clinicId);

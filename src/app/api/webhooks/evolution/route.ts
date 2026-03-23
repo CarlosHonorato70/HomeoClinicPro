@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
     }
     if (!apiKey || apiKey !== expectedKey) {
-      return NextResponse.json({ error: "Invalid key" }, { status: 401 });
+      return NextResponse.json({ error: "Chave inválida" }, { status: 401 });
     }
 
     const body = await req.json();

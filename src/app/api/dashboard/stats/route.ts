@@ -6,7 +6,7 @@ import { tryDecrypt } from "@/lib/encryption";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
   const clinicId = session.user.clinicId;
   const now = new Date();

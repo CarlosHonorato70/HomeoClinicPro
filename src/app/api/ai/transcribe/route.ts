@@ -8,7 +8,7 @@ const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB (Whisper limit)
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;

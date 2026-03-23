@@ -34,7 +34,7 @@ export function decrypt(encrypted: string): string {
   const [ivB64, dataB64, tagB64] = encrypted.split(":");
 
   if (!ivB64 || !dataB64 || !tagB64) {
-    throw new Error("Invalid encrypted data format");
+    throw new Error("Formato de dados criptografados inválido");
   }
 
   const iv = Buffer.from(ivB64, "base64");

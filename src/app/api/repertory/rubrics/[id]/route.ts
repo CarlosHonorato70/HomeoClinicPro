@@ -12,7 +12,7 @@ export async function GET(
 
     if (isNaN(rubricId)) {
       return NextResponse.json(
-        { error: "Invalid rubric ID" },
+        { error: "ID de rubrica inválido" },
         { status: 400 }
       );
     }

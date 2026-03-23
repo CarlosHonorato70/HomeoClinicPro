@@ -8,7 +8,7 @@ import { requirePermission } from "@/lib/rbac";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
   try {
     requirePermission(session, "manage_clinic");
@@ -39,7 +39,7 @@ export async function GET() {
 
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
   try {
     requirePermission(session, "manage_clinic");

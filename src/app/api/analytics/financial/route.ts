@@ -7,7 +7,7 @@ import { getFinancialAnalytics, parseDateRange } from "@/lib/analytics";
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     requirePermission(session, "manage_billing");
 
     if (!session.user.clinicId) {

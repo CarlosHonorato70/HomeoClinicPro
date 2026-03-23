@@ -18,7 +18,7 @@ function csvSafe(value: string | null | undefined): string {
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
   const patients = await prisma.patient.findMany({
     where: { clinicId: session.user.clinicId, deletedAt: null },

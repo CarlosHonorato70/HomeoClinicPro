@@ -13,7 +13,7 @@ function safeParseJSON(str: string | null | undefined, fallback: unknown): unkno
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     try { requirePermission(session, "manage_clinic"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const config = await prisma.reminderConfig.findUnique({
@@ -48,7 +48,7 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     try { requirePermission(session, "manage_clinic"); } catch { return NextResponse.json({ error: "Forbidden" }, { status: 403 }); }
 
     const body = await req.json();
